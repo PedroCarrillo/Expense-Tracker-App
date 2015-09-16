@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/background"
+    android:background="@color/purple">
+
+    <ImageView
+        android:id="@+id/iv_money_pig"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/saving_money_content_desc"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_save_money_white"/>
+
+    <TextView
+        android:id="@+id/tv_second_desc"
+        android:layout_marginTop="10dp"
+        android:text="@string/second_page_desc"
+        style="@style/WelcomeDescription"/>
+
+</LinearLayout>
