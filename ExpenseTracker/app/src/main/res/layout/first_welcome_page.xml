@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="@string/welcome"
+        android:textStyle="bold"
         android:textSize="@dimen/text_size_24"
         android:textColor="@color/white"/>
 

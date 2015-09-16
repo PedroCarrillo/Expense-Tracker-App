@@ -3,23 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.pedrocarrillo.expensetracker.ui.Login.LoginActivityFragment">
+    tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginActivityFragment">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_welcome"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_welcome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/cpi_welcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:elevation="10dp"
+        android:orientation="vertical"
         android:gravity="center">
-        <Button
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="signIn"
-            android:text="sign in"/>
+            android:layout_marginBottom="10dp"
+            android:text="Start using Expense Tracker"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>

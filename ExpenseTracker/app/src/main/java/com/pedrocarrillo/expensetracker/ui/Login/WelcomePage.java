@@ -1,4 +1,4 @@
-package com.pedrocarrillo.expensetracker.ui.Login;
+package com.pedrocarrillo.expensetracker.ui.login;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

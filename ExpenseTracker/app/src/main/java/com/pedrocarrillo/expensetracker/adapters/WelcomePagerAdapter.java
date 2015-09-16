@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.pedrocarrillo.expensetracker.R;
-import com.pedrocarrillo.expensetracker.ui.Login.WelcomePage;
+import com.pedrocarrillo.expensetracker.ui.login.WelcomePage;
 
 /**
  * Created by Pedro on 15/9/2015.

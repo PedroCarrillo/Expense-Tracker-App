@@ -1,8 +1,11 @@
-package com.pedrocarrillo.expensetracker.ui.Custom;
+package com.pedrocarrillo.expensetracker.ui.custom;
 
+import android.graphics.PorterDuff;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 
+import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
 
 /**
@@ -24,14 +27,13 @@ public class CrossfadePageTransformer implements ViewPager.PageTransformer {
         View ivMoney = page.findViewById(R.id.iv_money);
         View ivMoneyPig = page.findViewById(R.id.iv_money_pig);
 
-        if (position <= 1) {
-            page.setTranslationX(pageWidth * -position);
-        }
-
         if(position <= -1.0f || position >= 1.0f) {
         } else if( position == 0.0f ) {
+            backgroundView.setScaleX(1);
+            backgroundView.setScaleY(1);
         } else {
             if(backgroundView != null) {
+                page.setTranslationX(pageWidth * -position);
                 backgroundView.setAlpha(1.0f - Math.abs(position));
             }
 
@@ -56,44 +58,18 @@ public class CrossfadePageTransformer implements ViewPager.PageTransformer {
                 thirdText.setAlpha(1.0f - Math.abs(position));
             }
 
-            //Map + ivCreditCard - ivMoney simple translate, ivCreditCard parallax effect
             if(ivMoney != null){
-                ivMoney.setTranslationX(pageWidth * position);
+                ivMoney.setTranslationX(-pageWidth * position * 0.5f);
             }
 
             if(ivCreditCard != null){
-                ivCreditCard.setTranslationX((float)(pageWidth/1.2 * position));
+                ivCreditCard.setTranslationX(-(float)(pageWidth * 0.5f * position));
             }
 
-            //Mountain day - fade in/out
             if(ivMoneyPig != null){
-                ivMoneyPig.setAlpha(1.0f - Math.abs(position));
+                ivMoneyPig.setTranslationX(-pageWidth * position * 0.5f);
             }
 
-            //Mountain night - fade in, but translate out, rain fades in but parallax translate out
-//            if(mountainNight != null){
-//                if(position < 0){
-//                    mountainNight.setTranslationX(pageWidth * position);
-//                }else{
-//                    mountainNight.setAlpha(1.0f - Math.abs(position));
-//                }
-//            }
-//
-//            if(rain != null){
-//                if(position < 0){
-//                    rain.setTranslationX((float)(pageWidth/1.2 * position));
-//                }else{
-//                    rain.setAlpha(1.0f - Math.abs(position));
-//                }
-//            }
-//
-//            //Long click device + hands - translate both way but only fade out
-//            if(hands != null){
-//                hands.setTranslationX(pageWidth * position);
-//                if(position < 0) {
-//                    hands.setAlpha(1.0f - Math.abs(position));
-//                }
-//            }
         }
     }
 }
