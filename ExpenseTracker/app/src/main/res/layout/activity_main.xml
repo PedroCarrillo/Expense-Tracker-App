@@ -16,10 +16,9 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_height="wrap_content"
@@ -40,8 +39,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary"
-                    app:tabGravity="fill"
                     android:visibility="gone"
+                    app:layout_collapseMode="pin"
+                    app:tabGravity="fill"
                     android:theme="@style/AppTheme.AppBarOverlay" />
 
             </android.support.design.widget.AppBarLayout>
@@ -53,7 +53,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" >
             </FrameLayout>
 
-        </LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
 
         <android.support.design.widget.NavigationView
             android:layout_width="wrap_content"
