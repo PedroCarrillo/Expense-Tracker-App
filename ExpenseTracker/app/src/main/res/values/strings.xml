@@ -13,5 +13,9 @@
     <string name="money_desc">money_icon</string>
     <string name="credit_card_content_desc">credit card icon</string>
     <string name="saving_money_content_desc">saving money icon</string>
+    <string name="expenses">Expenses</string>
+    <string name="categories">Categories</string>
+    <string name="statistics">Statistics</string>
+    <string name="reminders">Reminders</string>
 
 </resources>

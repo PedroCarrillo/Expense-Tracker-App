@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginActivityFragment">
+    tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -37,11 +37,17 @@
             android:layout_marginBottom="10dp"
             android:text="Start using Expense Tracker"/>
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
+        <!--<com.google.android.gms.common.SignInButton-->
+            <!--android:id="@+id/sign_in_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+        <Button
+            android:id="@+id/sign_in"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:text="Start"/>
     </LinearLayout>
 
 </LinearLayout>

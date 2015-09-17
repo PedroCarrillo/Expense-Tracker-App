@@ -11,10 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.plus.Plus;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.WelcomePagerAdapter;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
@@ -22,12 +19,12 @@ import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.custom.CrossfadePageTransformer;
 import com.viewpagerindicator.CirclePageIndicator;
 
-public class LoginActivityFragment extends BaseFragment implements
+public class LoginFragment extends BaseFragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener  {
 
-    public static final String TAG = LoginActivityFragment.class.getSimpleName();
+    public static final String TAG = LoginFragment.class.getSimpleName();
 
     private static final int RC_SIGN_IN = 0;
     private GoogleApiClient mGoogleApiClient;
@@ -37,22 +34,22 @@ public class LoginActivityFragment extends BaseFragment implements
 
     private ViewPager vpWelcome;
 
-    public static LoginActivityFragment newInstance() {
-        return new LoginActivityFragment();
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
-    public LoginActivityFragment() {
+    public LoginFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Plus.API)
-                .addScope(new Scope(Scopes.PROFILE))
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(Plus.API)
+//                .addScope(new Scope(Scopes.PROFILE))
+//                .build();
     }
 
     @Override
@@ -73,23 +70,20 @@ public class LoginActivityFragment extends BaseFragment implements
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator)getView().findViewById(R.id.cpi_welcome);
         circlePageIndicator.setViewPager(vpWelcome);
 
-        getView().findViewById(R.id.sign_in_button).setOnClickListener(this);
+//        getView().findViewById(R.id.sign_in_button).setOnClickListener(this);
+        getView().findViewById(R.id.sign_in).setOnClickListener(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
-    }
-
-    public void signIn(View v) {
-        Log.e("hola", " hola12123");
+//        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -108,15 +102,17 @@ public class LoginActivityFragment extends BaseFragment implements
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.sign_in_button) {
-            onSignInClicked();
+//        if(view.getId() == R.id.sign_in_button) {
+//            onSignInClicked();
+//        } else
+        if (view.getId() == R.id.sign_in) {
+            showSignedInUI();
         }
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-
         if (!mIsResolving && mShouldResolve) {
             if (connectionResult.hasResolution()) {
                 try {
@@ -142,7 +138,7 @@ public class LoginActivityFragment extends BaseFragment implements
         // User clicked the sign-in button, so begin the sign-in process and automatically
         // attempt to resolve any errors that occur.
         mShouldResolve = true;
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
 
         // Show a message to the user that we are signing in.
 //        mStatusTextView.setText(R.string.signing_in);

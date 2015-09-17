@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_expenses"
+            android:icon="@drawable/ic_save_money"
+            android:title="@string/expenses" />
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_save_money"
+            android:title="@string/categories" />
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_save_money"
+            android:title="@string/statistics" />
+        <item
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_save_money"
+            android:title="@string/reminders" />
+    </group>
+</menu>
