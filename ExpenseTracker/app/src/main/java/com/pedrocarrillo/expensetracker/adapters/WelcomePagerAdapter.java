@@ -23,13 +23,13 @@ public class WelcomePagerAdapter extends FragmentStatePagerAdapter {
         WelcomePage tp = null;
         switch (position) {
             case 0:
-                tp = WelcomePage.newInstance(R.layout.first_welcome_page);
+                tp = WelcomePage.newInstance(R.layout.layout_welcome_first);
                 break;
             case 1:
-                tp = WelcomePage.newInstance(R.layout.second_welcome_page);
+                tp = WelcomePage.newInstance(R.layout.layout_welcome_second);
                 break;
             case 2:
-                tp = WelcomePage.newInstance(R.layout.third_welcome_page);
+                tp = WelcomePage.newInstance(R.layout.layout_welcome_third);
                 break;
         }
         return tp;

@@ -1,27 +1,27 @@
 package com.pedrocarrillo.expensetracker.ui;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.pedrocarrillo.expensetracker.interfaces.IFragmentListener;
+import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 
 /**
- * Created by Pedro on 15/9/2015.
+ * Created by pcarrillo on 17/09/2015.
  */
-public class BaseFragment extends Fragment{
+public class MainFragment extends BaseFragment {
 
-    protected IFragmentListener mFragmentListener;
+    protected IMainActivityListener mMainActivityListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mFragmentListener = (IFragmentListener)context;
+        mMainActivityListener = (IMainActivityListener)context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mFragmentListener = null;
+        mMainActivityListener = null;
     }
 
 }

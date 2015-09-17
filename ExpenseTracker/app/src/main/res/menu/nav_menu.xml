@@ -3,6 +3,7 @@
         <item
             android:id="@+id/nav_expenses"
             android:icon="@drawable/ic_save_money"
+            android:checked="true"
             android:title="@string/expenses" />
         <item
             android:id="@+id/nav_categories"

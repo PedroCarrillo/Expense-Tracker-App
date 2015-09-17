@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.0.0'
     compile 'com.android.support:cardview-v7:23.0.0'
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
+    compile 'io.realm:realm-android:0.82.2'
 }
