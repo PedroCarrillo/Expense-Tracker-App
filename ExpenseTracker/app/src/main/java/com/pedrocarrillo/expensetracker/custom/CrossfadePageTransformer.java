@@ -1,11 +1,8 @@
-package com.pedrocarrillo.expensetracker.ui.custom;
+package com.pedrocarrillo.expensetracker.custom;
 
-import android.graphics.PorterDuff;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 
-import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
 
 /**

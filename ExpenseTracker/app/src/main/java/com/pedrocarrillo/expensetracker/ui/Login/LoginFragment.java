@@ -16,7 +16,7 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.WelcomePagerAdapter;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
-import com.pedrocarrillo.expensetracker.ui.custom.CrossfadePageTransformer;
+import com.pedrocarrillo.expensetracker.custom.CrossfadePageTransformer;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class LoginFragment extends BaseFragment implements

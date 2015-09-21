@@ -39,4 +39,5 @@ public class BaseActivity extends AppCompatActivity implements IFragmentListener
     public void closeActivity() {
         finish();
     }
+
 }

@@ -1,7 +1,10 @@
 package com.pedrocarrillo.expensetracker.ui;
 
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -37,6 +40,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private DrawerLayout mainDrawerLayout;
     private NavigationView mainNavigationView;
     private TabLayout mainTabLayout;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mainDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mainTabLayout = (TabLayout)findViewById(R.id.tab_layout);
         mainNavigationView = (NavigationView)findViewById(R.id.nav_view);
+        mFloatingActionButton = (FloatingActionButton)findViewById(R.id.fab_main);
     }
 
     private void setUpDrawer() {
@@ -108,11 +113,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void setTabs(List<String> tabList) {
+    public void setTabs(List<String> tabList, TabLayout.OnTabSelectedListener onTabSelectedListener) {
         mainTabLayout.removeAllTabs();
         mainTabLayout.setVisibility(View.VISIBLE);
+        mainTabLayout.setOnTabSelectedListener(onTabSelectedListener);
         for (String tab : tabList) {
-            mainTabLayout.addTab(mainTabLayout.newTab().setText(tab));
+            mainTabLayout.addTab(mainTabLayout.newTab().setText(tab).setTag(tab));
         }
     }
 
@@ -120,6 +126,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void setMode(@NavigationMode int mode) {
         if (mode == mCurrentMode) return;
         mCurrentMode = mode;
+        mFloatingActionButton.hide();
         switch (mode) {
             case NAVIGATION_MODE_STANDARD:
                 setNavigationModeStandard();
@@ -128,6 +135,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 setNavigationModeTabs();
                 break;
         }
+    }
+
+    @Override
+    public void setFAB(@DrawableRes int drawableId, View.OnClickListener onClickListener) {
+        mFloatingActionButton.setImageDrawable(getResources().getDrawable(drawableId));
+        mFloatingActionButton.setOnClickListener(onClickListener);
+        mFloatingActionButton.show();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        getSupportActionBar().setTitle("HOLA");
     }
 
     private void setNavigationModeTabs() {

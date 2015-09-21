@@ -9,4 +9,6 @@
     <dimen name="text_size_35">35sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_final_width">70dp</dimen>
+    <dimen name="default_text_size">25dp</dimen>
 </resources>
