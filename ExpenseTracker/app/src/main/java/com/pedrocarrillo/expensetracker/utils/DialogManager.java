@@ -2,14 +2,20 @@ package com.pedrocarrillo.expensetracker.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Pedro on 9/20/2015.
@@ -40,8 +46,23 @@ public class DialogManager {
         dialogBuilder.setTitle(title);
         if (dialogLayout != null) dialogBuilder.setView(dialogLayout);
         if (message != null) dialogBuilder.setMessage(message);
+        dialogBuilder.setCancelable(false);
         dialogBuilder.setPositiveButton(confirmText, listener);
         dialogBuilder.setNegativeButton(negativeText, listener);
         dialogBuilder.create().show();
     }
+
+    public void showShortSnackBar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void showShortToast(String message) {
+        Toast.makeText(ExpenseTrackerApp.getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showDatePickerDialog(Context context, DatePickerDialog.OnDateSetListener dateSetListener, Calendar calendar) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
 }

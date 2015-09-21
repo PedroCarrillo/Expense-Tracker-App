@@ -26,11 +26,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mTextView;
-        public CardView mContainer;
 
         public ViewHolder(View v) {
             super(v);
-            mContainer = (CardView)v.findViewById(R.id.cv_container);
             mTextView = (TextView)v.findViewById(R.id.tv_title);
         }
 
@@ -53,7 +51,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         final Category category = mCategoryList.get(position);
         holder.mTextView.setText(category.getName());
         holder.itemView.setTag(category);
-        setAnimation(holder.mContainer, position);
+        setAnimation(holder, position);
     }
 
     @Override
@@ -66,10 +64,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         notifyDataSetChanged();
     }
 
-    private void setAnimation(View viewToAnimate, int position) {
+    private void setAnimation(ViewHolder holder, int position) {
         if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(ExpenseTrackerApp.getContext(), R.anim.push_left_in);
-            viewToAnimate.startAnimation(animation);
+            holder.itemView.startAnimation(animation);
             lastPosition = position;
         }
     }

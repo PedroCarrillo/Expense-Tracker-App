@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.design.widget.TabLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.CategoriesAdapter;
+import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
@@ -89,8 +91,10 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         super.onActivityCreated(savedInstanceState);
         rvCategories.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvCategories.setAdapter(mCategoriesAdapter);
+        rvCategories.setHasFixedSize(true);
+        rvCategories.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
 
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -99,7 +103,6 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                //Remove swiped item from list and notify the RecyclerView
                 final Category category = (Category) viewHolder.itemView.getTag();
                 DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete).concat(category.getName()), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
@@ -135,7 +138,6 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
             mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
         } else {
             mCategoriesAdapter.updateCategories(mCategoryList);
-//            mCategoriesAdapter.notifyDataSetChanged();
         }
     }
 

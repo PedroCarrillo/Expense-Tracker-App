@@ -11,6 +11,7 @@
     <color name="colorAccentRed">#FF5252</color>
     <color name="colorAccentGreen">#76FF03</color>
 
+    <color name="grey">#4f4f4f</color>
     <color name="teal">#00796B</color>
     <color name="white">#FFFFFF</color>
     <color name="purple">#7E57C2</color>

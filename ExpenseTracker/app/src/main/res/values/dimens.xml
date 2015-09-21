@@ -11,4 +11,7 @@
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_final_width">70dp</dimen>
     <dimen name="default_text_size">25dp</dimen>
+    <dimen name="dimen_5dp">5dp</dimen>
+    <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_15dp">15dp</dimen>
 </resources>
