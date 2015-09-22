@@ -3,6 +3,7 @@ package com.pedrocarrillo.expensetracker.entities;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
@@ -107,13 +108,28 @@ public class Expense extends RealmObject {
         return total;
     }
 
-    public static float getTodayTotalExpenses(){
-        Date today = DateUtils.getToday();
-        Date tomorrow = DateUtils.getTomorrowDate();
-        Log.e("getTodaysTotal", " " + today);
-        Log.e("getTodaysTotal", " " + tomorrow);
-        RealmResults<Expense> totalExpense = getExpensesList(today, tomorrow, IExpensesType.MODE_EXPENSES);
-        RealmResults<Expense> totalIncome = getExpensesList(today, tomorrow, IExpensesType.MODE_INCOME);
+    public static float getTotalExpensesByDateMode(@IDateMode int dateMode){
+        Date dateFrom;
+        Date dateTo;
+        switch (dateMode) {
+            case IDateMode.MODE_TODAY:
+                dateFrom = DateUtils.getToday();
+                dateTo = DateUtils.getTomorrowDate();
+                break;
+            case IDateMode.MODE_WEEK:
+                dateFrom = DateUtils.getFirstDateOfCurrentWeek();
+                dateTo = DateUtils.getLastDateOfCurrentWeek();
+                break;
+            case IDateMode.MODE_MONTH:
+                dateFrom = DateUtils.getFirstDateOfCurrentMonth();
+                dateTo = DateUtils.getLastDateOfCurrentMonth();
+                break;
+            default:
+                dateFrom = new Date();
+                dateTo = new Date();
+        }
+        RealmResults<Expense> totalExpense = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_EXPENSES);
+        RealmResults<Expense> totalIncome = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_INCOME);
         float total = totalExpense.sum("total").floatValue() - totalIncome.sum("total").floatValue();
         return total;
     }

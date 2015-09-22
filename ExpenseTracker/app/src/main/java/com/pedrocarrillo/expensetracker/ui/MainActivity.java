@@ -1,5 +1,6 @@
 package com.pedrocarrillo.expensetracker.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
@@ -19,6 +20,7 @@ import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 import com.pedrocarrillo.expensetracker.ui.categories.CategoriesFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesFragment;
 import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
+import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
 
 import java.lang.annotation.Retention;
@@ -98,6 +100,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

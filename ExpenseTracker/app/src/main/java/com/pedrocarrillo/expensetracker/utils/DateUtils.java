@@ -31,13 +31,14 @@ public class DateUtils {
 
     public static Date getFirstDateOfCurrentWeek() {
         Calendar cal = setDateStartOfDay(Calendar.getInstance());
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_WEEK));
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
         return cal.getTime();
     }
 
     public static Date getLastDateOfCurrentWeek(){
         Calendar cal = setDateStartOfDay(Calendar.getInstance());
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_WEEK));
+//        Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_WEEK);
+        cal.set(Calendar.DAY_OF_WEEK, 7);
         cal.add(Calendar.DATE, 1);
         return cal.getTime();
     }

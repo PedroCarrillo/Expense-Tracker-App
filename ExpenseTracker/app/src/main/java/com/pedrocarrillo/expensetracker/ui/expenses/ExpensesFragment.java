@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +38,7 @@ import java.util.List;
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSelectedListener {
+public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSelectedListener, ExpensesAdapter.ExpenseAdapterOnClickHandler {
 
     public static final int RQ_NEW_EXPENSE = 1001;
 
@@ -70,6 +74,12 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mExpensesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
@@ -84,6 +94,36 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
         rvExpenses.setAdapter(mExpensesAdapter);
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                final Expense expense= (Expense) viewHolder.itemView.getTag();
+                DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_expense), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            RealmManager.getInstance().delete(expense);
+                        }
+                        reloadData();
+                    }
+                });
+            }
+
+            @Override
+            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder.itemView.getTag() == null) return 0;
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(rvExpenses);
     }
 
     @Override
@@ -113,9 +153,9 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
                 break;
         }
         if (mExpensesAdapter == null) {
-            mExpensesAdapter = new ExpensesAdapter(getActivity(), mExpenseList);
+            mExpensesAdapter = new ExpensesAdapter(getActivity(), this, mExpenseList, mCurrentDateMode);
         } else {
-            mExpensesAdapter.updateExpenses(mExpenseList);
+            mExpensesAdapter.updateExpenses(mExpenseList, mCurrentDateMode);
         }
     }
 
@@ -130,10 +170,16 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     }
 
     @Override
+    public void onClick(ExpensesAdapter.ViewHolder vh) {
+        Log.e("Hola", "clicked" + vh.itemView.getTag());
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
             reloadData();
         }
     }
+
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.example.android.sunshine.app"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListPreference
+        android:title="@string/country_currency"
+        android:key="@string/pref_country_key"
+        android:defaultValue="@string/default_country"
+        android:entryValues="@array/country_values"
+        android:entries="@array/countries_names" />
+
+</PreferenceScreen>
