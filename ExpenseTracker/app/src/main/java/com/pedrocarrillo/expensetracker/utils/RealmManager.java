@@ -1,7 +1,6 @@
 package com.pedrocarrillo.expensetracker.utils;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
-import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesFragment;
 
 import io.realm.Realm;
 import io.realm.RealmObject;

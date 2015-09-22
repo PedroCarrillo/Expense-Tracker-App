@@ -1,7 +1,9 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -17,6 +19,8 @@ import com.pedrocarrillo.expensetracker.adapters.ExpensesAdapter;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
@@ -32,12 +36,12 @@ import java.util.List;
  */
 public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSelectedListener {
 
-    private List<String> tabList;
     public static final int RQ_NEW_EXPENSE = 1001;
 
     private List<Expense> mExpenseList;
     private ExpensesAdapter mExpensesAdapter;
     private RecyclerView rvExpenses;
+    private @IDateMode int mCurrentDateMode;
 
     public static ExpensesFragment newInstance() {
         return new ExpensesFragment();
@@ -68,7 +72,7 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
+        List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setTabs(tabList, this);
         mMainActivityListener.setFAB(android.R.drawable.ic_input_add, new View.OnClickListener() {
@@ -77,8 +81,6 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
                 onAddNewExpense();
             }
         });
-        mExpenseList = Expense.getExpenses();
-        mExpensesAdapter = new ExpensesAdapter(getActivity(), mExpenseList);
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
         rvExpenses.setAdapter(mExpensesAdapter);
@@ -86,7 +88,35 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getTag()!=null) {
+            if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.today))) {
+                mCurrentDateMode= IDateMode.MODE_TODAY;
+            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.week))) {
+                mCurrentDateMode = IDateMode.MODE_WEEK;
+            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.month))) {
+                mCurrentDateMode = IDateMode.MODE_MONTH;
+            }
+        }
+        reloadData();
+    }
 
+    private void reloadData() {
+        switch (mCurrentDateMode) {
+            case IDateMode.MODE_TODAY:
+                mExpenseList = Expense.getTodayExpenses();
+                break;
+            case IDateMode.MODE_WEEK:
+                mExpenseList = Expense.getWeekExpenses();
+                break;
+            case IDateMode.MODE_MONTH:
+                mExpenseList = Expense.getMonthExpenses();
+                break;
+        }
+        if (mExpensesAdapter == null) {
+            mExpensesAdapter = new ExpensesAdapter(getActivity(), mExpenseList);
+        } else {
+            mExpensesAdapter.updateExpenses(mExpenseList);
+        }
     }
 
     @Override
@@ -99,4 +129,11 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
+            reloadData();
+        }
+    }
 }

@@ -1,7 +1,9 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -129,6 +131,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
             String total = etTotal.getText().toString();
             String description = etDescription.getText().toString();
             RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Long.valueOf(total)));
+            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
             dismiss();
         } else {
             DialogManager.getInstance().showShortToast(getString(R.string.error_total));

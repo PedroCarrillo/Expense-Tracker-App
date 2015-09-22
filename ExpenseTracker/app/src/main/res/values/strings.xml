@@ -13,6 +13,8 @@
     <string name="money_desc">money_icon</string>
     <string name="credit_card_content_desc">credit card icon</string>
     <string name="saving_money_content_desc">saving money icon</string>
+
+    <!--General-->
     <string name="expenses">Expenses</string>
     <string name="income">Income</string>
     <string name="categories">Categories</string>
