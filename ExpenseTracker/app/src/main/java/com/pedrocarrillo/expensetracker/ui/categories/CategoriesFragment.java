@@ -69,7 +69,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
                         if (which == DialogInterface.BUTTON_POSITIVE) {
                             EditText etTest = (EditText) ((AlertDialog) dialog).findViewById(R.id.et_main);
                             Category category = new Category(etTest.getText().toString(), mCurrentMode);
-                            RealmManager.getInstance().save(category);
+                            RealmManager.getInstance().save(category, Category.class);
                             reloadData();
                         }
                     }

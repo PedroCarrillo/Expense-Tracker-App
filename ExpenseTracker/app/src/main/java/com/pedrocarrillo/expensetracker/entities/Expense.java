@@ -16,11 +16,15 @@ import java.util.List;
 import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by pcarrillo on 21/09/2015.
  */
 public class Expense extends RealmObject {
+
+    @PrimaryKey
+    private String id;
 
     private String description;
     private Date date;
@@ -79,33 +83,12 @@ public class Expense extends RealmObject {
         this.total = total;
     }
 
-    public static List<Expense> getExpenses() {
-        RealmResults<Expense> expenses = RealmManager.getInstance().getRealmInstance().where(Expense.class)
-//                .equalTo("type", type)
-                .findAll();
-        return expenses;
+    public String getId() {
+        return id;
     }
 
-    public static float getWeekTotalExpenses() {
-        Date startWeek = DateUtils.getFirstDateOfCurrentWeek();
-        Date endWeek = DateUtils.getLastDateOfCurrentWeek();
-        Log.e("getWeekTotalExpenses", " " + startWeek);
-        Log.e("getWeekTotalExpenses", " " + endWeek);
-        RealmResults<Expense> totalExpense = getExpensesList(startWeek, endWeek, IExpensesType.MODE_EXPENSES);
-        RealmResults<Expense> totalIncome = getExpensesList(startWeek, endWeek, IExpensesType.MODE_INCOME);
-        float total = totalExpense.sum("total").floatValue() - totalIncome.sum("total").floatValue();
-        return total;
-    }
-
-    public static float getMonthTotalExpenses(){
-        Date startMonth = DateUtils.getFirstDateOfCurrentMonth();
-        Date endMonth = DateUtils.getLastDateOfCurrentMonth();
-        Log.e("getThisMonthExpenses", " " + startMonth);
-        Log.e("getThisMonthExpenses", " " + endMonth);
-        RealmResults<Expense> totalExpense = getExpensesList(startMonth, endMonth, IExpensesType.MODE_EXPENSES);
-        RealmResults<Expense> totalIncome = getExpensesList(startMonth, endMonth, IExpensesType.MODE_INCOME);
-        float total = totalExpense.sum("total").floatValue() - totalIncome.sum("total").floatValue();
-        return total;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public static float getTotalExpensesByDateMode(@IDateMode int dateMode){
@@ -128,8 +111,8 @@ public class Expense extends RealmObject {
                 dateFrom = new Date();
                 dateTo = new Date();
         }
-        RealmResults<Expense> totalExpense = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_EXPENSES);
-        RealmResults<Expense> totalIncome = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_INCOME);
+        RealmResults<Expense> totalExpense = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_EXPENSES, null);
+        RealmResults<Expense> totalIncome = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_INCOME, null);
         float total = totalExpense.sum("total").floatValue() - totalIncome.sum("total").floatValue();
         return total;
     }
@@ -137,25 +120,41 @@ public class Expense extends RealmObject {
     public static List<Expense> getTodayExpenses() {
         Date today = DateUtils.getToday();
         Date tomorrow = DateUtils.getTomorrowDate();
-        return getExpensesList(today, tomorrow, null);
+        return getExpensesList(today, tomorrow, null, null);
     }
 
     public static List<Expense> getWeekExpenses() {
         Date startWeek = DateUtils.getFirstDateOfCurrentWeek();
         Date endWeek = DateUtils.getLastDateOfCurrentWeek();
-        return getExpensesList(startWeek, endWeek, null);
+        return getExpensesList(startWeek, endWeek, null, null);
+    }
+
+    public static List<Expense> getWeekExpensesByCategory(Expense expense) {
+        Date startWeek = DateUtils.getFirstDateOfCurrentWeek();
+        Date endWeek = DateUtils.getLastDateOfCurrentWeek();
+        return getExpensesList(startWeek, endWeek, null, expense.getCategory());
     }
 
     public static List<Expense> getMonthExpenses() {
         Date startMonth = DateUtils.getFirstDateOfCurrentMonth();
         Date endMonth = DateUtils.getLastDateOfCurrentMonth();
-        return getExpensesList(startMonth, endMonth, null);
+        return getExpensesList(startMonth, endMonth, null, null);
     }
 
-    public static RealmResults<Expense> getExpensesList(Date dateFrom, Date dateTo, @IExpensesType Integer type) {
+    public static float getCategoryTotalByDate(Date date, Category category) {
+        RealmResults<Expense> totalExpense = getExpensesList(date, DateUtils.addDaysToDate(date,1), IExpensesType.MODE_EXPENSES, category);
+        return totalExpense.sum("total").floatValue();
+    }
+
+    public static RealmResults<Expense> getExpensesList(Date dateFrom, Date dateTo, @IExpensesType Integer type, Category category) {
         RealmQuery<Expense> realmQuery = RealmManager.getInstance().getRealmInstance()
-                .where(Expense.class)
-                .between("date", dateFrom, dateTo);
+                .where(Expense.class);
+        if (dateTo != null) {
+            realmQuery.between("date", dateFrom, dateTo);
+        } else {
+            realmQuery.equalTo("date", dateFrom);
+        }
+        if (category != null) realmQuery.equalTo("category.id", category.getId());
         if (type != null) realmQuery.equalTo("type", type);
         return realmQuery.findAll();
     }

@@ -171,7 +171,10 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
 
     @Override
     public void onClick(ExpensesAdapter.ViewHolder vh) {
-        Log.e("Hola", "clicked" + vh.itemView.getTag());
+        Expense expenseSelected = (Expense) vh.itemView.getTag();
+        Intent expenseDetail = new Intent(getActivity(), ExpenseDetailActivity.class);
+        expenseDetail.putExtra(ExpenseDetailFragment.EXPENSE_ID_KEY, expenseSelected.getId());
+        startActivity(expenseDetail);
     }
 
     @Override

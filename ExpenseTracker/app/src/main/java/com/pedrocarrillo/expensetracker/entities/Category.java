@@ -9,11 +9,15 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by pcarrillo on 17/09/2015.
  */
 public class Category extends RealmObject {
+
+    @PrimaryKey
+    private String id;
 
     private String name;
     private int type;
@@ -49,6 +53,14 @@ public class Category extends RealmObject {
 
     public void setExpenses(RealmList<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public static List<Category> getCategoriesIncome() {

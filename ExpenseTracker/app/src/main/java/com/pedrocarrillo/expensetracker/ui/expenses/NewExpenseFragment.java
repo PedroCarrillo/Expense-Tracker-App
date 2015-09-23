@@ -130,7 +130,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
             Category currentCategory = (Category) spCategory.getSelectedItem();
             String total = etTotal.getText().toString();
             String description = etDescription.getText().toString();
-            RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Long.valueOf(total)));
+            RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Long.valueOf(total)), Expense.class);
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
             dismiss();
         } else {

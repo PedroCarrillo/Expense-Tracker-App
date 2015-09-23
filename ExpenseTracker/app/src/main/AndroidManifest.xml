@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
-        android:allowBackup="true"
         android:name=".ExpenseTrackerApp"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar" >
@@ -21,15 +21,18 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".ui.expenses.ExpenseDetailActivity"
+            android:label="@string/title_activity_expense_detail" >
+        </activity>
     </application>
-
 
 </manifest>
