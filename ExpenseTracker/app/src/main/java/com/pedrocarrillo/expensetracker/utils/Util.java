@@ -22,8 +22,7 @@ public class Util {
 
     public static String formatDateToString(Date date, String pattern) {
         DateFormat formatter = new SimpleDateFormat(pattern);
-        String formattedDate = formatter.format(date);
-        return formattedDate;
+        return formatter.format(date);
     }
 
     public static boolean isEmptyField(EditText et) {

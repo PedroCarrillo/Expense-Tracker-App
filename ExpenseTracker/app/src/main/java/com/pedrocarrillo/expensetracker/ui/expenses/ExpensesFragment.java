@@ -59,12 +59,6 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
         super.onCreate(savedInstanceState);
     }
 
-    private void onAddNewExpense() {
-        NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE);
-        newExpenseFragment.setTargetFragment(this, RQ_NEW_EXPENSE);
-        newExpenseFragment.show(getChildFragmentManager(), "NEW_EXPENSE");
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -138,6 +132,12 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
             }
         }
         reloadData();
+    }
+
+    private void onAddNewExpense() {
+        NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE, null);
+        newExpenseFragment.setTargetFragment(this, RQ_NEW_EXPENSE);
+        newExpenseFragment.show(getChildFragmentManager(), "NEW_EXPENSE");
     }
 
     private void reloadData() {

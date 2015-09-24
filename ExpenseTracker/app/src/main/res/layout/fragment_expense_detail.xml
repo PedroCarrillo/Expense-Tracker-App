@@ -99,12 +99,11 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_edit"
-            app:fabSize="mini"
+            app:fabSize="normal"
             app:layout_anchor="@id/detail_container"
             app:layout_anchorGravity="bottom|right"
+            android:src="@android:drawable/ic_menu_edit"
             android:layout_marginRight="25dp"
-            android:visibility="visible"
-            tools:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

@@ -1,11 +1,14 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
 import android.animation.PropertyValuesHolder;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import com.db.chart.view.YController;
 import com.db.chart.view.animation.Animation;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
@@ -31,7 +35,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class ExpenseDetailFragment extends BaseFragment {
+public class ExpenseDetailFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String EXPENSE_ID_KEY = "_expense_id";
 
@@ -51,6 +55,14 @@ public class ExpenseDetailFragment extends BaseFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_expense_detail, container, false);
+        bcvWeekExpenses = (BarChartView) rootView.findViewById(R.id.linechart);
+        return rootView;
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
@@ -65,6 +77,20 @@ public class ExpenseDetailFragment extends BaseFragment {
         ((TextView)getView().findViewById(R.id.tv_total)).setText(String.valueOf(expense.getTotal()));
         ((TextView)getView().findViewById(R.id.tv_category)).setText(String.valueOf(expense.getCategory().getName()));
         ((TextView)getView().findViewById(R.id.tv_description)).setText(String.valueOf(expense.getDescription()));
+        ((FloatingActionButton)getView().findViewById(R.id.fab_edit)).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fab_edit) {
+            onEditExpense();
+        }
+    }
+
+    private void onEditExpense() {
+        NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_UPDATE, expense.getId());
+        newExpenseFragment.setTargetFragment(this, ExpensesFragment.RQ_NEW_EXPENSE);
+        newExpenseFragment.show(getChildFragmentManager(), "EDIT_EXPENSE");
     }
 
     private void setWeekChart() {
@@ -106,8 +132,8 @@ public class ExpenseDetailFragment extends BaseFragment {
         bcvWeekExpenses.setBorderSpacing(0)
                 .setAxisBorderValues(0, maxValue, 10)
                 .setAxisColor(getResources().getColor(R.color.grey))
+                .setLabelsColor(getResources().getColor(R.color.white))
                 .setYAxis(false)
-                .setLabelsColor(Color.parseColor("#FF8E8A84"))
                 .setYLabels(YController.LabelPosition.NONE)
                 .setXLabels(XController.LabelPosition.OUTSIDE);
 
@@ -116,14 +142,6 @@ public class ExpenseDetailFragment extends BaseFragment {
                 .setOverlap(.3f, order)
                 .setEndAction(action));
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_expense_detail, container, false);
-        bcvWeekExpenses = (BarChartView) rootView.findViewById(R.id.linechart);
-        return rootView;
     }
 
     private void showTooltipWeekChart(){
@@ -142,6 +160,18 @@ public class ExpenseDetailFragment extends BaseFragment {
             }
         }
 
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ExpensesFragment.RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
+            loadData();
+            bcvWeekExpenses.dismissAllTooltips();
+            bcvWeekExpenses.reset();
+            setWeekChart();
+        }
     }
 
 }

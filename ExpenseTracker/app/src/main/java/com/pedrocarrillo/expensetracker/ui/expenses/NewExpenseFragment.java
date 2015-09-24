@@ -44,14 +44,16 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
 
     private CategoriesSpinnerAdapter mCategoriesSpinnerAdapter;
     private Date selectedDate;
+    private Expense mExpense;
 
     private @IUserActionsMode int mUserActionMode;
     private @IExpensesType int mExpenseType;
 
-    static NewExpenseFragment newInstance(@IUserActionsMode int mode) {
+    static NewExpenseFragment newInstance(@IUserActionsMode int mode, String expenseId) {
         NewExpenseFragment newExpenseFragment = new NewExpenseFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(IUserActionsMode.MODE_TAG, mode);
+        if (expenseId != null) bundle.putString(ExpenseDetailFragment.EXPENSE_ID_KEY, expenseId);
         newExpenseFragment.setArguments(bundle);
         return newExpenseFragment;
     }
@@ -99,7 +101,22 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
                 selectedDate = new Date();
                 break;
             case IUserActionsMode.MODE_UPDATE:
-                selectedDate = new Date();
+                if (getArguments() != null) {
+                    String id = getArguments().getString(ExpenseDetailFragment.EXPENSE_ID_KEY);
+                    mExpense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
+                    tvTitle.setText("Edit");
+                    selectedDate = mExpense.getDate();
+                    etDescription.setText(mExpense.getDescription());
+                    etTotal.setText(String.valueOf(mExpense.getTotal()));
+                    int categoryPosition = 0;
+                    for (int i=0; i<categoriesArray.length; i++) {
+                        if (categoriesArray[i].getId().equalsIgnoreCase(mExpense.getCategory().getId())) {
+                            categoryPosition = i;
+                            break;
+                        }
+                    }
+                    spCategory.setSelection(categoryPosition);
+                }
                 break;
         }
         updateDate();
@@ -130,7 +147,17 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
             Category currentCategory = (Category) spCategory.getSelectedItem();
             String total = etTotal.getText().toString();
             String description = etDescription.getText().toString();
-            RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Long.valueOf(total)), Expense.class);
+            if (mUserActionMode == IUserActionsMode.MODE_CREATE) {
+                RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Long.valueOf(total)), Expense.class);
+            } else {
+                Expense editExpense = new Expense();
+                editExpense.setId(mExpense.getId());
+                editExpense.setTotal(Long.valueOf(total));
+                editExpense.setDescription(description);
+                editExpense.setCategory(currentCategory);
+                editExpense.setDate(selectedDate);
+                RealmManager.getInstance().update(editExpense);
+            }
             getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
             dismiss();
         } else {
@@ -154,4 +181,5 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
     private void updateDate() {
         tvDate.setText(Util.formatDateToString(selectedDate, "MM/dd/yyyy"));
     }
+
 }

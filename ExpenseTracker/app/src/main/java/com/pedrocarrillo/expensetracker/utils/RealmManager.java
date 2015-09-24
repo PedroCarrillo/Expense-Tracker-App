@@ -31,29 +31,41 @@ public class RealmManager {
         return realm;
     }
 
-    public <E extends RealmObject> void update(E object) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(object);
-        realm.commitTransaction();
+    public <E extends RealmObject> void update(final E object) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(object);
+            }
+        });
     }
 
-    public <E extends RealmObject> void update(Iterable<E> object) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(object);
-        realm.commitTransaction();
+    public <E extends RealmObject> void update(final Iterable<E> object) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(object);
+            }
+        });
     }
 
-    public <E extends RealmObject> void save(E object, Class<E> clazz) {
-        realm.beginTransaction();
-        checkDuplicateUUID(object, clazz);
-        realm.copyToRealm(object);
-        realm.commitTransaction();
+    public <E extends RealmObject> void save(final E object, final Class<E> clazz) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                checkDuplicateUUID(object, clazz);
+                realm.copyToRealm(object);
+            }
+        });
     }
 
-    public <E extends RealmObject> void delete(E object){
-        realm.beginTransaction();
-        object.removeFromRealm();
-        realm.commitTransaction();
+    public <E extends RealmObject> void delete(final E object){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                object.removeFromRealm();
+            }
+        });
     }
 
     public <E extends RealmObject> RealmObject findById(Class<E> clazz, String id) {
