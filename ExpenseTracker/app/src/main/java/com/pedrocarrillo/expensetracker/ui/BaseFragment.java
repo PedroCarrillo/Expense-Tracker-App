@@ -35,18 +35,6 @@ public class BaseFragment extends Fragment{
         return viewWithToolbar;
     }
 
-//        setSupportActionBar(mToolbar);
-//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                BaseActivity.super.onBackPressed();
-//            }
-//        });
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back_navigation);
-//        setToolBarType(toolbarType);
-//    }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

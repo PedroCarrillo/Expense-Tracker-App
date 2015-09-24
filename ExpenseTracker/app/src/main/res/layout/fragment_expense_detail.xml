@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_10dp"
                         tools:text="description"/>
-                    
+
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
