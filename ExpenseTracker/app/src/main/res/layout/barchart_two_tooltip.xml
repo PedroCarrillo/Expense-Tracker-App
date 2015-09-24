@@ -11,7 +11,7 @@
         android:gravity="center"
         android:layout_marginTop="2dp"
         android:textSize="10sp"
-        android:textColor="#ffc2c2c2"
+        android:textColor="@color/colorPrimaryDark"
         android:includeFontPadding="false">
     </TextView>
 

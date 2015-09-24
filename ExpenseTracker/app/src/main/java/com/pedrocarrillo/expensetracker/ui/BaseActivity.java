@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.interfaces.IFragmentListener;
@@ -38,6 +40,20 @@ public class BaseActivity extends AppCompatActivity implements IFragmentListener
     @Override
     public void closeActivity() {
         finish();
+    }
+
+    @Override
+    public void setToolbar(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
 }

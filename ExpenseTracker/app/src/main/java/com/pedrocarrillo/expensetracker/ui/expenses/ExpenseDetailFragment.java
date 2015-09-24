@@ -38,6 +38,7 @@ import java.util.List;
 public class ExpenseDetailFragment extends BaseFragment implements View.OnClickListener {
 
     public static final String EXPENSE_ID_KEY = "_expense_id";
+    public static final int RQ_EDIT_EXPENSE = 1001;
 
     private BarChartView bcvWeekExpenses;
     private List<Float> valuesPerDay;
@@ -57,7 +58,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_expense_detail, container, false);
+        View rootView = onCreateFragmentView(R.layout.fragment_expense_detail, inflater, container, true);
         bcvWeekExpenses = (BarChartView) rootView.findViewById(R.id.linechart);
         return rootView;
     }
@@ -89,7 +90,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
 
     private void onEditExpense() {
         NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_UPDATE, expense.getId());
-        newExpenseFragment.setTargetFragment(this, ExpensesFragment.RQ_NEW_EXPENSE);
+        newExpenseFragment.setTargetFragment(this, RQ_EDIT_EXPENSE);
         newExpenseFragment.show(getChildFragmentManager(), "EDIT_EXPENSE");
     }
 
@@ -123,7 +124,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
             valuesPerDay.add(value);
             barSet.addBar(new Bar(day, value));
         }
-        barSet.setColor(getResources().getColor(R.color.colorPrimaryDark));
+        barSet.setColor(getResources().getColor(R.color.colorPrimaryLight));
         bcvWeekExpenses.setSetSpacing(Tools.fromDpToPx(-15));
         bcvWeekExpenses.setRoundCorners(Tools.fromDpToPx(2));
         bcvWeekExpenses.addData(barSet);
@@ -132,7 +133,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
         bcvWeekExpenses.setBorderSpacing(0)
                 .setAxisBorderValues(0, maxValue, 10)
                 .setAxisColor(getResources().getColor(R.color.grey))
-                .setLabelsColor(getResources().getColor(R.color.white))
+                .setLabelsColor(getResources().getColor(R.color.colorPrimaryDark))
                 .setYAxis(false)
                 .setYLabels(YController.LabelPosition.NONE)
                 .setXLabels(XController.LabelPosition.OUTSIDE);
@@ -166,7 +167,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == ExpensesFragment.RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
+        if(requestCode == RQ_EDIT_EXPENSE && resultCode == Activity.RESULT_OK) {
             loadData();
             bcvWeekExpenses.dismissAllTooltips();
             bcvWeekExpenses.reset();
