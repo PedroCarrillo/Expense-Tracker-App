@@ -1,7 +1,9 @@
 package com.pedrocarrillo.expensetracker.adapters;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     private int colorIncome;
     private String prefixExpense;
     private String prefixIncome;
+    private String titleTransitionName;
 
     final private ExpenseAdapterOnClickHandler mClickHandler;
 
@@ -44,6 +47,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
         this.prefixExpense = context.getResources().getString(R.string.expense_prefix);
         this.prefixIncome = context.getResources().getString(R.string.income_prefix);
         this.mCurrentDateMode = mCurrentDateMode;
+        this.titleTransitionName = context.getString(R.string.tv_title_transition);
     }
 
     @Override
@@ -87,7 +91,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
                         break;
                 }
                 holder.tvCategory.setText(expense.getCategory().getName());
-                if (expense.getDescription() != null || !expense.getDescription().isEmpty()) {
+                if (expense.getDescription() != null && !expense.getDescription().isEmpty()) {
                     holder.tvDescription.setText(expense.getDescription());
                     holder.tvDescription.setVisibility(View.VISIBLE);
                 } else {
@@ -95,6 +99,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
                 }
                 holder.tvTotal.setText(prefix);
                 holder.itemView.setTag(expense);
+                ViewCompat.setTransitionName(holder.tvTotal, titleTransitionName);
                 break;
         }
         setAnimation(holder, position);

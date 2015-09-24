@@ -529,4 +529,5 @@
     </string-array>
     <string name="title_activity_expense_detail">ExpenseDetailActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="tv_title_transition">tvTotalTransition</string>
 </resources>

@@ -2,12 +2,10 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 
 import android.animation.PropertyValuesHolder;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +14,11 @@ import android.widget.TextView;
 import com.db.chart.Tools;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
-import com.db.chart.view.AxisController;
-import com.db.chart.view.HorizontalBarChartView;
+import com.db.chart.view.BarChartView;
 import com.db.chart.view.Tooltip;
 import com.db.chart.view.XController;
+import com.db.chart.view.YController;
 import com.db.chart.view.animation.Animation;
-import com.google.android.gms.ads.internal.purchase.GInAppPurchaseManagerInfoParcel;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
@@ -32,22 +29,15 @@ import com.pedrocarrillo.expensetracker.utils.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import io.realm.RealmObject;
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class ExpenseDetailFragment extends BaseFragment {
 
     public static final String EXPENSE_ID_KEY = "_expense_id";
-    private HorizontalBarChartView chartOtherExpensesWeek;
-    private TextView tvTwo;
-    private TextView tvTwoMetric;
+
+    private BarChartView bcvWeekExpenses;
+    private List<Float> valuesPerDay;
+    private Expense expense;
 
     static ExpenseDetailFragment newInstance(String id) {
         ExpenseDetailFragment expenseDetailFragment = new ExpenseDetailFragment();
@@ -65,65 +55,93 @@ public class ExpenseDetailFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             String id = getArguments().getString(EXPENSE_ID_KEY);
-            Expense expense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
-            List<Date> dateList = DateUtils.getWeekDates();
-
-            Runnable action =  new Runnable() {
-                @Override
-                public void run() {
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-
-                        }
-                    }, 500);
-                }
-            };
-
-            Tooltip tip = new Tooltip(getActivity(), R.layout.barchart_two_tooltip);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                tip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
-                tip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA,0));
-            }
-            chartOtherExpensesWeek.setTooltips(tip);
-
-            BarSet barSet = new BarSet();
-            Bar bar;
-            List<Float> valuesPerDay = new ArrayList<>();
-            Collections.sort(dateList);
-            for (Date date : dateList) {
-                String day = Util.formatDateToString(date, "EEE");
-                float value = Expense.getCategoryTotalByDate(date, expense.getCategory());
-
-                valuesPerDay.add(value);
-                bar = new Bar(day, value);
-                barSet.addBar(bar);
-            }
-
-            chartOtherExpensesWeek.addData(barSet);
-            chartOtherExpensesWeek.setBarSpacing(Tools.fromDpToPx(10));
-            
-            int maxValue = Math.round(Collections.max(valuesPerDay));
-            chartOtherExpensesWeek.setBorderSpacing(0)
-                    .setAxisBorderValues(0, maxValue, 10)
-                    .setXAxis(false)
-                    .setYAxis(false)
-                    .setLabelsColor(Color.parseColor("#FF8E8A84"))
-                    .setXLabels(XController.LabelPosition.NONE);
-
-
-            int[] order = {4, 3, 2, 1, 5, 0, 6};
-            chartOtherExpensesWeek.show(new Animation()
-                    .setOverlap(.5f, order)
-                    .setEndAction(action));
-
+            expense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
+            loadData();
+            setWeekChart();
         }
+    }
+
+    private void loadData() {
+        ((TextView)getView().findViewById(R.id.tv_total)).setText(String.valueOf(expense.getTotal()));
+        ((TextView)getView().findViewById(R.id.tv_category)).setText(String.valueOf(expense.getCategory().getName()));
+        ((TextView)getView().findViewById(R.id.tv_description)).setText(String.valueOf(expense.getDescription()));
+    }
+
+    private void setWeekChart() {
+        List<Date> dateList = DateUtils.getWeekDates();
+
+        Runnable action =  new Runnable() {
+            @Override
+            public void run() {
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        if( getActivity() != null) showTooltipWeekChart();
+                    }
+                }, 500);
+            }
+        };
+
+        Tooltip tip = new Tooltip(getActivity(), R.layout.barchart_two_tooltip);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            tip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
+            tip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA,0));
+        }
+
+        bcvWeekExpenses.setTooltips(tip);
+        BarSet barSet = new BarSet();
+        valuesPerDay = new ArrayList<>();
+        Collections.sort(dateList);
+        for (Date date : dateList) {
+            String day = Util.formatDateToString(date, "EEE");
+            float value = Expense.getCategoryTotalByDate(date, expense.getCategory());
+            valuesPerDay.add(value);
+            barSet.addBar(new Bar(day, value));
+        }
+        barSet.setColor(getResources().getColor(R.color.colorPrimaryDark));
+        bcvWeekExpenses.setSetSpacing(Tools.fromDpToPx(-15));
+        bcvWeekExpenses.setRoundCorners(Tools.fromDpToPx(2));
+        bcvWeekExpenses.addData(barSet);
+        bcvWeekExpenses.setBarSpacing(Tools.fromDpToPx(35));
+        int maxValue = Math.round(Collections.max(valuesPerDay));
+        bcvWeekExpenses.setBorderSpacing(0)
+                .setAxisBorderValues(0, maxValue, 10)
+                .setAxisColor(getResources().getColor(R.color.grey))
+                .setYAxis(false)
+                .setLabelsColor(Color.parseColor("#FF8E8A84"))
+                .setYLabels(YController.LabelPosition.NONE)
+                .setXLabels(XController.LabelPosition.OUTSIDE);
+
+        int[] order = {0, 1, 2, 3, 4, 5, 6};
+        bcvWeekExpenses.show(new Animation()
+                .setOverlap(.3f, order)
+                .setEndAction(action));
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_expense_detail, container, false);
-        chartOtherExpensesWeek = (HorizontalBarChartView) rootView.findViewById(R.id.linechart);
+        bcvWeekExpenses = (BarChartView) rootView.findViewById(R.id.linechart);
         return rootView;
     }
+
+    private void showTooltipWeekChart(){
+        ArrayList<ArrayList<Rect>> areas = new ArrayList<>();
+        areas.add(bcvWeekExpenses.getEntriesArea(0));
+
+        for(int i = 0; i < areas.size(); i++) {
+            for (int j = 0; j < areas.get(i).size(); j++) {
+                Tooltip tooltip = new Tooltip(getActivity(), R.layout.barchart_two_tooltip, R.id.value);
+                tooltip.prepare(areas.get(i).get(j), valuesPerDay.get(j));
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    tooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
+                    tooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0));
+                }
+                bcvWeekExpenses.showTooltip(tooltip, true);
+            }
+        }
+
+    }
+
 }
