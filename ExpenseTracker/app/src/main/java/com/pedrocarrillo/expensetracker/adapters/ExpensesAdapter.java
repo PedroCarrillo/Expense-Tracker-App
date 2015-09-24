@@ -90,7 +90,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
                         prefix = String.format(prefixIncome, Util.getFormattedCurrency(expense.getTotal()));
                         break;
                 }
-                holder.tvCategory.setText(expense.getCategory().getName());
+                if (expense.getCategory() != null)holder.tvCategory.setText(expense.getCategory().getName());
                 if (expense.getDescription() != null && !expense.getDescription().isEmpty()) {
                     holder.tvDescription.setText(expense.getDescription());
                     holder.tvDescription.setVisibility(View.VISIBLE);
@@ -116,6 +116,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     }
 
     public void updateExpenses(List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
+        this.lastPosition = -1;
         this.mCurrentDateMode = mCurrentDateMode;
         this.mExpensesList = mExpensesList;
         notifyDataSetChanged();

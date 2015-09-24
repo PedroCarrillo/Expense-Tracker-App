@@ -530,4 +530,7 @@
     <string name="title_activity_expense_detail">ExpenseDetailActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="tv_title_transition">tvTotalTransition</string>
+    <string name="date_placeholder">date placeholder</string>
+    <string name="to_date">Date to</string>
+    <string name="date_from">Date from</string>
 </resources>

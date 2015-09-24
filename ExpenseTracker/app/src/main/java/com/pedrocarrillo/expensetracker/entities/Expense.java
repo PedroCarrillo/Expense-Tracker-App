@@ -142,9 +142,15 @@ public class Expense extends RealmObject {
     }
 
     public static float getCategoryTotalByDate(Date date, Category category) {
-        RealmResults<Expense> totalExpense = getExpensesList(date, DateUtils.addDaysToDate(date,1), IExpensesType.MODE_EXPENSES, category);
+        RealmResults<Expense> totalExpense = getExpensesList(date, DateUtils.addDaysToDate(date, 1), IExpensesType.MODE_EXPENSES, category);
         return totalExpense.sum("total").floatValue();
     }
+
+    public static float getCategoryTotalByDate(Date fromDate, Date toDate, Category category) {
+        RealmResults<Expense> totalExpense = getExpensesList(fromDate, DateUtils.addDaysToDate(toDate, 1), IExpensesType.MODE_EXPENSES, category);
+        return totalExpense.sum("total").floatValue();
+    }
+
 
     public static RealmResults<Expense> getExpensesList(Date dateFrom, Date dateTo, @IExpensesType Integer type, Category category) {
         RealmQuery<Expense> realmQuery = RealmManager.getInstance().getRealmInstance()

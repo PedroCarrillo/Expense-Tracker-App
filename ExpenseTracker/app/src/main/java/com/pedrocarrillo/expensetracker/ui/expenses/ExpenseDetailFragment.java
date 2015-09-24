@@ -3,7 +3,6 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
@@ -108,7 +107,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
             }
         };
 
-        Tooltip tip = new Tooltip(getActivity(), R.layout.barchart_two_tooltip);
+        Tooltip tip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             tip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
             tip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA,0));
@@ -151,7 +150,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
 
         for(int i = 0; i < areas.size(); i++) {
             for (int j = 0; j < areas.get(i).size(); j++) {
-                Tooltip tooltip = new Tooltip(getActivity(), R.layout.barchart_two_tooltip, R.id.value);
+                Tooltip tooltip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart, R.id.value);
                 tooltip.prepare(areas.get(i).get(j), valuesPerDay.get(j));
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     tooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
