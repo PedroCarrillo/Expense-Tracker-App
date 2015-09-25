@@ -50,11 +50,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
     private TextView tvDateFrom;
     private TextView tvDateTo;
     private BarChartView bcvCategories;
-    private LineChartView lcvExpenses;
+    private BarChartView bcvCategoriesPercentage;
 
     private Date mDateFrom;
     private Date mDateTo;
     private List<Float> valuesPerCategory;
+    private List<Float> categoryPercentages;
 
     public static StatisticsFragment newInstance() {
         return new StatisticsFragment();
@@ -77,7 +78,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         tvDateFrom = (TextView)rootView.findViewById(R.id.tv_date_from);
         tvDateTo = (TextView)rootView.findViewById(R.id.tv_date_to);
         bcvCategories = (BarChartView) rootView.findViewById(R.id.chartCategories);
-        lcvExpenses = (LineChartView) rootView.findViewById(R.id.chartExpenses);
+        bcvCategoriesPercentage = (BarChartView) rootView.findViewById(R.id.chartCategoriesPercentages);
         return rootView;
     }
 
@@ -91,7 +92,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         updateDate(tvDateFrom, mDateFrom);
         updateDate(tvDateTo, mDateTo);
         setCategoryChart();
-//        setExpensesChart();
+        setCategoryChartPercentage();
     }
 
     @Override
@@ -121,6 +122,9 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                                 bcvCategories.dismissAllTooltips();
                                 bcvCategories.reset();
                                 setCategoryChart();
+                                bcvCategoriesPercentage.dismissAllTooltips();
+                                bcvCategoriesPercentage.reset();
+                                setCategoryChartPercentage();
                             }
                         },
                         calendar,
@@ -202,14 +206,15 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
     }
 
-    private void setExpensesChart() {
+    private void setCategoryChartPercentage() {
         List<Category> categoryList = Category.getCategoriesExpense();
+
         Runnable action =  new Runnable() {
             @Override
             public void run() {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-//                        if( getActivity() != null) showTooltipCategoriesChart();
+                        if( getActivity() != null) showTooltipCategoriesPercentageChart();
                     }
                 }, 500);
             }
@@ -221,40 +226,52 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
             tip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA,0));
         }
 
-        lcvExpenses.setTooltips(tip);
-        String[] categoriesNames = new String[categoryList.size()];
-        for (int pos=0; pos<categoryList.size(); pos++) {
-            categoriesNames[pos] = categoryList.get(pos).getName();
-        }
-
+        bcvCategoriesPercentage.setTooltips(tip);
+        BarSet barSet = new BarSet();
+        categoryPercentages = new ArrayList<>();
+        int[] order = new int[categoryList.size()];
+        int pos = 0;
         for (Category category : categoryList) {
-            List<Expense> expenseList = Expense.getExpensesList(mDateFrom, DateUtils.addDaysToDate(mDateTo, 1), null, category);
-            float[] expenseValues = new float[expenseList.size()];
-            for(int i=0; i<expenseList.size(); i++) {
-                Expense expense = expenseList.get(i);
-                expenseValues[i] = expense.getType() == IExpensesType.MODE_INCOME ? -expense.getTotal() : expense.getTotal();
-            }
-            if( expenseValues.length > 0) {
-                LineSet dataset = new LineSet(categoriesNames, expenseValues);
-                dataset
-//                    .setColor(Color.parseColor("#a34545"))
-//                    .setFill(Color.parseColor("#a34545"))
-                        .setSmooth(true);
-                lcvExpenses.addData(dataset);
+            float percentage = Expense.getExpensesCategoryPercentage(mDateFrom, mDateTo, category);
+            categoryPercentages.add(percentage);
+            order[pos] = pos++;
+            barSet.addBar(new Bar(category.getName(), percentage));
+        }
+        barSet.setColor(getResources().getColor(R.color.colorPrimaryLight));
+        bcvCategoriesPercentage.setSetSpacing(Tools.fromDpToPx(40));
+        bcvCategoriesPercentage.setRoundCorners(Tools.fromDpToPx(2));
+        bcvCategoriesPercentage.addData(barSet);
+        bcvCategoriesPercentage.setBarSpacing(Tools.fromDpToPx(35));
+        bcvCategoriesPercentage.setBorderSpacing(0)
+                .setAxisBorderValues(0, 100, 10)
+                .setAxisColor(getResources().getColor(R.color.grey))
+                .setLabelsColor(getResources().getColor(R.color.colorPrimaryDark))
+                .setYAxis(false)
+                .setYLabels(YController.LabelPosition.NONE)
+                .setXLabels(XController.LabelPosition.OUTSIDE);
+        bcvCategoriesPercentage.setHorizontalScrollBarEnabled(true);
+        Collections.shuffle(Arrays.asList(order));
+        bcvCategoriesPercentage.show(new Animation()
+                .setOverlap(.8f, order)
+                .setEndAction(action));
+    }
+
+    private void showTooltipCategoriesPercentageChart(){
+        ArrayList<ArrayList<Rect>> areas = new ArrayList<>();
+        areas.add(bcvCategoriesPercentage.getEntriesArea(0));
+
+        for(int i = 0; i < areas.size(); i++) {
+            for (int j = 0; j < areas.get(i).size(); j++) {
+                Tooltip tooltip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart, R.id.value);
+                tooltip.prepare(areas.get(i).get(j), categoryPercentages.get(j));
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    tooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
+                    tooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0));
+                }
+                bcvCategoriesPercentage.showTooltip(tooltip, true);
             }
         }
-
-        lcvExpenses.setTopSpacing(Tools.fromDpToPx(15))
-                .setBorderSpacing(Tools.fromDpToPx(0))
-                .setAxisBorderValues(0, 10, 1)
-                .setXLabels(AxisController.LabelPosition.INSIDE)
-                .setYLabels(AxisController.LabelPosition.NONE)
-                .setLabelsColor(Color.parseColor("#e08b36"))
-                .setXAxis(false)
-                .setYAxis(false);
-        Animation anim = new Animation().setStartPoint(-1, 1).setEndAction(action);
-
-        lcvExpenses.show(anim);
 
     }
+
 }

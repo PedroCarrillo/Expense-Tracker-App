@@ -116,7 +116,6 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     }
 
     public void updateExpenses(List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
-        this.lastPosition = -1;
         this.mCurrentDateMode = mCurrentDateMode;
         this.mExpensesList = mExpensesList;
         notifyDataSetChanged();

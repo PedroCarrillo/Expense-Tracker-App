@@ -75,7 +75,7 @@ public class Expense extends RealmObject {
         this.category = category;
     }
 
-        public long getTotal() {
+    public long getTotal() {
         return total;
     }
 
@@ -163,6 +163,12 @@ public class Expense extends RealmObject {
         if (category != null) realmQuery.equalTo("category.id", category.getId());
         if (type != null) realmQuery.equalTo("type", type);
         return realmQuery.findAll();
+    }
+
+    public static float getExpensesCategoryPercentage(Date fromDate, Date toDate, Category category) {
+        float totalCategory = getCategoryTotalByDate(fromDate, toDate, category);
+        float total = getExpensesList(fromDate, toDate, IExpensesType.MODE_EXPENSES, null).sum("total").floatValue();
+        return totalCategory * 100 / total;
     }
 
 }

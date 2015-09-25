@@ -77,7 +77,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
         ((TextView)getView().findViewById(R.id.tv_total)).setText(String.valueOf(expense.getTotal()));
         ((TextView)getView().findViewById(R.id.tv_category)).setText(String.valueOf(expense.getCategory().getName()));
         ((TextView)getView().findViewById(R.id.tv_description)).setText(String.valueOf(expense.getDescription()));
-        ((FloatingActionButton)getView().findViewById(R.id.fab_edit)).setOnClickListener(this);
+        (getView().findViewById(R.id.fab_edit)).setOnClickListener(this);
     }
 
     @Override
