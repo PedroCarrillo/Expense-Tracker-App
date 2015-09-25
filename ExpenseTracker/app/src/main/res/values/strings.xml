@@ -533,4 +533,6 @@
     <string name="date_placeholder">date placeholder</string>
     <string name="to_date">Date to</string>
     <string name="date_from">Date from</string>
+    <string name="total_expenses_per_category">Total Expenses per category</string>
+    <string name="categories_percentage">Categories Percentage</string>
 </resources>

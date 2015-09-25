@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private DrawerLayout mainDrawerLayout;
     private NavigationView mainNavigationView;
+    private Toolbar mToolbar;
     private TabLayout mainTabLayout;
     private FloatingActionButton mFloatingActionButton;
 
@@ -72,12 +75,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void setUpToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainDrawerLayout.openDrawer(GravityCompat.START);
@@ -158,6 +161,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void setNavigationModeStandard() {
+        CoordinatorLayout coordinator = (CoordinatorLayout) findViewById(R.id.main_coordinator);
+        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar_layout);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
+        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+
+        int[] consumed = new int[2];
+        behavior.onNestedPreScroll(coordinator, appbar, null, 0, -1000, consumed);
+
         mainTabLayout.setVisibility(View.GONE);
     }
 

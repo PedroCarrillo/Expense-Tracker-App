@@ -36,8 +36,6 @@
                 android:id="@+id/tv_date_from"
                 app:layout_gravity="fill_horizontal"
                 app:layout_columnWeight="1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 tools:text="@string/date_placeholder"/>
 
             <TextView
@@ -56,13 +54,42 @@
 
         </android.support.v7.widget.GridLayout>
 
+        <TextView
+            android:id="@+id/tv_total"
+            style="@style/HeaderTextView"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="@string/total"/>
+
+        <TextView
+            android:id="@+id/tv_expenses_per_category"
+            style="@style/HeaderTextView"
+            android:gravity="center"
+            android:layout_gravity="left"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
+            android:text="@string/total_expenses_per_category"/>
+
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bc_categories"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="250dp" />
 
+        <TextView
+            android:id="@+id/tv_category_percentage"
+            style="@style/HeaderTextView"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:layout_gravity="left"
+            android:layout_marginTop="20dp"
+            android:text="@string/categories_percentage"/>
+
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pc_categories"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="250dp" />
 
