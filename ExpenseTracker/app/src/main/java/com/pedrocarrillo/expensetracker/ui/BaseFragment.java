@@ -27,7 +27,7 @@ public class BaseFragment extends Fragment{
         }
         View viewWithToolbar = inflater.inflate(R.layout.fragment_base, container, false);
         ViewGroup llMainContainer = (ViewGroup) viewWithToolbar.findViewById(R.id.ll_container);
-        View content = inflater.inflate(layoutId, llMainContainer, false);
+        View content = inflater.inflate(layoutId, container, false);
         llMainContainer.addView(content);
 
         mToolbar = (Toolbar) viewWithToolbar.findViewById(R.id.toolbar);

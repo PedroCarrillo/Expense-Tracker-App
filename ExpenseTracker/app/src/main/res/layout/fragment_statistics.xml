@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="?attr/actionBarSize"
     android:fillViewport="true">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.GridLayout
@@ -49,32 +52,19 @@
                 android:id="@+id/tv_date_to"
                 app:layout_gravity="fill_horizontal"
                 app:layout_columnWeight="1"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 tools:text="@string/date_placeholder"/>
 
         </android.support.v7.widget.GridLayout>
 
-        <com.db.chart.view.BarChartView
-            android:id="@+id/chartCategories"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/bc_categories"
             android:layout_width="match_parent"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_height="250dp"/>
+            android:layout_height="250dp" />
 
-        <com.db.chart.view.BarChartView
-            android:id="@+id/chartCategoriesPercentages"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pc_categories"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"/>
-
-        <TextView
-            android:text="test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="250dp" />
 
     </LinearLayout>
 </ScrollView>

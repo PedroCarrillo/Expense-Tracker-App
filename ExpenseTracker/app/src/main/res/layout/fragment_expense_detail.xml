@@ -89,11 +89,11 @@
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:text="Same Category This Week"/>
 
-                <com.db.chart.view.BarChartView
-                    android:id="@+id/linechart"
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bc_expenses"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"/>
+                    android:layout_height="250dp" />
 
             </LinearLayout>
 

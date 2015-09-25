@@ -1,30 +1,27 @@
 package com.pedrocarrillo.expensetracker.ui.statistics;
 
-import android.animation.PropertyValuesHolder;
 import android.app.DatePickerDialog;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.db.chart.Tools;
-import com.db.chart.model.Bar;
-import com.db.chart.model.BarSet;
-import com.db.chart.model.LineSet;
-import com.db.chart.view.AxisController;
-import com.db.chart.view.BarChartView;
-import com.db.chart.view.LineChartView;
-import com.db.chart.view.Tooltip;
-import com.db.chart.view.XController;
-import com.db.chart.view.YController;
-import com.db.chart.view.animation.Animation;
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
@@ -49,8 +46,9 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
     private TextView tvDateFrom;
     private TextView tvDateTo;
-    private BarChartView bcvCategories;
-    private BarChartView bcvCategoriesPercentage;
+
+    private PieChart pcCategories;
+    private BarChart bcCategories;
 
     private Date mDateFrom;
     private Date mDateTo;
@@ -77,8 +75,8 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
         tvDateFrom = (TextView)rootView.findViewById(R.id.tv_date_from);
         tvDateTo = (TextView)rootView.findViewById(R.id.tv_date_to);
-        bcvCategories = (BarChartView) rootView.findViewById(R.id.chartCategories);
-        bcvCategoriesPercentage = (BarChartView) rootView.findViewById(R.id.chartCategoriesPercentages);
+        pcCategories = (PieChart) rootView.findViewById(R.id.pc_categories);
+        bcCategories = (BarChart) rootView.findViewById(R.id.bc_categories);
         return rootView;
     }
 
@@ -91,8 +89,94 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         mDateTo = DateUtils.getTomorrowDate();
         updateDate(tvDateFrom, mDateFrom);
         updateDate(tvDateTo, mDateTo);
-        setCategoryChart();
-        setCategoryChartPercentage();
+        setCategoriesBarChart();
+        setCategoriesPieChart();
+    }
+
+    private void setCategoriesBarChart() {
+        List<Category> categoryList = Category.getCategoriesExpense();
+        List<String> categoriesNames = new ArrayList<>();
+
+        List<BarEntry> entryPerCategory = new ArrayList<BarEntry>();
+        valuesPerCategory = new ArrayList<>();
+
+        for (int i=0; i < categoryList.size(); i++) {
+            float value = Expense.getCategoryTotalByDate(mDateFrom, mDateTo, categoryList.get(i));
+            if (value != 0) {
+                valuesPerCategory.add(value);
+                categoriesNames.add(categoryList.get(i).getName());
+                entryPerCategory.add(new BarEntry(value, i));
+            }
+        }
+        BarDataSet dataSet = new BarDataSet(entryPerCategory, "categories");
+        BarData barData = new BarData(categoriesNames, dataSet);
+        bcCategories.setVisibleXRangeMaximum(5);
+        bcCategories.getAxisLeft().setDrawGridLines(false);
+        bcCategories.getXAxis().setDrawGridLines(false);
+        bcCategories.getAxisRight().setDrawGridLines(false);
+        bcCategories.getAxisRight().setDrawLabels(false);
+        bcCategories.setData(barData);
+        bcCategories.setDescription("");
+        bcCategories.animateY(2000);
+        bcCategories.invalidate();
+    }
+
+    private void setCategoriesPieChart() {
+
+        pcCategories.setCenterText("");
+        pcCategories.setCenterTextSize(10f);
+        pcCategories.setHoleRadius(50f);
+        pcCategories.setTransparentCircleRadius(55f);
+        pcCategories.setUsePercentValues(true);
+
+        Legend l = pcCategories.getLegend();
+        l.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
+        pcCategories.animateY(1500, Easing.EasingOption.EaseInOutQuad);
+
+        List<Category> categoryList = Category.getCategoriesExpense();
+        List<String> categoriesNames = new ArrayList<>();
+
+        List<Entry> categoryPercentagesEntries = new ArrayList<Entry>();
+        categoryPercentages = new ArrayList<>();
+
+        for (int i=0; i < categoryList.size(); i++) {
+            float percentage = Expense.getExpensesCategoryPercentage(mDateFrom, mDateTo, categoryList.get(i));
+            if( percentage != 0) {
+                categoryPercentages.add(percentage);
+                categoriesNames.add(categoryList.get(i).getName());
+                Entry pieEntry = new Entry(percentage, i);
+                categoryPercentagesEntries.add(pieEntry);
+            }
+        }
+
+        PieDataSet dataSet = new PieDataSet(categoryPercentagesEntries, "Categories");
+        dataSet.setSliceSpace(1f);
+        dataSet.setSelectionShift(5f);
+
+        ArrayList<Integer> colors = new ArrayList<>();
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+        colors.add(ColorTemplate.getHoloBlue());
+
+        dataSet.setColors(colors);
+
+        PieData data = new PieData(categoriesNames, dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextSize(11f);
+        data.setValueTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        pcCategories.setData(data);
+        pcCategories.setDescription("");
+
+        pcCategories.invalidate();
+
     }
 
     @Override
@@ -119,12 +203,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                                     mDateTo = calendar.getTime();
                                     updateDate(tvDateTo, mDateTo);
                                 }
-                                bcvCategories.dismissAllTooltips();
-                                bcvCategories.reset();
-                                setCategoryChart();
-                                bcvCategoriesPercentage.dismissAllTooltips();
-                                bcvCategoriesPercentage.reset();
-                                setCategoryChartPercentage();
+                                bcCategories.notifyDataSetChanged();
+                                bcCategories.invalidate();
+                                pcCategories.notifyDataSetChanged();
+                                pcCategories.invalidate();
+                                setCategoriesBarChart();
+                                setCategoriesPieChart();
                             }
                         },
                         calendar,
@@ -134,144 +218,6 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
     private void updateDate(TextView tv, Date date) {
         tv.setText(Util.formatDateToString(date, "MM/dd/yyyy"));
-    }
-
-    private void setCategoryChart() {
-        List<Category> categoryList = Category.getCategoriesExpense();
-
-        Runnable action =  new Runnable() {
-            @Override
-            public void run() {
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        if( getActivity() != null) showTooltipCategoriesChart();
-                    }
-                }, 500);
-            }
-        };
-
-        Tooltip tip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            tip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
-            tip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA,0));
-        }
-
-        bcvCategories.setTooltips(tip);
-        BarSet barSet = new BarSet();
-        valuesPerCategory = new ArrayList<>();
-
-        int[] order = new int[categoryList.size()];
-        int pos = 0;
-        for (Category category : categoryList) {
-            float value = Expense.getCategoryTotalByDate(mDateFrom, mDateTo, category);
-            valuesPerCategory.add(value);
-            order[pos] = pos++;
-            barSet.addBar(new Bar(category.getName(), value));
-        }
-        barSet.setColor(getResources().getColor(R.color.colorPrimaryLight));
-        bcvCategories.setSetSpacing(Tools.fromDpToPx(-15));
-        bcvCategories.setRoundCorners(Tools.fromDpToPx(2));
-        bcvCategories.addData(barSet);
-        bcvCategories.setBarSpacing(Tools.fromDpToPx(35));
-        int maxValue = Math.round(Collections.max(valuesPerCategory));
-        bcvCategories.setBorderSpacing(0)
-                .setAxisBorderValues(0, maxValue, 10)
-                .setAxisColor(getResources().getColor(R.color.grey))
-                .setLabelsColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setYAxis(false)
-                .setYLabels(YController.LabelPosition.NONE)
-                .setXLabels(XController.LabelPosition.OUTSIDE);
-        bcvCategories.setHorizontalScrollBarEnabled(true);
-        Collections.shuffle(Arrays.asList(order));
-        bcvCategories.show(new Animation()
-                .setOverlap(.3f, order)
-                .setEndAction(action));
-    }
-
-    private void showTooltipCategoriesChart(){
-        ArrayList<ArrayList<Rect>> areas = new ArrayList<>();
-        areas.add(bcvCategories.getEntriesArea(0));
-
-        for(int i = 0; i < areas.size(); i++) {
-            for (int j = 0; j < areas.get(i).size(); j++) {
-                Tooltip tooltip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart, R.id.value);
-                tooltip.prepare(areas.get(i).get(j), valuesPerCategory.get(j));
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    tooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
-                    tooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0));
-                }
-                bcvCategories.showTooltip(tooltip, true);
-            }
-        }
-
-    }
-
-    private void setCategoryChartPercentage() {
-        List<Category> categoryList = Category.getCategoriesExpense();
-
-        Runnable action =  new Runnable() {
-            @Override
-            public void run() {
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        if( getActivity() != null) showTooltipCategoriesPercentageChart();
-                    }
-                }, 500);
-            }
-        };
-
-        Tooltip tip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            tip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
-            tip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA,0));
-        }
-
-        bcvCategoriesPercentage.setTooltips(tip);
-        BarSet barSet = new BarSet();
-        categoryPercentages = new ArrayList<>();
-        int[] order = new int[categoryList.size()];
-        int pos = 0;
-        for (Category category : categoryList) {
-            float percentage = Expense.getExpensesCategoryPercentage(mDateFrom, mDateTo, category);
-            categoryPercentages.add(percentage);
-            order[pos] = pos++;
-            barSet.addBar(new Bar(category.getName(), percentage));
-        }
-        barSet.setColor(getResources().getColor(R.color.colorPrimaryLight));
-        bcvCategoriesPercentage.setSetSpacing(Tools.fromDpToPx(40));
-        bcvCategoriesPercentage.setRoundCorners(Tools.fromDpToPx(2));
-        bcvCategoriesPercentage.addData(barSet);
-        bcvCategoriesPercentage.setBarSpacing(Tools.fromDpToPx(35));
-        bcvCategoriesPercentage.setBorderSpacing(0)
-                .setAxisBorderValues(0, 100, 10)
-                .setAxisColor(getResources().getColor(R.color.grey))
-                .setLabelsColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setYAxis(false)
-                .setYLabels(YController.LabelPosition.NONE)
-                .setXLabels(XController.LabelPosition.OUTSIDE);
-        bcvCategoriesPercentage.setHorizontalScrollBarEnabled(true);
-        Collections.shuffle(Arrays.asList(order));
-        bcvCategoriesPercentage.show(new Animation()
-                .setOverlap(.8f, order)
-                .setEndAction(action));
-    }
-
-    private void showTooltipCategoriesPercentageChart(){
-        ArrayList<ArrayList<Rect>> areas = new ArrayList<>();
-        areas.add(bcvCategoriesPercentage.getEntriesArea(0));
-
-        for(int i = 0; i < areas.size(); i++) {
-            for (int j = 0; j < areas.get(i).size(); j++) {
-                Tooltip tooltip = new Tooltip(getActivity(), R.layout.tooltip_bar_chart, R.id.value);
-                tooltip.prepare(areas.get(i).get(j), categoryPercentages.get(j));
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    tooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1));
-                    tooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0));
-                }
-                bcvCategoriesPercentage.showTooltip(tooltip, true);
-            }
-        }
-
     }
 
 }
