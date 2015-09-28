@@ -3,7 +3,9 @@ package com.pedrocarrillo.expensetracker.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.WelcomePagerAdapter;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
@@ -145,6 +148,10 @@ public class LoginFragment extends BaseFragment implements
     }
 
     private void showSignedInUI() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ExpenseTrackerApp.getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(getString(R.string.already_accepted_user_key), true);
+        editor.apply();
         Intent intent = new Intent(getActivity(), MainActivity.class);
         getActivity().finish();
         startActivity(intent);

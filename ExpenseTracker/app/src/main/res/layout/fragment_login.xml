@@ -1,53 +1,59 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginFragment">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_welcome"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <com.viewpagerindicator.CirclePageIndicator
-            android:id="@+id/cpi_welcome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"/>
-    </RelativeLayout>
+    android:fillViewport="true"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:elevation="10dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginFragment">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Start using Expense Tracker"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
 
-        <!--<com.google.android.gms.common.SignInButton-->
-            <!--android:id="@+id/sign_in_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-        <Button
-            android:id="@+id/sign_in"
-            android:layout_height="wrap_content"
-            android:layout_width="80dp"
-            android:gravity="center"
-            style="@style/ExpenseTrackerButton"
-            android:text="Start"/>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_welcome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <com.viewpagerindicator.CirclePageIndicator
+                android:id="@+id/cpi_welcome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:elevation="10dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/start_using_expense"/>
+
+            <!--<com.google.android.gms.common.SignInButton-->
+                <!--android:id="@+id/sign_in_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
+            <Button
+                android:id="@+id/sign_in"
+                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:gravity="center"
+                style="@style/ExpenseTrackerButton"
+                android:text="Start"/>
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>
