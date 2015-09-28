@@ -38,7 +38,8 @@
             android:id="@+id/main_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         </FrameLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -46,7 +47,7 @@
             app:layout_anchor="@id/main_content"
             app:layout_anchorGravity="bottom|right"
             app:layout_behavior="com.pedrocarrillo.expensetracker.custom.FABScrollBehavior"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -57,6 +58,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:id="@+id/nav_view"
+        app:headerLayout="@layout/layout_drawer_header"
         app:menu="@menu/nav_menu"/>
 
 </android.support.v4.widget.DrawerLayout>

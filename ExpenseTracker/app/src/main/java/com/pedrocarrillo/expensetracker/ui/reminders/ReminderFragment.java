@@ -76,7 +76,7 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
         rvReminders.setAdapter(mRemindersAdapter);
         rvReminders.setHasFixedSize(true);
         rvReminders.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
-
+        
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
 
             @Override

@@ -23,17 +23,17 @@
                 android:id="@+id/cv_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                card_view:cardElevation="2dp"
+                card_view:cardElevation="@dimen/elevation_dp"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 card_view:cardBackgroundColor="@color/white"
-                card_view:cardCornerRadius="2dp"
+                card_view:cardCornerRadius="@dimen/corner_dp"
                 card_view:cardPreventCornerOverlap="false"
                 card_view:cardUseCompatPadding="true"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:padding="50dp">
+                android:padding="@dimen/dimen_5_10dp">
 
                 <LinearLayout
                     android:id="@+id/detail_container"
@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         tools:text="total"
                         android:transitionName="@string/tv_title_transition"
-                        android:textSize="30sp"/>
+                        android:textSize="@dimen/text_size_30"/>
 
 
                     <TextView
@@ -92,7 +92,7 @@
                     android:id="@+id/bc_expenses"
                     android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp" />
+                    android:layout_height="@dimen/dimen_25_10dp" />
 
             </LinearLayout>
 
@@ -104,7 +104,7 @@
             app:layout_anchor="@id/detail_container"
             app:layout_anchorGravity="bottom|right"
             android:src="@drawable/ic_mode_edit_white_48dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="@dimen/dimen_25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

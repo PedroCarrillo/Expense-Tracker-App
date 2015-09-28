@@ -9,7 +9,7 @@
         android:layout_marginTop="@dimen/dimen_10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lineSpacingExtra="5dp"
+        android:lineSpacingExtra="@dimen/dimen_5dp"
         android:gravity="center"
         android:text="@string/reminder_help" />
 

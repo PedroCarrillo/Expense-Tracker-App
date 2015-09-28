@@ -26,20 +26,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="@dimen/dimen_10dp"/>
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:elevation="10dp"
+            android:layout_height="@dimen/dimen_15_10dp"
+            android:elevation="@dimen/dimen_10dp"
             android:orientation="vertical"
             android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
                 android:text="@string/start_using_expense"/>
 
             <!--<com.google.android.gms.common.SignInButton-->
@@ -49,7 +49,7 @@
             <Button
                 android:id="@+id/sign_in"
                 android:layout_height="wrap_content"
-                android:layout_width="80dp"
+                android:layout_width="@dimen/dimen_8_10dp"
                 android:gravity="center"
                 style="@style/ExpenseTrackerButton"
                 android:text="Start"/>

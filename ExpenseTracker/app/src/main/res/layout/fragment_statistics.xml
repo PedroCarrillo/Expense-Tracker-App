@@ -23,9 +23,9 @@
             android:layout_marginTop="@dimen/dimen_10dp"
             android:orientation="vertical"
             android:gravity="center"
-            card_view:cardElevation="2dp"
+            card_view:cardElevation="@dimen/elevation_dp"
             card_view:cardBackgroundColor="@color/white"
-            card_view:cardCornerRadius="2dp"
+            card_view:cardCornerRadius="@dimen/corner_dp"
             card_view:cardPreventCornerOverlap="false"
             card_view:cardUseCompatPadding="true">
 
@@ -34,8 +34,8 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:padding="@dimen/dimen_10dp"
                 app:columnCount="2">
 
                 <TextView
@@ -44,7 +44,7 @@
                     app:layout_gravity="fill_horizontal"
                     app:layout_columnWeight="1"
                     android:gravity="center"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="@dimen/dimen_10dp"
                     android:text="@string/date_from"/>
 
                 <TextView
@@ -73,7 +73,7 @@
                     app:layout_columnSpan="2"
                     app:layout_gravity="fill_horizontal"
                     android:gravity="center"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/text_size_24"
                     android:layout_marginTop="20dp"
                     android:text="@string/total"/>
 
@@ -84,31 +84,31 @@
             style="@style/HeaderTextView"
             android:gravity="center"
             android:layout_gravity="left"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp"
+            android:textSize="@dimen/text_size_14"
+            android:layout_marginTop="@dimen/dimen_20dp"
             android:text="@string/total_expenses_per_category"/>
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/bc_categories"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="@dimen/dimen_25_10dp" />
 
         <TextView
             android:id="@+id/tv_category_percentage"
             style="@style/HeaderTextView"
             android:gravity="center"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14"
             android:layout_gravity="left"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
             android:text="@string/categories_percentage"/>
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pc_categories"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginBottom="@dimen/dimen_10dp"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="@dimen/dimen_25_10dp" />
 
     </LinearLayout>
 </ScrollView>

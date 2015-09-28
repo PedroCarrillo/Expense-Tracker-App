@@ -11,24 +11,24 @@
         android:layout_height="wrap_content"
         style="@style/ExpenseTrackerTextView"
         android:text="@string/add_new_expense"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp" />
+        android:textSize="@dimen/text_size_20"
+        android:layout_marginTop="@dimen/dimen_20dp" />
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="@dimen/text_size_20"
         android:textColor="@color/primary_dark"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="@dimen/dimen_20dp"/>
 
     <Spinner
         android:id="@+id/sp_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginLeft="@dimen/dimen_20dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
         style="@style/ExpenseTrackerSpinner"/>
 
     <android.support.design.widget.TextInputLayout
@@ -40,23 +40,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/optional_description"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:maxLines="2"
+            android:layout_marginLeft="@dimen/dimen_20dp"
+            android:layout_marginRight="@dimen/dimen_20dp"
             style="@style/ExpenseTrackerEditText"/>
 
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:layout_width="100dp"
-        android:layout_gravity="right"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="@dimen/dimen_10_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginRight="@dimen/dimen_20dp"
+        android:layout_marginEnd="@dimen/dimen_20dp"
+        android:layout_gravity="end"
         android:layout_height="wrap_content" >
         <EditText
             android:id="@+id/et_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:gravity="center"
             android:inputType="numberDecimal"
             style="@style/ExpenseTrackerEditText"
             android:hint="@string/total"/>
@@ -64,17 +68,17 @@
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginBottom="@dimen/dimen_20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="120dp"
-            android:gravity="center"
+            android:layout_width="@dimen/dimen_12_10dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             style="@style/ExpenseTrackerButton"
             android:text="@string/cancel"/>
 
@@ -82,7 +86,7 @@
             android:id="@+id/btn_save"
             android:layout_marginLeft="@dimen/dimen_10dp"
             android:layout_marginStart="@dimen/dimen_10dp"
-            android:layout_width="120dp"
+            android:layout_width="@dimen/dimen_12_10dp"
             android:gravity="center"
             android:layout_height="wrap_content"
             style="@style/ExpenseTrackerButton"

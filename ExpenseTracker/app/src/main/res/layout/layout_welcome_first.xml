@@ -10,7 +10,7 @@
         android:id="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="@dimen/dimen_6_10dp"
         android:text="@string/welcome"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_24"
@@ -18,17 +18,17 @@
 
     <ImageView
         android:id="@+id/iv_money"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/dimen_3_10dp"
         android:contentDescription="@string/money_desc"
         android:src="@drawable/ic_action"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/dimen_6_10dp"
+        android:layout_height="@dimen/dimen_6_10dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/tv_first_desc"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
         android:text="@string/welcome_first_page"
         style="@style/WelcomeDescription" />
 

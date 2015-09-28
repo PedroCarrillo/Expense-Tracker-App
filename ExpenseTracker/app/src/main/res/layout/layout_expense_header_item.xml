@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_container"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     card_view:cardElevation="2dp"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -16,17 +16,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dimen_20_10dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="@dimen/dimen_10dp">
 
 
         <TextView
             android:id="@+id/tv_description"
             style="@style/ExpenseTrackerTextView"
             android:layout_marginBottom="@dimen/dimen_15dp"
-            android:textSize="25sp"
+            android:textSize="@dimen/text_size_24"
             android:textColor="@color/grey"
             android:text="@string/total"/>
 
@@ -35,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:textSize="40sp"
+            android:textSize="@dimen/text_size_35"
             tools:text="+100"/>
 
     </LinearLayout>

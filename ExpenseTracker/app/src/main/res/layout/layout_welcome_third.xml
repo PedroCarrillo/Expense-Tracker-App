@@ -8,9 +8,9 @@
 
     <ImageView
         android:id="@+id/iv_credit_card"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="@dimen/dimen_6_10dp"
+        android:layout_height="@dimen/dimen_6_10dp"
+        android:layout_marginTop="@dimen/dimen_3_10dp"
         android:contentDescription="@string/credit_card_content_desc"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/tv_third_desc"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
         android:text="@string/third_page_desc"
         style="@style/WelcomeDescription"/>
 

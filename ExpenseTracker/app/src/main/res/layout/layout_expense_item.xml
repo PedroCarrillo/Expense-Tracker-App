@@ -6,11 +6,11 @@
     android:id="@+id/cv_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="2dp"
+    card_view:cardElevation="@dimen/elevation_dp"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     card_view:cardBackgroundColor="@color/white"
-    card_view:cardCornerRadius="2dp"
+    card_view:cardCornerRadius="@dimen/corner_dp"
     card_view:cardPreventCornerOverlap="false"
     card_view:cardUseCompatPadding="true">
 
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="@dimen/dimen_10dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -47,9 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen_10dp"
+            android:layout_marginEnd="@dimen/dimen_10dp"
             android:textColor="@color/colorAccentGreen"
             android:gravity="center_vertical"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_size_18"
             tools:text="+100"/>
 
     </LinearLayout>
