@@ -1,15 +1,10 @@
 package com.pedrocarrillo.expensetracker.entities;
 
-import android.support.annotation.Nullable;
-import android.util.Log;
-
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
-import com.pedrocarrillo.expensetracker.utils.Util;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +25,12 @@ public class Expense extends RealmObject {
     private Date date;
     private @IExpensesType int type;
     private Category category;
-    private long total;
+    private float total;
 
     public Expense() {
     }
 
-    public Expense(String description, Date date, @IExpensesType int type, Category category, long total) {
+    public Expense(String description, Date date, @IExpensesType int type, Category category, float total) {
         this.description = description;
         this.date = date;
         this.type = type;
@@ -75,11 +70,11 @@ public class Expense extends RealmObject {
         this.category = category;
     }
 
-    public long getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal(float total) {
         this.total = total;
     }
 

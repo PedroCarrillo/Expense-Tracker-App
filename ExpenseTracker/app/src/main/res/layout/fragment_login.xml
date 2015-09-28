@@ -43,10 +43,10 @@
             <!--android:layout_height="wrap_content" />-->
         <Button
             android:id="@+id/sign_in"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:background="@color/colorPrimary"
+            android:layout_width="80dp"
+            android:gravity="center"
+            style="@style/ExpenseTrackerButton"
             android:text="Start"/>
     </LinearLayout>
 

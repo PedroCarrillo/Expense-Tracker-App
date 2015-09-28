@@ -3,13 +3,10 @@ package com.pedrocarrillo.expensetracker.ui.categories;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.design.widget.TabLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +17,11 @@ import com.pedrocarrillo.expensetracker.adapters.CategoriesAdapter;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
-import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +54,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         tabList = Arrays.asList(getString(R.string.expenses), getString(R.string.income));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setTabs(tabList, this);
-        mMainActivityListener.setFAB(android.R.drawable.ic_menu_edit, new View.OnClickListener() {
+        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogManager.getInstance().createEditTextDialog(getActivity(), getString(R.string.create_category), getString(R.string.save), getString(R.string.cancel), new DialogInterface.OnClickListener() {

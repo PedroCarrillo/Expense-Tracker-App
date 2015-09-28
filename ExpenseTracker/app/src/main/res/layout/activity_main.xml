@@ -27,9 +27,10 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:visibility="gone"
+                android:theme="@style/AppTheme.AppBarOverlay"
                 app:layout_collapseMode="pin"
                 app:tabGravity="fill"
-                android:theme="@style/AppTheme.AppBarOverlay" />
+                app:tabIndicatorColor="@android:color/white"/>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -46,8 +47,6 @@
             app:layout_anchorGravity="bottom|right"
             app:layout_behavior="com.pedrocarrillo.expensetracker.custom.FABScrollBehavior"
             android:layout_margin="16dp"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

@@ -40,6 +40,51 @@
     <string name="country_currency">Country Currency</string>
     <string name="pref_country_key">country_key</string>
     <string name="default_country">US</string>
+    <string name="title_activity_expense_detail">ExpenseDetailActivity</string>
+    <string name="tv_title_transition">tvTotalTransition</string>
+    <string name="date_placeholder">date placeholder</string>
+    <string name="to_date">Date to</string>
+    <string name="date_from">Date from</string>
+    <string name="categories_percentage">Categories Percentage</string>
+    <string name="total_expenses_per_category">Total Expenses per category</string>
+    <string name="Save">Save</string>
+    <string name="hour_format"><xliff:g id="hour" example="09">%02d</xliff:g>:<xliff:g id="minute" example="09">%02d</xliff:g></string>
+    <string name="reminder_name_validation">Please fill a name for the reminder</string>
+    <string name="pick_day_of_month">Pick a day of the month</string>
+    <string name="confirm_reminder_delete">Are you sure you want to delete this reminder?</string>
+    <string name="this_week">This week</string>
+    <string name="reminder_name_hint">Ex. Company Credit Card</string>
+    <string name="reminder_schedule_title">The alarm is schedule for:</string>
+    <string name="reminder_time_sent_title">It will be sent at:</string>
+    <string name="reminder_help">Create a reminder to help you set a notification for a day in every month to remember where your debts are due.\n A notification will be shown when the time is right. \nRemember you can turn them off anytime you like.</string>
+
+    <string-array name="reminder_days_available">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+    </string-array>
 
     <!--Countries-->
     <string-array name="countries_names">
@@ -527,12 +572,4 @@
         <item>ZM</item>
         <item>ZW</item>
     </string-array>
-    <string name="title_activity_expense_detail">ExpenseDetailActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="tv_title_transition">tvTotalTransition</string>
-    <string name="date_placeholder">date placeholder</string>
-    <string name="to_date">Date to</string>
-    <string name="date_from">Date from</string>
-    <string name="total_expenses_per_category">Total Expenses per category</string>
-    <string name="categories_percentage">Categories Percentage</string>
 </resources>

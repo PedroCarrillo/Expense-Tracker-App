@@ -3,12 +3,12 @@ package com.pedrocarrillo.expensetracker.utils;
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.entities.Reminder;
 
 import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 /**
  * Created by Pedro on 9/20/2015.
@@ -80,8 +80,10 @@ public class RealmManager {
             if ( realmObject == null ) {
                 if (object instanceof Expense) {
                     ((Expense)object).setId(id);
-                } else {
+                } else if (object instanceof  Category){
                     ((Category)object).setId(id);
+                } else {
+                    ((Reminder)object).setId(id);
                 }
                 repeated = false;
             }

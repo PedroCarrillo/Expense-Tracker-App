@@ -1,18 +1,18 @@
 package com.pedrocarrillo.expensetracker.utils;
 
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.EditText;
 
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
-import com.pedrocarrillo.expensetracker.entities.Expense;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -31,6 +31,22 @@ public class Util {
         } else {
             return false;
         }
+    }
+
+    public static List<Integer> getListColors() {
+        ArrayList<Integer> colors = new ArrayList<>();
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+        colors.add(ColorTemplate.getHoloBlue());
+        return colors;
     }
 
     public static String getFormattedCurrency(float number) {

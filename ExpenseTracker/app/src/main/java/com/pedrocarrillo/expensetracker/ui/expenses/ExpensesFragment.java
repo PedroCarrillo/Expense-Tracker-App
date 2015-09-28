@@ -1,32 +1,23 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.ExpensesAdapter;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
-import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
-import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
-import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
@@ -79,7 +70,7 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
         List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setTabs(tabList, this);
-        mMainActivityListener.setFAB(android.R.drawable.ic_input_add, new View.OnClickListener() {
+        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onAddNewExpense();

@@ -3,10 +3,12 @@ package com.pedrocarrillo.expensetracker.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.ArrayRes;
 import android.support.design.widget.Snackbar;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -39,6 +41,17 @@ public class DialogManager {
 
     public void createCustomAcceptDialog(Activity activity, String title, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
         createAlertDialog(activity, title, null, message, confirmText, negativeText, listener);
+    }
+
+    public void createSinglePickDialog(Activity activity, String title, @ArrayRes int arrayId, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(title)
+                .setItems(arrayId, listener);
+        builder.create().show();
+    }
+
+    public void createTimePickerDialog(Activity activity, int hour, int minute, TimePickerDialog.OnTimeSetListener listener) {
+        new TimePickerDialog(activity, listener, hour, minute, DateFormat.is24HourFormat(activity)).show();
     }
 
     private void createAlertDialog(Activity activity, String title, View dialogLayout, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {

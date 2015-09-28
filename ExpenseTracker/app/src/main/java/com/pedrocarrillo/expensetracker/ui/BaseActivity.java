@@ -10,8 +10,6 @@ import android.view.View;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.interfaces.IFragmentListener;
 
-import java.util.List;
-
 /**
  * Created by Pedro on 15/9/2015.
  */

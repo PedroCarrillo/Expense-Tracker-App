@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".ExpenseTrackerApp"
@@ -35,6 +36,16 @@
             android:name=".ui.expenses.ExpenseDetailActivity"
             android:label="@string/title_activity_expense_detail" >
         </activity>
+        <activity android:name=".ui.reminders.NewReminderActivity">
+        </activity>
+        <receiver android:name=".receivers.AlarmReceiver">
+        </receiver>
+        <receiver android:name=".receivers.AlarmsSystemBooted"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

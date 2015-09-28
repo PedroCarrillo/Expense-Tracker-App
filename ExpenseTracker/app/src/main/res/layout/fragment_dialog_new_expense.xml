@@ -18,17 +18,18 @@
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/primary_dark"
         android:textSize="20sp"
         android:layout_marginTop="20dp"/>
 
     <Spinner
         android:id="@+id/sp_categories"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"
+        style="@style/ExpenseTrackerSpinner"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -41,7 +42,8 @@
             android:hint="@string/optional_description"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            style="@style/ExpenseTrackerEditText"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -56,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            style="@style/ExpenseTrackerEditText"
             android:hint="@string/total"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -69,16 +72,20 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
+            android:gravity="center"
             android:layout_height="wrap_content"
+            style="@style/ExpenseTrackerButton"
             android:text="@string/cancel"/>
 
         <Button
             android:id="@+id/btn_save"
             android:layout_marginLeft="@dimen/dimen_10dp"
             android:layout_marginStart="@dimen/dimen_10dp"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
+            android:gravity="center"
             android:layout_height="wrap_content"
+            style="@style/ExpenseTrackerButton"
             android:text="@string/save"/>
 
     </LinearLayout>

@@ -109,6 +109,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         }
 
         BarDataSet dataSet = new BarDataSet(entryPerCategory, "categories");
+        dataSet.setColors(Util.getListColors());
         BarData barData = new BarData(categoriesNames, dataSet);
         bcCategories.setVisibleXRangeMaximum(5);
         bcCategories.getAxisLeft().setDrawGridLines(false);
@@ -149,25 +150,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         dataSet.setSliceSpace(1f);
         dataSet.setSelectionShift(5f);
 
-        ArrayList<Integer> colors = new ArrayList<>();
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.PASTEL_COLORS)
-            colors.add(c);
-        colors.add(ColorTemplate.getHoloBlue());
-
-        dataSet.setColors(colors);
+        dataSet.setColors(Util.getListColors());
 
         PieData data = new PieData(categoriesNames, dataSet);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
-        data.setValueTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        data.setValueTextColor(getResources().getColor(R.color.primary_dark));
         pcCategories.setData(data);
         pcCategories.setDescription("");
 

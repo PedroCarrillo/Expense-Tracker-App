@@ -3,10 +3,30 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textViewStyle">@style/ExpenseTrackerTextView</item>
+        <item name="android:editTextStyle">@style/ExpenseTrackerEditText</item>
+        <item name="android:buttonStyle">@style/ExpenseTrackerButton</item>
+        <item name="android:spinnerStyle">@style/ExpenseTrackerSpinner</item>
     </style>
+
+    <style name="ExpenseTrackerEditText" parent="Base.Widget.AppCompat.EditText">
+        <item name="backgroundTint">@color/primary</item>
+    </style>
+
+    <style name="ExpenseTrackerButton" parent="Base.TextAppearance.AppCompat.Widget.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/dimen_10dp</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="ExpenseTrackerSpinner" parent="@style/Widget.AppCompat.Spinner.Underlined">
+        <item name="backgroundTint">@color/primary</item>
+    </style>
+
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -16,6 +36,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ExpenseTrackerTextView" >
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -24,7 +45,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/primary</item>
     </style>
 
     <style name="TransparentText" >

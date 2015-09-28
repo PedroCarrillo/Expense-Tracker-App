@@ -3,20 +3,19 @@ package com.pedrocarrillo.expensetracker.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
@@ -131,9 +130,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void setMode(@NavigationMode int mode) {
-        if (mode == mCurrentMode) return;
+        mFloatingActionButton.setVisibility(View.GONE);
         mCurrentMode = mode;
-        mFloatingActionButton.hide();
         switch (mode) {
             case NAVIGATION_MODE_STANDARD:
                 setNavigationModeStandard();
@@ -173,20 +171,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void switchFragment(MenuItem menuItem) {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
         switch (menuItem.getItemId()) {
             case R.id.nav_expenses:
-                replaceFragment(ExpensesFragment.newInstance(), false);
+                if (!(currentFragment instanceof  ExpensesFragment)) replaceFragment(ExpensesFragment.newInstance(), false);
                 break;
             case R.id.nav_categories:
-                replaceFragment(CategoriesFragment.newInstance(), false);
+                if (!(currentFragment instanceof  CategoriesFragment)) replaceFragment(CategoriesFragment.newInstance(), false);
                 break;
             case R.id.nav_statistics:
-                replaceFragment(StatisticsFragment.newInstance(), false);
+                if (!(currentFragment instanceof  StatisticsFragment)) replaceFragment(StatisticsFragment.newInstance(), false);
                 break;
             case R.id.nav_reminders:
-                replaceFragment(ReminderFragment.newInstance(), false);
+                if (!(currentFragment instanceof  ReminderFragment)) replaceFragment(ReminderFragment.newInstance(), false);
                 break;
-
         }
     }
 }

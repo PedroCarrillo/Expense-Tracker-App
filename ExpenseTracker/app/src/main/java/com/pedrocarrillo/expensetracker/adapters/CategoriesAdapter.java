@@ -1,6 +1,5 @@
 package com.pedrocarrillo.expensetracker.adapters;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +24,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextView;
+        public TextView tvTitle;
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView)v.findViewById(R.id.tv_title);
+            tvTitle = (TextView)v.findViewById(R.id.tv_title);
         }
 
     }
@@ -49,7 +48,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Category category = mCategoryList.get(position);
-        holder.mTextView.setText(category.getName());
+        holder.tvTitle.setText(category.getName());
         holder.itemView.setTag(category);
         setAnimation(holder, position);
     }

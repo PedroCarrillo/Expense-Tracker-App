@@ -2,20 +2,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_expenses"
-            android:icon="@drawable/ic_save_money"
+            android:icon="@drawable/ic_money_bag"
             android:checked="true"
             android:title="@string/expenses" />
         <item
             android:id="@+id/nav_categories"
-            android:icon="@drawable/ic_save_money"
+            android:icon="@drawable/ic_label_black_48dp"
             android:title="@string/categories" />
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_save_money"
+            android:icon="@drawable/ic_insert_chart_black_48dp"
             android:title="@string/statistics" />
         <item
             android:id="@+id/nav_reminders"
-            android:icon="@drawable/ic_save_money"
+            android:icon="@drawable/ic_alarm_black_48dp"
             android:title="@string/reminders" />
     </group>
 </menu>

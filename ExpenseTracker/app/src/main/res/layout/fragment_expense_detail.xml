@@ -104,7 +104,7 @@
             app:fabSize="normal"
             app:layout_anchor="@id/detail_container"
             app:layout_anchorGravity="bottom|right"
-            android:src="@android:drawable/ic_menu_edit"
+            android:src="@drawable/ic_mode_edit_white_48dp"
             android:layout_marginRight="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

@@ -3,9 +3,7 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,11 +146,11 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
             String total = etTotal.getText().toString();
             String description = etDescription.getText().toString();
             if (mUserActionMode == IUserActionsMode.MODE_CREATE) {
-                RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Long.valueOf(total)), Expense.class);
+                RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Float.parseFloat(total)), Expense.class);
             } else {
                 Expense editExpense = new Expense();
                 editExpense.setId(mExpense.getId());
-                editExpense.setTotal(Long.valueOf(total));
+                editExpense.setTotal(Float.parseFloat(total));
                 editExpense.setDescription(description);
                 editExpense.setCategory(currentCategory);
                 editExpense.setDate(selectedDate);

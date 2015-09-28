@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
@@ -64,7 +65,9 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
     }
 
     private void loadData() {
-        ((TextView)getView().findViewById(R.id.tv_total)).setText(Util.getFormattedCurrency(expense.getTotal()));
+        TextView tvExpenseTotal = ((TextView)getView().findViewById(R.id.tv_total));
+        tvExpenseTotal.setText(Util.getFormattedCurrency(expense.getTotal()));
+        tvExpenseTotal.setTextColor(getResources().getColor(expense.getType() == IExpensesType.MODE_EXPENSES ? R.color.colorAccentRed : R.color.colorAccentGreen));
         ((TextView)getView().findViewById(R.id.tv_category)).setText(String.valueOf(expense.getCategory().getName()));
         ((TextView)getView().findViewById(R.id.tv_description)).setText(String.valueOf(expense.getDescription()));
         (getView().findViewById(R.id.fab_edit)).setOnClickListener(this);
@@ -97,7 +100,8 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
             days.add(day);
             entriesPerDay.add(new BarEntry(value, i));
         }
-        BarDataSet dataSet = new BarDataSet(entriesPerDay, "this week");
+        BarDataSet dataSet = new BarDataSet(entriesPerDay, getString(R.string.this_week));
+        dataSet.setColors(Util.getListColors());
         BarData barData = new BarData(days, dataSet);
         bcWeekExpenses.setVisibleXRangeMaximum(5);
         bcWeekExpenses.getAxisLeft().setDrawGridLines(false);

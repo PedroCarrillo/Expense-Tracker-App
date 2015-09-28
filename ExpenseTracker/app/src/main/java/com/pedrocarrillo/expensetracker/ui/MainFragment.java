@@ -2,7 +2,6 @@ package com.pedrocarrillo.expensetracker.ui;
 
 import android.content.Context;
 
-import com.pedrocarrillo.expensetracker.interfaces.IFragmentListener;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 
 /**
