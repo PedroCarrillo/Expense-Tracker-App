@@ -5,10 +5,12 @@ import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.entities.Reminder;
 
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 /**
  * Created by Pedro on 9/20/2015.
@@ -63,6 +65,13 @@ public class RealmManager {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                if (object instanceof Category) {
+                    Category category = (Category) object;
+                    RealmResults<Expense> expenseList  = Expense.getExpensesPerCategory(category);
+                    for (int i = expenseList.size()-1; i >= 0; i--) {
+                        expenseList.get(i).removeFromRealm();
+                    }
+                }
                 object.removeFromRealm();
             }
         });

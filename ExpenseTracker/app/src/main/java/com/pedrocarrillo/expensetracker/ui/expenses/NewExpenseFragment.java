@@ -141,25 +141,29 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void onSaveExpense() {
-        if (!Util.isEmptyField(etTotal)) {
-            Category currentCategory = (Category) spCategory.getSelectedItem();
-            String total = etTotal.getText().toString();
-            String description = etDescription.getText().toString();
-            if (mUserActionMode == IUserActionsMode.MODE_CREATE) {
-                RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Float.parseFloat(total)), Expense.class);
+        if (mCategoriesSpinnerAdapter.getCount() > 0 ) {
+            if (!Util.isEmptyField(etTotal)) {
+                Category currentCategory = (Category) spCategory.getSelectedItem();
+                String total = etTotal.getText().toString();
+                String description = etDescription.getText().toString();
+                if (mUserActionMode == IUserActionsMode.MODE_CREATE) {
+                    RealmManager.getInstance().save(new Expense(description, selectedDate, mExpenseType, currentCategory, Float.parseFloat(total)), Expense.class);
+                } else {
+                    Expense editExpense = new Expense();
+                    editExpense.setId(mExpense.getId());
+                    editExpense.setTotal(Float.parseFloat(total));
+                    editExpense.setDescription(description);
+                    editExpense.setCategory(currentCategory);
+                    editExpense.setDate(selectedDate);
+                    RealmManager.getInstance().update(editExpense);
+                }
+                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
+                dismiss();
             } else {
-                Expense editExpense = new Expense();
-                editExpense.setId(mExpense.getId());
-                editExpense.setTotal(Float.parseFloat(total));
-                editExpense.setDescription(description);
-                editExpense.setCategory(currentCategory);
-                editExpense.setDate(selectedDate);
-                RealmManager.getInstance().update(editExpense);
+                DialogManager.getInstance().showShortToast(getString(R.string.error_total));
             }
-            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
-            dismiss();
         } else {
-            DialogManager.getInstance().showShortToast(getString(R.string.error_total));
+            DialogManager.getInstance().showShortToast(getString(R.string.no_categories_error));
         }
     }
 

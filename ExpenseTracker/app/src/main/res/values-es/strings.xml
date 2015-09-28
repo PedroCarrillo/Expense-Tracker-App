@@ -65,6 +65,7 @@
     <string name="reminders_empty">No se encontraron recordatorios. Agrega uno para recordar fechas imnportantes</string>
     <string name="categories_empty">No se encontraron categorías. Empieza creando algunas para poder tomar ventaja de las estadísticas.</string>
     <string name="no_chart_data">No hay información disponible</string>
+    <string name="no_categories_error">Crea categorías para poder registrar gastos</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

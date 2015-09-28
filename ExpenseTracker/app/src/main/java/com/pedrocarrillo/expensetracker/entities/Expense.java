@@ -149,6 +149,9 @@ public class Expense extends RealmObject {
         return totalExpense.sum("total").floatValue();
     }
 
+    public static RealmResults<Expense> getExpensesPerCategory(Category category) {
+        return RealmManager.getInstance().getRealmInstance().where(Expense.class).equalTo("category.id", category.getId()).findAll();
+    }
 
     public static RealmResults<Expense> getExpensesList(Date dateFrom, Date dateTo, @IExpensesType Integer type, Category category) {
         RealmQuery<Expense> realmQuery = RealmManager.getInstance().getRealmInstance()
