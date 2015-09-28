@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.CategoriesAdapter;
@@ -34,6 +35,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
 
 //    private List<String> tabList;
     private RecyclerView rvCategories;
+    private TextView tvEmpty;
 
     private List<Category> mCategoryList;
     private CategoriesAdapter mCategoriesAdapter;
@@ -57,6 +59,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
         rvCategories = (RecyclerView)rootView.findViewById(R.id.rv_categories);
+        tvEmpty = (TextView)rootView.findViewById(R.id.tv_empty);
         return rootView;
     }
 
@@ -130,6 +133,11 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
 
     private void reloadData() {
         mCategoryList = Category.getCategoriesForType(mCurrentMode);
+        if (mCategoryList.isEmpty()) {
+            tvEmpty.setVisibility(View.VISIBLE);
+        } else {
+            tvEmpty.setVisibility(View.GONE);
+        }
         if (mCategoriesAdapter == null) {
             mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
         } else {

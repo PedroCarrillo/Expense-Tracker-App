@@ -10,6 +10,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.RemindersAdapter;
@@ -32,6 +33,7 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
     private RecyclerView rvReminders;
     private List<Reminder> mReminderList;
     private RemindersAdapter mRemindersAdapter;
+    private TextView tvEmpty;
 
     public static ReminderFragment newInstance() {
         return new ReminderFragment();
@@ -56,6 +58,7 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_reminders, container, false);
         rvReminders = (RecyclerView)rootView.findViewById(R.id.rv_reminders);
+        tvEmpty = (TextView)rootView.findViewById(R.id.tv_empty);
         return rootView;
     }
 
@@ -76,7 +79,8 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
         rvReminders.setAdapter(mRemindersAdapter);
         rvReminders.setHasFixedSize(true);
         rvReminders.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
-        
+        reloadData();
+
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
 
             @Override
@@ -130,6 +134,11 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
 
     private void reloadData() {
         mReminderList = Reminder.getReminders();
+        if (mReminderList.isEmpty()) {
+            tvEmpty.setVisibility(View.VISIBLE);
+        } else {
+            tvEmpty.setVisibility(View.GONE);
+        }
         mRemindersAdapter.updateReminders(mReminderList);
     }
 }

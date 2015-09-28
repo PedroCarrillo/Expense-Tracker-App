@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="?attr/actionBarSize"
@@ -87,12 +88,25 @@
             android:textSize="@dimen/text_size_14"
             android:layout_marginTop="@dimen/dimen_20dp"
             android:text="@string/total_expenses_per_category"/>
-
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/bc_categories"
-            android:layout_marginTop="@dimen/dimen_10dp"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_25_10dp" />
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_height="@dimen/dimen_25_10dp">
+
+            <TextView
+                android:id="@+id/tv_bar_chart_category_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_chart_data"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/bc_categories"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tv_category_percentage"
@@ -102,13 +116,26 @@
             android:layout_gravity="left"
             android:layout_marginTop="@dimen/dimen_20dp"
             android:text="@string/categories_percentage"/>
-
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/pc_categories"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_marginTop="@dimen/dimen_10dp"
             android:layout_marginBottom="@dimen/dimen_10dp"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_25_10dp" />
+            android:layout_height="@dimen/dimen_25_10dp">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pc_categories"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_pie_categories_chart_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_chart_data"
+                android:visibility="gone"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 </ScrollView>

@@ -42,6 +42,8 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
     private TextView tvDateFrom;
     private TextView tvDateTo;
     private TextView tvTotal;
+    private TextView tvPcCategoriesEmpty;
+    private TextView tvBcCategoriesEmpty;
 
     private PieChart pcCategories;
     private BarChart bcCategories;
@@ -72,6 +74,8 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         tvTotal = (TextView)rootView.findViewById(R.id.tv_total);
         pcCategories = (PieChart) rootView.findViewById(R.id.pc_categories);
         bcCategories = (BarChart) rootView.findViewById(R.id.bc_categories);
+        tvPcCategoriesEmpty = (TextView)rootView.findViewById(R.id.tv_bar_chart_category_empty);
+        tvBcCategoriesEmpty = (TextView)rootView.findViewById(R.id.tv_pie_categories_chart_empty);
         return rootView;
     }
 
@@ -108,7 +112,13 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                 entryPerCategory.add(new BarEntry(value, categoriesNames.size()-1));
             }
         }
-
+        if (categoriesNames.isEmpty()) {
+            tvBcCategoriesEmpty.setVisibility(View.VISIBLE);
+            bcCategories.setVisibility(View.GONE);
+        } else {
+            tvBcCategoriesEmpty.setVisibility(View.GONE);
+            bcCategories.setVisibility(View.VISIBLE);
+        }
         BarDataSet dataSet = new BarDataSet(entryPerCategory, getString(R.string.categories));
         dataSet.setColors(Util.getListColors());
         BarData barData = new BarData(categoriesNames, dataSet);
@@ -119,6 +129,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         bcCategories.getAxisRight().setDrawLabels(false);
         bcCategories.setData(barData);
         bcCategories.setDescription("");
+        bcCategories.setNoDataText("");
         bcCategories.animateY(2000);
         bcCategories.invalidate();
     }
@@ -146,6 +157,13 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                 categoryPercentagesEntries.add(pieEntry);
             }
         }
+        if (categoriesNames.isEmpty()) {
+            tvPcCategoriesEmpty.setVisibility(View.VISIBLE);
+            bcCategories.setVisibility(View.GONE);
+        } else {
+            tvPcCategoriesEmpty.setVisibility(View.GONE);
+            bcCategories.setVisibility(View.VISIBLE);
+        }
 
         PieDataSet dataSet = new PieDataSet(categoryPercentagesEntries, "Categories");
         dataSet.setSliceSpace(1f);
@@ -159,7 +177,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         data.setValueTextColor(getResources().getColor(R.color.primary_dark));
         pcCategories.setData(data);
         pcCategories.setDescription("");
-
+        pcCategories.setNoDataText("");
         pcCategories.invalidate();
 
     }
