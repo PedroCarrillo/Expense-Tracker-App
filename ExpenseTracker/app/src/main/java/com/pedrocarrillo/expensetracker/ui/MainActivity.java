@@ -37,9 +37,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public static final int NAVIGATION_MODE_STANDARD = 0;
     public static final int NAVIGATION_MODE_TABS = 1;
+    public static final String NAVIGATION_POSITION = "navigation_position";
 
     private int mCurrentMode = NAVIGATION_MODE_STANDARD;
-
+    private int idSelectedNavigationItem;
 
     private DrawerLayout mainDrawerLayout;
     private NavigationView mainNavigationView;
@@ -54,6 +55,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initUI();
         setUpDrawer();
         setUpToolbar();
+        if ( savedInstanceState != null) {
+            int menuItemId = savedInstanceState.getInt(NAVIGATION_POSITION);
+            mainNavigationView.setCheckedItem(menuItemId);
+            mainNavigationView.getMenu().performIdentifierAction(menuItemId, 0);
+        } else {
+            mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
+        }
     }
 
     @NavigationMode
@@ -70,7 +78,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void setUpDrawer() {
         mainNavigationView.setNavigationItemSelectedListener(this);
-        mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
     }
 
     private void setUpToolbar() {
@@ -111,10 +118,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(NAVIGATION_POSITION, idSelectedNavigationItem);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         menuItem.setChecked(true);
         mainDrawerLayout.closeDrawers();
-        switchFragment(menuItem);
+        idSelectedNavigationItem = menuItem.getItemId();
+        switchFragment(menuItem.getItemId());
         return false;
     }
 
@@ -151,7 +165,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void setTitle(String title) {
-        getSupportActionBar().setTitle("HOLA");
+        getSupportActionBar().setTitle(title);
     }
 
     private void setNavigationModeTabs() {
@@ -163,16 +177,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar_layout);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
         AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-
-        int[] consumed = new int[2];
-        behavior.onNestedPreScroll(coordinator, appbar, null, 0, -1000, consumed);
-
+        if (behavior != null && appbar != null) {
+            int[] consumed = new int[2];
+            behavior.onNestedPreScroll(coordinator, appbar, null, 0, -1000, consumed);
+        }
         mainTabLayout.setVisibility(View.GONE);
     }
 
-    private void switchFragment(MenuItem menuItem) {
+    private void switchFragment(int menuItemId) {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
-        switch (menuItem.getItemId()) {
+        switch (menuItemId) {
             case R.id.nav_expenses:
                 if (!(currentFragment instanceof  ExpensesFragment)) replaceFragment(ExpensesFragment.newInstance(), false);
                 break;

@@ -6,6 +6,12 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.pedrocarrillo.expensetracker.R;
 
@@ -15,16 +21,75 @@ import com.pedrocarrillo.expensetracker.R;
 public class SettingsActivity  extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private AppCompatDelegate mDelegate;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
+        getDelegate().installViewFactory();
+        getDelegate().onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings_activity);
+        setToolbar((Toolbar) findViewById(R.id.toolbar));
         addPreferencesFromResource(R.xml.pref_general);
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_country_key)));
     }
+
+    private void setToolbar(Toolbar mToolbar) {
+        setSupportActionBar(mToolbar);
+        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getDelegate().onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        getDelegate().setContentView(layoutResID);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getDelegate().onPostResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getDelegate().onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getDelegate().onDestroy();
+    }
+
+    private void setSupportActionBar(@Nullable Toolbar toolbar) {
+        getDelegate().setSupportActionBar(toolbar);
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
+    }
+
 
     // Registers a shared preference change listener that gets notified when preferences change
     @Override

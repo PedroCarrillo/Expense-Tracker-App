@@ -43,13 +43,6 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
-        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddNewReminder();
-            }
-        });
     }
 
     private void onAddNewReminder() {
@@ -69,6 +62,14 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
+        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddNewReminder();
+            }
+        });
+        mMainActivityListener.setTitle(getString(R.string.reminders));
         mReminderList = Reminder.getReminders();
         mRemindersAdapter = new RemindersAdapter(mReminderList, this);
         rvReminders.setLayoutManager(new LinearLayoutManager(getActivity()));

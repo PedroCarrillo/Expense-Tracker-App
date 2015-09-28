@@ -68,6 +68,7 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
+        mMainActivityListener.setTitle(getString(R.string.expenses));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setTabs(tabList, this);
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {

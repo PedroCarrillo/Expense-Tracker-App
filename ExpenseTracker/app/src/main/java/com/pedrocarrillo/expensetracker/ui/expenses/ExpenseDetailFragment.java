@@ -57,6 +57,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
+            setTitle(getString(R.string.expense_detail));
             String id = getArguments().getString(EXPENSE_ID_KEY);
             expense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
             loadData();

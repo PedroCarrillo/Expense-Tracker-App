@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class DateUtils {
 
-    private static Calendar setDateStartOfDay(Calendar calendar){
+    public static Calendar setDateStartOfDay(Calendar calendar){
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.clear(Calendar.MINUTE);
         calendar.clear(Calendar.SECOND);
@@ -38,7 +38,7 @@ public class DateUtils {
     public static Calendar getCalendarFirstDayOfCurrentWeek() {
         Calendar cal = setDateStartOfDay(Calendar.getInstance());
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-        return cal;
+        return setDateStartOfDay(cal);
     }
 
     public static Date getLastDateOfCurrentWeek(){

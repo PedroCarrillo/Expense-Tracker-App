@@ -84,8 +84,8 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
         }
         setModeViews();
         tvDate.setOnClickListener(this);
-        ((Button)getView().findViewById(R.id.btn_cancel)).setOnClickListener(this);
-        ((Button)getView().findViewById(R.id.btn_save)).setOnClickListener(this);
+        (getView().findViewById(R.id.btn_cancel)).setOnClickListener(this);
+        (getView().findViewById(R.id.btn_save)).setOnClickListener(this);
     }
 
     private void setModeViews() {

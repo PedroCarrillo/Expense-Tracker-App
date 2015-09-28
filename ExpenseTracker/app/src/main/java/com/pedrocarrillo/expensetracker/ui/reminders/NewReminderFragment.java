@@ -77,9 +77,11 @@ public class NewReminderFragment extends BaseFragment implements View.OnClickLis
 
     private void setMode() {
         if (IUserActionsMode.MODE_CREATE == mUserActionMode) {
+            setTitle(getString(R.string.create_a_reminder));
             daySelected = 1;
             timeSelected = new Date();
         } else {
+            setTitle(getString(R.string.edit_a_reminder));
             String reminderId = getArguments().getString(REMINDER_ID_KEY);
             mReminder = (Reminder) RealmManager.getInstance().findById(Reminder.class, reminderId);
             daySelected = mReminder.getDay();

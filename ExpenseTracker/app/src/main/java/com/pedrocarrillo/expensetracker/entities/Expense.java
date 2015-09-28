@@ -1,9 +1,12 @@
 package com.pedrocarrillo.expensetracker.entities;
 
+import android.util.Log;
+
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
+import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.Date;
 import java.util.List;

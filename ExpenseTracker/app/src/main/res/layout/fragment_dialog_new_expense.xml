@@ -18,8 +18,8 @@
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/primary_dark"
         android:textSize="20sp"
+        android:textColor="@color/primary_dark"
         android:layout_marginTop="20dp"/>
 
     <Spinner
@@ -72,7 +72,7 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:gravity="center"
             android:layout_height="wrap_content"
             style="@style/ExpenseTrackerButton"
@@ -82,7 +82,7 @@
             android:id="@+id/btn_save"
             android:layout_marginLeft="@dimen/dimen_10dp"
             android:layout_marginStart="@dimen/dimen_10dp"
-            android:layout_width="80dp"
+            android:layout_width="120dp"
             android:gravity="center"
             android:layout_height="wrap_content"
             style="@style/ExpenseTrackerButton"

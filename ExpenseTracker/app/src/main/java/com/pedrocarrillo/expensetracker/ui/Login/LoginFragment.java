@@ -146,6 +146,7 @@ public class LoginFragment extends BaseFragment implements
 
     private void showSignedInUI() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
+        getActivity().finish();
         startActivity(intent);
     }
 

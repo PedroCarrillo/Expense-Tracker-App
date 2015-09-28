@@ -23,7 +23,6 @@ import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,9 +30,9 @@ import java.util.List;
  */
 public class CategoriesFragment extends MainFragment implements TabLayout.OnTabSelectedListener {
 
-    private int mCurrentMode = IExpensesType.MODE_EXPENSES;
+    private @IExpensesType int mCurrentMode = IExpensesType.MODE_EXPENSES;
 
-    private List<String> tabList;
+//    private List<String> tabList;
     private RecyclerView rvCategories;
 
     private List<Category> mCategoryList;
@@ -51,9 +50,23 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         super.onCreate(savedInstanceState);
         mCategoryList = new ArrayList<>();
         mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
-        tabList = Arrays.asList(getString(R.string.expenses), getString(R.string.income));
-        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
-        mMainActivityListener.setTabs(tabList, this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
+        rvCategories = (RecyclerView)rootView.findViewById(R.id.rv_categories);
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        tabList = Arrays.asList(getString(R.string.expenses), getString(R.string.income));
+//        mMainActivityListener.setTabs(tabList, this);
+        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
+        reloadData();
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,19 +83,8 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
                 });
             }
         });
-    }
+        mMainActivityListener.setTitle(getString(R.string.categories));
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
-        rvCategories = (RecyclerView)rootView.findViewById(R.id.rv_categories);
-        return rootView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         rvCategories.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvCategories.setAdapter(mCategoriesAdapter);
         rvCategories.setHasFixedSize(true);

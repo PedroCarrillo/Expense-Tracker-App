@@ -60,7 +60,6 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
     }
 
 
@@ -79,11 +78,13 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
+        mMainActivityListener.setTitle(getString(R.string.statistics));
         mCategoryList = Category.getCategoriesExpense();
         tvDateFrom.setOnClickListener(this);
         tvDateTo.setOnClickListener(this);
         mDateFrom = DateUtils.getFirstDateOfCurrentWeek();
-        mDateTo = DateUtils.getTomorrowDate();
+        mDateTo = DateUtils.getLastDateOfCurrentWeek();
         updateDate(tvDateFrom, mDateFrom);
         updateDate(tvDateTo, mDateTo);
         updateData();
@@ -102,13 +103,13 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
         for (int i=0; i < mCategoryList.size(); i++) {
             float value = Expense.getCategoryTotalByDate(mDateFrom, mDateTo, mCategoryList.get(i));
-            if (value != 0) {
+            if (value > 0) {
                 categoriesNames.add(mCategoryList.get(i).getName());
-                entryPerCategory.add(new BarEntry(value, i));
+                entryPerCategory.add(new BarEntry(value, categoriesNames.size()-1));
             }
         }
 
-        BarDataSet dataSet = new BarDataSet(entryPerCategory, "categories");
+        BarDataSet dataSet = new BarDataSet(entryPerCategory, getString(R.string.categories));
         dataSet.setColors(Util.getListColors());
         BarData barData = new BarData(categoriesNames, dataSet);
         bcCategories.setVisibleXRangeMaximum(5);
@@ -139,9 +140,9 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
         for (int i=0; i < mCategoryList.size(); i++) {
             float percentage = Expense.getExpensesCategoryPercentage(mDateFrom, mDateTo, mCategoryList.get(i));
-            if( percentage != 0) {
+            if( percentage > 0) {
                 categoriesNames.add(mCategoryList.get(i).getName());
-                Entry pieEntry = new Entry(percentage, i);
+                Entry pieEntry = new Entry(percentage, categoriesNames.size()-1);
                 categoryPercentagesEntries.add(pieEntry);
             }
         }
@@ -172,7 +173,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
     private void showDateDialog(final int id) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+        calendar.setTime(id == R.id.tv_date_from ? mDateFrom : mDateTo);
         DialogManager.getInstance()
                 .showDatePicker(
                         getActivity(),
@@ -180,6 +181,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                                 calendar.set(year, month, day);
+                                DateUtils.setDateStartOfDay(calendar);
                                 if (id == R.id.tv_date_from) {
                                     mDateFrom = calendar.getTime();
                                     updateDate(tvDateFrom, mDateFrom);

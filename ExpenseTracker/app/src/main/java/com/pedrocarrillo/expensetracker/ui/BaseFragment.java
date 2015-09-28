@@ -45,4 +45,9 @@ public class BaseFragment extends Fragment{
         mFragmentListener = null;
     }
 
+    public void setTitle(String title) {
+       if(getActivity() != null && getActivity() instanceof BaseActivity){
+           ((BaseActivity)getActivity()).getSupportActionBar().setTitle(title);
+       }
+    }
 }
