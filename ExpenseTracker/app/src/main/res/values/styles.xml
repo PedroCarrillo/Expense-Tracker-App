@@ -20,7 +20,7 @@
     <style name="ExpenseTrackerButton" parent="Base.TextAppearance.AppCompat.Widget.Button">
         <item name="android:textColor">@color/white</item>
         <item name="android:padding">@dimen/dimen_10dp</item>
-        <item name="android:background">@color/primary</item>
+        <item name="android:background">@drawable/selector_button</item>
     </style>
 
     <style name="ExpenseTrackerSpinner" parent="@style/Widget.AppCompat.Spinner.Underlined">
