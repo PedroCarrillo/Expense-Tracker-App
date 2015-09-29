@@ -13,16 +13,19 @@ android {
     }
 
     signingConfigs {
-//        def Properties localProps = new Properties()
-//        localProps.load(new FileInputStream(file('../local.properties')))
-//        storeFile file("tracker_expense.jks")
-//        storePassword localProps["storePass"]
-//        keyAlias localProps["alias"]
-//        keyPassword localProps["pass"]
+        release {
+            def Properties localProps = new Properties()
+            localProps.load(new FileInputStream(file('../local.properties')))
+            storeFile file("tracker_expense.jks")
+            storePassword localProps["storePass"]
+            keyAlias localProps["alias"]
+            keyPassword localProps["pass"]
+        }
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
