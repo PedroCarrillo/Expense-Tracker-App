@@ -15,6 +15,8 @@
     <dimen name="default_text_size">25dp</dimen>
     <dimen name="elevation_dp">2dp</dimen>
     <dimen name="corner_dp">2dp</dimen>
+    <dimen name="widget_default_height">180dp</dimen>
+    <dimen name="widget_default_width">250dp</dimen>
 
     <dimen name="dimen_5dp">5dp</dimen>
     <dimen name="dimen_10dp">10dp</dimen>

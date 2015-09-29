@@ -8,6 +8,7 @@ import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -172,4 +173,20 @@ public class Expense extends RealmObject {
         return totalCategory * 100 / total;
     }
 
+    public static List<Expense> cloneExpensesCollection(List<Expense> expenseList) {
+        List<Expense> clonedExpenses = new ArrayList<>();
+        for (Expense expense : expenseList) {
+            Expense cloneExpense = new Expense();
+            cloneExpense.setId(expense.getId());
+            Category category = new Category();
+            category.setName(expense.getCategory().getName());
+            cloneExpense.setCategory(category);
+            cloneExpense.setDate(expense.getDate());
+            cloneExpense.setDescription(expense.getDescription());
+            cloneExpense.setTotal(expense.getTotal());
+            cloneExpense.setType(expense.getType());
+            clonedExpenses.add(cloneExpense);
+        }
+        return clonedExpenses;
+    }
 }

@@ -3,8 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
-
+    buildToolsVersion '23.0.1'
     defaultConfig {
         applicationId "com.pedrocarrillo.expensetracker"
         minSdkVersion 16
@@ -12,6 +11,16 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+//        def Properties localProps = new Properties()
+//        localProps.load(new FileInputStream(file('../local.properties')))
+//        storeFile file("tracker_expense.jks")
+//        storePassword localProps["storePass"]
+//        keyAlias localProps["alias"]
+//        keyPassword localProps["pass"]
+    }
+
     buildTypes {
         release {
             minifyEnabled false
