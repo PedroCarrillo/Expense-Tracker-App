@@ -1,12 +1,10 @@
 package com.pedrocarrillo.expensetracker.entities;
 
-import android.util.Log;
 
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
-import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -112,8 +110,7 @@ public class Expense extends RealmObject {
         }
         RealmResults<Expense> totalExpense = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_EXPENSES, null);
         RealmResults<Expense> totalIncome = getExpensesList(dateFrom, dateTo, IExpensesType.MODE_INCOME, null);
-        float total = totalExpense.sum("total").floatValue() - totalIncome.sum("total").floatValue();
-        return total;
+        return totalExpense.sum("total").floatValue() - totalIncome.sum("total").floatValue();
     }
 
     public static List<Expense> getTodayExpenses() {

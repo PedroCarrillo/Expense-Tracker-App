@@ -8,7 +8,7 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context="com.pedrocarrillo.expensetracker.ui.expenses.ExpenseDetailFragment">
 
         <LinearLayout
@@ -105,6 +105,7 @@
             app:layout_anchorGravity="bottom|right"
             android:src="@drawable/ic_mode_edit_white_48dp"
             android:layout_marginRight="@dimen/dimen_25dp"
+            android:layout_marginEnd="@dimen/dimen_25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

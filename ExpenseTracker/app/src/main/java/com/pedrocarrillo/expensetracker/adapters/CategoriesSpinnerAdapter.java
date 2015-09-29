@@ -17,13 +17,11 @@ import com.pedrocarrillo.expensetracker.entities.Category;
  */
 public class CategoriesSpinnerAdapter extends ArrayAdapter<Category> {
 
-    private Activity context;
     Category[] categoriesList = null;
     LayoutInflater inflater;
 
     public CategoriesSpinnerAdapter(Activity context, Category[] categoriesList) {
         super(context, android.R.layout.simple_spinner_dropdown_item, categoriesList);
-        this.context = context;
         this.categoriesList = categoriesList;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

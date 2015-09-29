@@ -71,10 +71,9 @@ public class Category extends RealmObject {
     }
 
     public static List<Category> getCategoriesForType(@IExpensesType int type){
-        RealmResults<Category> categories = RealmManager.getInstance().getRealmInstance().where(Category.class)
+        return RealmManager.getInstance().getRealmInstance().where(Category.class)
                 .equalTo("type", type)
                 .findAll();
-        return categories;
     }
 
 }

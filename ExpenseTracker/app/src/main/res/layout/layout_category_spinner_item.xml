@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/tv_title"
-    android:padding="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/dimen_10dp"
+    android:paddingBottom="@dimen/dimen_10dp"
+    android:paddingLeft="@dimen/dimen_5dp"
+    android:paddingRight="@dimen/dimen_5dp"
     style="@style/ExpenseTrackerTextView"
     tools:text="Category"/>

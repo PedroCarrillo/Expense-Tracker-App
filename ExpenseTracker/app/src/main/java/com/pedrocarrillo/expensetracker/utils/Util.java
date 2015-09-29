@@ -26,11 +26,7 @@ public class Util {
     }
 
     public static boolean isEmptyField(EditText et) {
-        if(et.getText() == null || et.getText().toString().isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (et.getText() == null || et.getText().toString().isEmpty());
     }
 
     public static List<Integer> getListColors() {

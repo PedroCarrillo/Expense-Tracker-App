@@ -52,7 +52,7 @@
                 android:layout_width="@dimen/dimen_8_10dp"
                 android:gravity="center"
                 style="@style/ExpenseTrackerButton"
-                android:text="Start"/>
+                android:text="@string/start"/>
         </LinearLayout>
 
     </LinearLayout>
