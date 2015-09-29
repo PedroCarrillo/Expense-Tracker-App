@@ -40,15 +40,12 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-//        Date today = DateUtils.getToday();
-//        Date tomorrow = DateUtils.getTomorrowDate();
-//        this.expenseList = Expense.cloneExpensesCollection(Realm.getInstance(ExpenseTrackerApp.getContext()).where(Expense.class).between("date", today, tomorrow).findAll());
-        this.expenseList = Expense.cloneExpensesCollection(Expense.getTodayExpenses());
-
+        getExpenses();
     }
 
     @Override
     public void onDataSetChanged() {
+        getExpenses();
 
     }
 
@@ -90,21 +87,23 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.layout_expense_widget_item);
-        Log.e("adasd", expenseList.toString());
         Expense expense = expenseList.get(position);
         remoteView.setTextViewText(R.id.tv_category, String.valueOf(expense.getCategory().getName()));
         remoteView.setTextViewText(R.id.tv_description, expense.getDescription());
         remoteView.setTextViewText(R.id.tv_total, Util.getFormattedCurrency(expense.getTotal()));
         remoteView.setViewVisibility(R.id.tv_description, (expense.getDescription() != null && !expense.getDescription().isEmpty()) ? View.VISIBLE : View.GONE);
         remoteView.setTextColor(R.id.tv_total, expense.getType() == IExpensesType.MODE_EXPENSES ? context.getResources().getColor(R.color.colorAccentRed) : context.getResources().getColor(R.color.colorAccentGreen));
-//        remoteView.setTextViewText(R.id.away_name, match.getAway().getName());
-//        remoteView.setTextViewText(R.id.score_textview, Utilies.getScores(match.getHome().getGoals(), match.getAway().getGoals()));
-//        remoteView.setTextViewText(R.id.data_textview, match.getDate());
-//        remoteView.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(match.getHome().getName()));
-//        remoteView.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(match.getAway().getName()));
-
         return remoteView;
     }
 
 
+    public void getExpenses() {
+        Date today = DateUtils.getToday();
+        Date tomorrow = DateUtils.getTomorrowDate();
+        this.expenseList = new ArrayList<>();
+        Realm realm = Realm.getInstance(context);
+        //sync realm instance with other instances
+        realm.refresh();
+        this.expenseList = Expense.cloneExpensesCollection(realm.where(Expense.class).between("date", today, tomorrow).findAll());
+    }
 }

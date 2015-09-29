@@ -3,8 +3,10 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,12 @@ import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
+import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
+import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetProvider;
+import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetService;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -156,6 +161,12 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
                     editExpense.setCategory(currentCategory);
                     editExpense.setDate(selectedDate);
                     RealmManager.getInstance().update(editExpense);
+                }
+                // update widget if the expense is created today
+                if (DateUtils.isToday(selectedDate)) {
+                    Intent i = new Intent(getActivity(), ExpensesWidgetProvider.class);
+                    i.setAction(ExpensesWidgetService.UPDATE_WIDGET);
+                    getActivity().sendBroadcast(i);
                 }
                 getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                 dismiss();

@@ -20,10 +20,14 @@ import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
+import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
+import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetProvider;
+import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetService;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,7 +98,14 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON_POSITIVE) {
+                            Date expenseDate = expense.getDate();
                             RealmManager.getInstance().delete(expense);
+                            // update widget if the expense is created today
+                            if (DateUtils.isToday(expenseDate)) {
+                                Intent i = new Intent(getActivity(), ExpensesWidgetProvider.class);
+                                i.setAction(ExpensesWidgetService.UPDATE_WIDGET);
+                                getActivity().sendBroadcast(i);
+                            }
                         }
                         reloadData();
                     }

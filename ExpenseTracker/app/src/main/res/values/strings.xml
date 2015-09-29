@@ -67,6 +67,8 @@
     <string name="categories_empty">There are no categories yet. Start by creating some and be able to take advantage of the statistics.</string>
     <string name="no_chart_data">No data available</string>
     <string name="no_categories_error">Please create categories to start saving expenses</string>
+    <string name="today_expenses_total">Today: %s</string>
+    <string name="no_expenses_today">No expenses today</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

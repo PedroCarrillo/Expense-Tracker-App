@@ -2,4 +2,5 @@
     android:initialLayout="@layout/widget_layout"
     android:minHeight="@dimen/widget_default_height"
     android:minWidth="@dimen/widget_default_width"
+    android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="108000"/>

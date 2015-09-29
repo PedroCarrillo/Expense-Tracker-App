@@ -1,27 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout     xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_5_10dp"
-        android:orientation="vertical"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:background="@color/primary">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="@dimen/text_size_20"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:textSize="@dimen/text_size_14"
             android:textColor="@color/white"
             android:text="@string/app_name"/>
-    </FrameLayout>
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textSize="@dimen/text_size_14"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:textColor="@color/white"
+            android:text="@string/today_expenses_total"
+            />
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:id="@+id/widget">
 
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_expenses_today"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
         <ListView
             android:id="@+id/listViewWidget"
             android:layout_width="match_parent"
@@ -29,15 +52,6 @@
             android:divider="@color/grey"
             android:dividerHeight="0.5dp"/>
 
-        <TextView
-            android:id="@+id/empty_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="No data today"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:visibility="gone" />
 
     </FrameLayout>
 </LinearLayout>

@@ -53,6 +53,7 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.pedrocarrillo.expensetracker.widget.ExpensesWidgetService.UPDATE_WIDGET" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />

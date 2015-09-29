@@ -72,6 +72,10 @@ public class DateUtils {
         return dateList;
     }
 
+    public static boolean isToday(Date date) {
+        return  android.text.format.DateUtils.isToday(date.getTime());
+    }
+
     public static Date getToday() {
         return setDateStartOfDay(Calendar.getInstance()).getTime();
     }
