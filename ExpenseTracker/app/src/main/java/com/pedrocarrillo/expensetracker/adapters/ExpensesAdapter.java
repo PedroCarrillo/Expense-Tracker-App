@@ -41,12 +41,12 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     public ExpensesAdapter(Context context, ExpenseAdapterOnClickHandler onClickHandler, List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
         this.mExpensesList = mExpensesList;
         this.mClickHandler = onClickHandler;
-        this.colorExpense = context.getResources().getColor(R.color.colorAccentRed);
-        this.colorIncome = context.getResources().getColor(R.color.colorAccentGreen);
-        this.prefixExpense = context.getResources().getString(R.string.expense_prefix);
-        this.prefixIncome = context.getResources().getString(R.string.income_prefix);
+        this.colorExpense = ExpenseTrackerApp.getContext().getResources().getColor(R.color.colorAccentRed);
+        this.colorIncome = ExpenseTrackerApp.getContext().getResources().getColor(R.color.colorAccentGreen);
+        this.prefixExpense = ExpenseTrackerApp.getContext().getResources().getString(R.string.expense_prefix);
+        this.prefixIncome = ExpenseTrackerApp.getContext().getResources().getString(R.string.income_prefix);
         this.mCurrentDateMode = mCurrentDateMode;
-        this.titleTransitionName = context.getString(R.string.tv_title_transition);
+        this.titleTransitionName = ExpenseTrackerApp.getContext().getString(R.string.tv_title_transition);
     }
 
     @Override

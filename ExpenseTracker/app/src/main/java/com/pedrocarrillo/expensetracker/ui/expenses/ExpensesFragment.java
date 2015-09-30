@@ -18,6 +18,7 @@ import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
+import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
@@ -33,7 +34,7 @@ import java.util.List;
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSelectedListener, ExpensesAdapter.ExpenseAdapterOnClickHandler {
+public class ExpensesFragment extends BaseFragment implements ExpensesAdapter.ExpenseAdapterOnClickHandler{
 
     public static final int RQ_NEW_EXPENSE = 1001;
 
@@ -42,8 +43,12 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     private RecyclerView rvExpenses;
     private @IDateMode int mCurrentDateMode;
 
-    public static ExpensesFragment newInstance() {
-        return new ExpensesFragment();
+    public static ExpensesFragment newInstance(@IDateMode int mCurrentDateMode) {
+        ExpensesFragment expensesFragment = new ExpensesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(IDateMode.DATE_MODE_TAG, mCurrentDateMode);
+        expensesFragment.setArguments(bundle);
+        return expensesFragment;
     }
 
     public ExpensesFragment() {
@@ -71,16 +76,21 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
-        mMainActivityListener.setTitle(getString(R.string.expenses));
-        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
-        mMainActivityListener.setTabs(tabList, this);
-        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddNewExpense();
-            }
-        });
+        if (getArguments() != null) {
+            int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
+            mCurrentDateMode = IDateMode.MODE_TODAY == mode ? IDateMode.MODE_TODAY : (IDateMode.MODE_WEEK == mode ? IDateMode.MODE_WEEK : IDateMode.MODE_MONTH);
+            reloadData();
+        }
+//        List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
+//        mMainActivityListener.setTitle(getString(R.string.expenses));
+//        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
+//        mMainActivityListener.setTabs(tabList, this);
+//        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onAddNewExpense();
+//            }
+//        });
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
         rvExpenses.setAdapter(mExpensesAdapter);
@@ -123,19 +133,19 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
         itemTouchHelper.attachToRecyclerView(rvExpenses);
     }
 
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        if (tab.getTag()!=null) {
-            if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.today))) {
-                mCurrentDateMode= IDateMode.MODE_TODAY;
-            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.week))) {
-                mCurrentDateMode = IDateMode.MODE_WEEK;
-            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.month))) {
-                mCurrentDateMode = IDateMode.MODE_MONTH;
-            }
-        }
-        reloadData();
-    }
+//    @Override
+//    public void onTabSelected(TabLayout.Tab tab) {
+//        if (tab.getTag()!=null) {
+//            if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.today))) {
+//                mCurrentDateMode= IDateMode.MODE_TODAY;
+//            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.week))) {
+//                mCurrentDateMode = IDateMode.MODE_WEEK;
+//            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.month))) {
+//                mCurrentDateMode = IDateMode.MODE_MONTH;
+//            }
+//        }
+//        reloadData();
+//    }
 
     private void onAddNewExpense() {
         NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE, null);
@@ -143,7 +153,7 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
         newExpenseFragment.show(getChildFragmentManager(), "NEW_EXPENSE");
     }
 
-    private void reloadData() {
+    public void reloadData() {
         switch (mCurrentDateMode) {
             case IDateMode.MODE_TODAY:
                 mExpenseList = Expense.getTodayExpenses();
@@ -162,15 +172,15 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
         }
     }
 
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
+//    @Override
+//    public void onTabUnselected(TabLayout.Tab tab) {
+//
+//    }
+//
+//    @Override
+//    public void onTabReselected(TabLayout.Tab tab) {
+//
+//    }
 
     @Override
     public void onClick(ExpensesAdapter.ViewHolder vh) {
