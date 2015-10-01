@@ -56,7 +56,7 @@ public class RealmManager {
             @Override
             public void execute(Realm realm) {
                 checkDuplicateUUID(object, clazz);
-                realm.copyToRealm(object);
+                realm.copyToRealmOrUpdate(object);
             }
         });
     }

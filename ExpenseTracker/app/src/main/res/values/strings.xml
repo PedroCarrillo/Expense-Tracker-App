@@ -69,6 +69,9 @@
     <string name="no_categories_error">Please create categories to start saving expenses</string>
     <string name="today_expenses_total">Today: %s</string>
     <string name="no_expenses_today">No expenses today</string>
+    <string name="start">Start</string>
+    <string name="hint_category">Ej. Food</string>
+    <string name="error_name">Please enter a name</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>
@@ -584,4 +587,5 @@
         <item>ZM</item>
         <item>ZW</item>
     </string-array>
+
 </resources>

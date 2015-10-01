@@ -22,6 +22,7 @@ import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
+import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class CategoriesFragment extends MainFragment implements TabLayout.OnTabSelectedListener {
+public class CategoriesFragment extends MainFragment implements TabLayout.OnTabSelectedListener, CategoriesAdapter.CategoriesAdapterOnCLickHandler {
 
     private @IExpensesType int mCurrentMode = IExpensesType.MODE_EXPENSES;
 
@@ -51,7 +52,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategoryList = new ArrayList<>();
-        mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
+        mCategoriesAdapter = new CategoriesAdapter(mCategoryList, this);
     }
 
     @Override
@@ -73,17 +74,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().createEditTextDialog(getActivity(), getString(R.string.create_category), getString(R.string.save), getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            EditText etTest = (EditText) ((AlertDialog) dialog).findViewById(R.id.et_main);
-                            Category category = new Category(etTest.getText().toString(), mCurrentMode);
-                            RealmManager.getInstance().save(category, Category.class);
-                            reloadData();
-                        }
-                    }
-                });
+                createCategoryDialog(null);
             }
         });
         mMainActivityListener.setTitle(getString(R.string.categories));
@@ -138,11 +129,11 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         } else {
             tvEmpty.setVisibility(View.GONE);
         }
-        if (mCategoriesAdapter == null) {
-            mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
-        } else {
+//        if (mCategoriesAdapter == null) {
+//            mCategoriesAdapter = new CategoriesAdapter(mCategoryList, this);
+//        } else {
             mCategoriesAdapter.updateCategories(mCategoryList);
-        }
+//        }
     }
 
     @Override
@@ -153,6 +144,40 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onClick(CategoriesAdapter.ViewHolder vh) {
+        createCategoryDialog(vh);
+    }
+
+    private void createCategoryDialog(final CategoriesAdapter.ViewHolder vh) {
+        AlertDialog alertDialog = DialogManager.getInstance().createEditTextDialog(getActivity(), getString(R.string.create_category), getString(R.string.save), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    EditText etTest = (EditText) ((AlertDialog) dialog).findViewById(R.id.et_main);
+                    if (!Util.isEmptyField(etTest)) {
+                        Category category = new Category(etTest.getText().toString(), mCurrentMode);
+                        if (vh != null) {
+                            Category categoryToUpdate = (Category)vh.itemView.getTag();
+                            category.setId(categoryToUpdate.getId());
+                            RealmManager.getInstance().update(category);
+                        } else {
+                            RealmManager.getInstance().save(category, Category.class);
+                        }
+                        reloadData();
+                    } else {
+                        DialogManager.getInstance().showShortToast(getString(R.string.error_name));
+                    }
+                }
+            }
+        });
+        if (vh != null) {
+            EditText etCategoryName = (EditText) alertDialog.findViewById(R.id.et_main);
+            Category category = (Category) vh.itemView.getTag();
+            etCategoryName.setText(category.getName());
+        }
     }
 
 }

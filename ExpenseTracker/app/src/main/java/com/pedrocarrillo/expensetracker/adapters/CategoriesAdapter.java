@@ -21,20 +21,28 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
     private List<Category> mCategoryList;
     private int lastPosition = -1;
+    final private CategoriesAdapterOnCLickHandler mClickHandler;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView tvTitle;
 
         public ViewHolder(View v) {
             super(v);
             tvTitle = (TextView)v.findViewById(R.id.tv_title);
+            v.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mClickHandler.onClick(this);
         }
 
     }
 
-    public CategoriesAdapter(List<Category> categoryList) {
+    public CategoriesAdapter(List<Category> categoryList, CategoriesAdapterOnCLickHandler categoriesAdapterOnCLickHandler) {
         this.mCategoryList = categoryList;
+        this.mClickHandler = categoriesAdapterOnCLickHandler;
     }
 
     @Override
@@ -69,6 +77,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
             holder.itemView.startAnimation(animation);
             lastPosition = position;
         }
+    }
+
+    public interface CategoriesAdapterOnCLickHandler {
+        void onClick(ViewHolder vh);
     }
 
 }
