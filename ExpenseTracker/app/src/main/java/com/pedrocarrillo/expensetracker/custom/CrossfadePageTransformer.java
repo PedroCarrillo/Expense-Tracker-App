@@ -60,7 +60,7 @@ public class CrossfadePageTransformer implements ViewPager.PageTransformer {
             }
 
             if(ivCreditCard != null){
-                ivCreditCard.setTranslationX(-(float)(pageWidth * 0.5f * position));
+                ivCreditCard.setTranslationX(-(pageWidth * 0.5f * position));
             }
 
             if(ivMoneyPig != null){

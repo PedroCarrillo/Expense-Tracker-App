@@ -4,14 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.receivers.AlarmReceiver;
 import com.pedrocarrillo.expensetracker.ui.reminders.NewReminderFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
-import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.Calendar;
 import java.util.Date;

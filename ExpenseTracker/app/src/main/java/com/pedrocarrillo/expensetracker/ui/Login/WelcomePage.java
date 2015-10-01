@@ -23,8 +23,7 @@ public class WelcomePage extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(getArguments().getInt(LAYOUT_ID, -1), container, false);
-        return rootView;
+        return inflater.inflate(getArguments().getInt(LAYOUT_ID, -1), container, false);
     }
 
 }

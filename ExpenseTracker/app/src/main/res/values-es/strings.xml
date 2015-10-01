@@ -68,6 +68,8 @@
     <string name="no_categories_error">Crea categorías para poder registrar gastos</string>
     <string name="today_expenses_total">Hoy: %s</string>
     <string name="no_expenses_today">No hay gastos hoy</string>
+    <string name="start">Inicio</string>
+    <string name="hint_category">Ej. Comida</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

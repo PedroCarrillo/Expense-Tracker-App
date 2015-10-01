@@ -3,18 +3,15 @@ package com.pedrocarrillo.expensetracker.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
-import com.pedrocarrillo.expensetracker.utils.RealmManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.ArrayList;

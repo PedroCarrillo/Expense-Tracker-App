@@ -5,7 +5,6 @@ import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.entities.Reminder;
 
-import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;

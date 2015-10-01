@@ -92,7 +92,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
         List<String> days = new ArrayList<>();
         Collections.sort(dateList);
 
-        List<BarEntry> entriesPerDay = new ArrayList<BarEntry>();
+        List<BarEntry> entriesPerDay = new ArrayList<>();
 
         for (int i=0; i < dateList.size(); i++) {
             Date date = dateList.get(i);

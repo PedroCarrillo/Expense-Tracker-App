@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @NavigationMode
     public int getNavigationMode() {
         return mCurrentMode;
-    };
+    }
 
     private void initUI() {
         mainDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
