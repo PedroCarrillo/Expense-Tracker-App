@@ -2,6 +2,7 @@ package com.pedrocarrillo.expensetracker.interfaces;
 
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.TabLayout;
+import android.view.ActionMode;
 import android.view.View;
 
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
@@ -17,5 +18,6 @@ public interface IMainActivityListener {
     void setTabs(List<String> tabList, TabLayout.OnTabSelectedListener onTabSelectedListener);
     void setFAB(@DrawableRes int drawableId, View.OnClickListener onClickListener);
     void setTitle(String title);
+    ActionMode setActionMode(ActionMode.Callback actionModeCallback);
 
 }

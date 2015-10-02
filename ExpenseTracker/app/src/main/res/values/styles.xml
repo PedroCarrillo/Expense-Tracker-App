@@ -11,6 +11,7 @@
         <item name="android:editTextStyle">@style/ExpenseTrackerEditText</item>
         <item name="android:buttonStyle">@style/ExpenseTrackerButton</item>
         <item name="android:spinnerStyle">@style/ExpenseTrackerSpinner</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

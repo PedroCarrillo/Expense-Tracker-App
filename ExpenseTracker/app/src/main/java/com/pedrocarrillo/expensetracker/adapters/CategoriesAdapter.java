@@ -23,7 +23,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     private int lastPosition = -1;
     final private CategoriesAdapterOnCLickHandler mClickHandler;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public TextView tvTitle;
 
@@ -31,6 +31,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
             super(v);
             tvTitle = (TextView)v.findViewById(R.id.tv_title);
             v.setOnClickListener(this);
+            v.setOnLongClickListener(this);
         }
 
         @Override
@@ -38,6 +39,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
             mClickHandler.onClick(this);
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            mClickHandler.onLongClick(this);
+            return true;
+        }
     }
 
     public CategoriesAdapter(List<Category> categoryList, CategoriesAdapterOnCLickHandler categoriesAdapterOnCLickHandler) {
@@ -80,6 +86,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
     public interface CategoriesAdapterOnCLickHandler {
         void onClick(ViewHolder vh);
+        void onLongClick(ViewHolder vh);
     }
 
 }
