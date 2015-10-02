@@ -34,6 +34,7 @@
     <string name="add_new_expense">Añade un nuevo Gasto</string>
     <string name="optional_description">Descripción (Opcional)</string>
     <string name="total">Total</string>
+    <string name="confirm_delete_category">Seguro de borrar este/estos item(s)</string>
     <string name="confirm_delete_expense">Seguro de borrar este gasto?</string>
     <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>

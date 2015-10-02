@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.entities.Category;
 
 import java.util.List;
@@ -17,52 +18,41 @@ import java.util.List;
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
+public class CategoriesAdapter extends BaseRecyclerViewAdapter<CategoriesAdapter.CategoryViewHolder> {
 
     private List<Category> mCategoryList;
     private int lastPosition = -1;
-    final private CategoriesAdapterOnCLickHandler mClickHandler;
+    private BaseViewHolder.RecyclerClickListener onRecyclerClickListener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public static class CategoryViewHolder extends BaseViewHolder {
 
         public TextView tvTitle;
 
-        public ViewHolder(View v) {
-            super(v);
+        public CategoryViewHolder(View v, RecyclerClickListener onRecyclerClickListener) {
+            super(v, onRecyclerClickListener);
             tvTitle = (TextView)v.findViewById(R.id.tv_title);
-            v.setOnClickListener(this);
-            v.setOnLongClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            mClickHandler.onClick(this);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            mClickHandler.onLongClick(this);
-            return true;
-        }
     }
 
-    public CategoriesAdapter(List<Category> categoryList, CategoriesAdapterOnCLickHandler categoriesAdapterOnCLickHandler) {
+    public CategoriesAdapter(List<Category> categoryList, BaseViewHolder.RecyclerClickListener recyclerClickListener) {
         this.mCategoryList = categoryList;
-        this.mClickHandler = categoriesAdapterOnCLickHandler;
+        this.onRecyclerClickListener = recyclerClickListener;
     }
 
     @Override
-    public CategoriesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_category_item, parent, false);
-        return new ViewHolder(v);
+        return new CategoryViewHolder(v, onRecyclerClickListener);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(CategoriesAdapter.CategoryViewHolder holder, int position) {
         final Category category = mCategoryList.get(position);
         holder.tvTitle.setText(category.getName());
         holder.itemView.setTag(category);
+        holder.itemView.setSelected(isSelected(position));
         setAnimation(holder, position);
     }
 
@@ -76,17 +66,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         notifyDataSetChanged();
     }
 
-    private void setAnimation(ViewHolder holder, int position) {
+    private void setAnimation(CategoryViewHolder holder, int position) {
         if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(ExpenseTrackerApp.getContext(), R.anim.push_left_in);
             holder.itemView.startAnimation(animation);
             lastPosition = position;
         }
-    }
-
-    public interface CategoriesAdapterOnCLickHandler {
-        void onClick(ViewHolder vh);
-        void onLongClick(ViewHolder vh);
     }
 
 }
