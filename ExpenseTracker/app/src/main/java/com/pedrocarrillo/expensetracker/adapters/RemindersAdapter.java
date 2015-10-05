@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.entities.Reminder;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
@@ -20,20 +21,20 @@ import java.util.List;
 /**
  * Created by Pedro on 9/26/2015.
  */
-public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.ViewHolder> {
+public class RemindersAdapter extends BaseRecyclerViewAdapter<RemindersAdapter.ViewHolder> {
 
     private List<Reminder> mReminderList;
     private int lastPosition = -1;
-    final private RemindersAdapterOnClickHandler mClickHandler;
+    private RemindersAdapterOnClickHandler onRecyclerClickListener;
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    public class ViewHolder extends BaseViewHolder implements CompoundButton.OnCheckedChangeListener {
 
         public TextView tvTitle;
         public TextView tvDate;
         public SwitchCompat scState;
 
-        public ViewHolder(View v) {
-            super(v);
+        public ViewHolder(View v, RemindersAdapterOnClickHandler onRecyclerClickListener) {
+            super(v, onRecyclerClickListener);
             tvTitle = (TextView)v.findViewById(R.id.tv_name);
             tvDate = (TextView)v.findViewById(R.id.tv_date);
             scState = (SwitchCompat)v.findViewById(R.id.sc_reminder);
@@ -42,28 +43,23 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         }
 
         @Override
-        public void onClick(View v) {
-            mClickHandler.onClick(this);
-        }
-
-        @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(this.itemView.getTag() != null) {
-                mClickHandler.onChecked(isChecked, this);
+                ((RemindersAdapterOnClickHandler)onRecyclerClickListener).onChecked(isChecked, this);
             }
         }
     }
 
-    public RemindersAdapter(List<Reminder> mReminderList, RemindersAdapterOnClickHandler mClickHandler) {
+    public RemindersAdapter(List<Reminder> mReminderList, RemindersAdapterOnClickHandler onRecyclerClickListener) {
         this.mReminderList = mReminderList;
-        this.mClickHandler = mClickHandler;
+        this.onRecyclerClickListener = onRecyclerClickListener;
     }
 
     @Override
     public RemindersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_reminder_item, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, onRecyclerClickListener);
     }
 
     @Override
@@ -94,8 +90,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         }
     }
 
-    public interface RemindersAdapterOnClickHandler {
-        void onClick(ViewHolder vh);
+    public interface RemindersAdapterOnClickHandler extends BaseViewHolder.RecyclerClickListener {
         void onChecked(boolean checked, ViewHolder vh);
     }
 

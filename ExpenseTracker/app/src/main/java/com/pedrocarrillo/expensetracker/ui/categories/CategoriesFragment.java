@@ -47,6 +47,9 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     private List<Category> mCategoryList;
     private CategoriesAdapter mCategoriesAdapter;
 
+    // Action mode for categories.
+    private ActionMode mActionMode;
+
     public static CategoriesFragment newInstance() {
         return new CategoriesFragment();
     }
@@ -160,9 +163,6 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
             etCategoryName.setText(category.getName());
         }
     }
-
-    // Action mode for categories.
-    private ActionMode mActionMode;
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
