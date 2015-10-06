@@ -6,11 +6,12 @@
     android:id="@+id/cv_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="@dimen/elevation_dp"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
+    card_view:cardElevation="@dimen/elevation_dp"
     card_view:cardBackgroundColor="@color/white"
     card_view:cardCornerRadius="@dimen/corner_dp"
+    android:foreground="@drawable/card_foreground"
     card_view:cardPreventCornerOverlap="false"
     card_view:cardUseCompatPadding="true">
 

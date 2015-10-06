@@ -5,6 +5,7 @@ import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.entities.Reminder;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -55,7 +56,28 @@ public class RealmManager {
             @Override
             public void execute(Realm realm) {
                 checkDuplicateUUID(object, clazz);
-                realm.copyToRealm(object);
+                realm.copyToRealmOrUpdate(object);
+            }
+        });
+    }
+
+    public <E extends RealmObject> void delete(final Iterable<E> objects){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (objects == null) {
+                    return;
+                }
+                for (E object : objects) {
+                    if (object instanceof Category) {
+                        Category category = (Category) object;
+                        RealmResults<Expense> expenseList  = Expense.getExpensesPerCategory(category);
+                        for (int i = expenseList.size()-1; i >= 0; i--) {
+                            expenseList.get(i).removeFromRealm();
+                        }
+                    }
+                    object.removeFromRealm();
+                }
             }
         });
     }

@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -175,6 +176,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setPager(ViewPager vp) {
         mainTabLayout.setupWithViewPager(vp);
+    }
+
+    public ActionMode setActionMode(ActionMode.Callback actionModeCallback) {
+       return mToolbar.startActionMode(actionModeCallback);
     }
 
     private void setNavigationModeTabs() {

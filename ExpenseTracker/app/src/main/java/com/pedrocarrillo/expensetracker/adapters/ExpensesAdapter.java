@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
@@ -22,7 +23,7 @@ import java.util.List;
 /**
  * Created by pcarrillo on 21/09/2015.
  */
-public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHolder> {
+public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.ViewHolder> {
 
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_EXPENSE_ROW = 1;
@@ -36,11 +37,11 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
     private String prefixIncome;
     private String titleTransitionName;
 
-    final private ExpenseAdapterOnClickHandler mClickHandler;
+    private BaseViewHolder.RecyclerClickListener onRecyclerClickListener;
 
-    public ExpensesAdapter(Context context, ExpenseAdapterOnClickHandler onClickHandler, List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
+    public ExpensesAdapter(Context context, BaseViewHolder.RecyclerClickListener onRecyclerClickListener, List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
         this.mExpensesList = mExpensesList;
-        this.mClickHandler = onClickHandler;
+        this.onRecyclerClickListener = onRecyclerClickListener;
         this.colorExpense = ExpenseTrackerApp.getContext().getResources().getColor(R.color.colorAccentRed);
         this.colorIncome = ExpenseTrackerApp.getContext().getResources().getColor(R.color.colorAccentGreen);
         this.prefixExpense = ExpenseTrackerApp.getContext().getResources().getString(R.string.expense_prefix);
@@ -64,7 +65,7 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
         }
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v, onRecyclerClickListener);
     }
 
     @Override
@@ -127,27 +128,29 @@ public class ExpensesAdapter extends RecyclerView.Adapter<ExpensesAdapter.ViewHo
         }
     }
 
-    public interface ExpenseAdapterOnClickHandler {
-        void onClick(ViewHolder vh);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends BaseViewHolder {
 
         public TextView tvCategory;
         public TextView tvDescription;
         public TextView tvTotal;
 
-        public ViewHolder(View v) {
-            super(v);
+        public ViewHolder(View v, RecyclerClickListener onRecyclerClickListener) {
+            super(v, onRecyclerClickListener);
             tvCategory = (TextView)v.findViewById(R.id.tv_category);
             tvDescription = (TextView)v.findViewById(R.id.tv_description);
             tvTotal = (TextView)v.findViewById(R.id.tv_total);
-            v.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (getAdapterPosition() != 0) mClickHandler.onClick(this);
+            if (getAdapterPosition() == 0) return;
+            super.onClick(v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (getAdapterPosition() == 0) return false;
+            return super.onLongClick(v);
         }
     }
 

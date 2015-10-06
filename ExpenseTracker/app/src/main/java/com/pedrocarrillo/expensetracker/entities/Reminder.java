@@ -145,4 +145,13 @@ public class Reminder extends RealmObject {
         }
         RealmManager.getInstance().delete(reminder);
     }
+
+    public static void eraseReminders(List<Reminder> reminderList) {
+        for (Reminder reminder : reminderList) {
+            if (reminder.isState()) {
+                cancelReminder(reminder);
+            }
+        }
+        RealmManager.getInstance().delete(reminderList);
+    }
 }

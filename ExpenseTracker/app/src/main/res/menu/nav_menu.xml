@@ -17,5 +17,6 @@
             android:id="@+id/nav_reminders"
             android:icon="@drawable/ic_alarm_black_48dp"
             android:title="@string/reminders" />
+
     </group>
 </menu>

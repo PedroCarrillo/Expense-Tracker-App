@@ -11,6 +11,9 @@
         <item name="android:editTextStyle">@style/ExpenseTrackerEditText</item>
         <item name="android:buttonStyle">@style/ExpenseTrackerButton</item>
         <item name="android:spinnerStyle">@style/ExpenseTrackerSpinner</item>
+        <item name="android:dialogTheme">@style/DialogTheme</item>
+        <item name="actionModeBackground">@color/primary</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
@@ -36,7 +39,6 @@
     <style name="ExpenseTrackerSpinner" parent="@style/Widget.AppCompat.Spinner.Underlined">
         <item name="backgroundTint">@color/primary</item>
     </style>
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -64,6 +66,12 @@
         <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:lineSpacingExtra">5dp</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
     </style>
 
 </resources>
