@@ -139,7 +139,7 @@ public class ReminderFragment extends MainFragment implements RemindersAdapter.R
     };
 
     private void eraseReminders() {
-        DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_reminder_delete), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_items), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {

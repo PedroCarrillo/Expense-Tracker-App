@@ -70,7 +70,7 @@ public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.Vie
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        holder.itemView.setSelected(isSelected(position));
         switch (getItemViewType(position)) {
             case VIEW_TYPE_HEADER:
                 float total = Expense.getTotalExpensesByDateMode(mCurrentDateMode);
@@ -152,6 +152,7 @@ public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.Vie
             if (getAdapterPosition() == 0) return false;
             return super.onLongClick(v);
         }
+
     }
 
 }

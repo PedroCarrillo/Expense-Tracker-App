@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="@string/statistics"
-    android:paddingBottom="?attr/actionBarSize"
     android:fillViewport="true">
 
     <LinearLayout
@@ -41,6 +40,15 @@
                 app:columnCount="2">
 
                 <TextView
+                    android:id="@+id/tv_help"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    app:layout_columnSpan="2"
+                    app:layout_gravity="fill_horizontal"
+                    android:layout_marginBottom="@dimen/dimen_5dp"
+                    android:gravity="center"
+                    android:text="@string/pick_dates"/>
+
+                <TextView
                     android:id="@+id/tv_title_date_from"
                     style="@style/HeaderTextView"
                     app:layout_gravity="fill_horizontal"
@@ -49,11 +57,13 @@
                     android:layout_marginBottom="@dimen/dimen_10dp"
                     android:text="@string/date_from"/>
 
-                <TextView
-                    android:id="@+id/tv_date_from"
+                <Button
+                    android:id="@+id/btn_date_from"
                     app:layout_gravity="fill_horizontal"
                     app:layout_columnWeight="1"
-                    tools:text="@string/date_placeholder"/>
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textColor="@color/primary_dark"
+                    android:text="@string/date_placeholder"/>
 
                 <TextView
                     android:id="@+id/tv_title_date_to"
@@ -63,11 +73,13 @@
                     style="@style/HeaderTextView"
                     android:text="@string/to_date"/>
 
-                <TextView
-                    android:id="@+id/tv_date_to"
+                <Button
+                    android:id="@+id/btn_date_to"
                     app:layout_gravity="fill_horizontal"
                     app:layout_columnWeight="1"
-                    tools:text="@string/date_placeholder"/>
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textColor="@color/primary_dark"
+                    android:text="@string/date_placeholder"/>
 
                 <TextView
                     android:id="@+id/tv_total"
@@ -76,7 +88,7 @@
                     app:layout_gravity="fill_horizontal"
                     android:gravity="center"
                     android:textSize="@dimen/text_size_24"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
                     android:text="@string/total"/>
 
             </android.support.v7.widget.GridLayout>

@@ -34,7 +34,7 @@
     <string name="add_new_expense">Add new Expense</string>
     <string name="optional_description">Description (Optional)</string>
     <string name="total">Total</string>
-    <string name="confirm_delete_category">Are you sure to delete this item(s)</string>
+    <string name="confirm_delete_items">Are you sure to delete this item(s)</string>
     <string name="confirm_delete_expense">Are you sure you want to delete this expense?</string>
     <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
@@ -73,6 +73,8 @@
     <string name="start">Start</string>
     <string name="hint_category">Eg. Food</string>
     <string name="error_name">Please enter a name</string>
+    <string name="pick_dates">Pick a range of dates</string>
+    <string name="edit_category">Edit category</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

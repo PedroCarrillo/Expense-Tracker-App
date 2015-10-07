@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -38,8 +39,8 @@ import java.util.List;
  */
 public class StatisticsFragment extends MainFragment implements View.OnClickListener {
 
-    private TextView tvDateFrom;
-    private TextView tvDateTo;
+    private Button btnDateFrom;
+    private Button btnDateTo;
     private TextView tvTotal;
     private TextView tvPcCategoriesEmpty;
     private TextView tvBcCategoriesEmpty;
@@ -68,8 +69,8 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
-        tvDateFrom = (TextView)rootView.findViewById(R.id.tv_date_from);
-        tvDateTo = (TextView)rootView.findViewById(R.id.tv_date_to);
+        btnDateFrom = (Button)rootView.findViewById(R.id.btn_date_from);
+        btnDateTo = (Button)rootView.findViewById(R.id.btn_date_to);
         tvTotal = (TextView)rootView.findViewById(R.id.tv_total);
         pcCategories = (PieChart) rootView.findViewById(R.id.pc_categories);
         bcCategories = (BarChart) rootView.findViewById(R.id.bc_categories);
@@ -84,12 +85,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
         mMainActivityListener.setTitle(getString(R.string.statistics));
         mCategoryList = Category.getCategoriesExpense();
-        tvDateFrom.setOnClickListener(this);
-        tvDateTo.setOnClickListener(this);
+        btnDateFrom.setOnClickListener(this);
+        btnDateTo.setOnClickListener(this);
         mDateFrom = DateUtils.getFirstDateOfCurrentWeek();
         mDateTo = DateUtils.getLastDateOfCurrentWeek();
-        updateDate(tvDateFrom, mDateFrom);
-        updateDate(tvDateTo, mDateTo);
+        updateDate(btnDateFrom, mDateFrom);
+        updateDate(btnDateTo, mDateTo);
         updateData();
     }
 
@@ -183,14 +184,14 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.tv_date_from || v.getId() == R.id.tv_date_to) {
+        if(v.getId() == R.id.btn_date_from || v.getId() == R.id.btn_date_to) {
             showDateDialog(v.getId());
         }
     }
 
     private void showDateDialog(final int id) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(id == R.id.tv_date_from ? mDateFrom : mDateTo);
+        calendar.setTime(id == R.id.btn_date_from ? mDateFrom : mDateTo);
         DialogManager.getInstance()
                 .showDatePicker(
                         getActivity(),
@@ -199,12 +200,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                                 calendar.set(year, month, day);
                                 DateUtils.setDateStartOfDay(calendar);
-                                if (id == R.id.tv_date_from) {
+                                if (id == R.id.btn_date_from) {
                                     mDateFrom = calendar.getTime();
-                                    updateDate(tvDateFrom, mDateFrom);
+                                    updateDate(btnDateFrom, mDateFrom);
                                 } else {
                                     mDateTo = calendar.getTime();
-                                    updateDate(tvDateTo, mDateTo);
+                                    updateDate(btnDateTo, mDateTo);
                                 }
                                 bcCategories.notifyDataSetChanged();
                                 bcCategories.invalidate();
@@ -214,12 +215,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
                             }
                         },
                         calendar,
-                        (R.id.tv_date_from == id) ? null : mDateFrom,
-                        (R.id.tv_date_from == id) ? mDateTo : null);
+                        (R.id.btn_date_from == id) ? null : mDateFrom,
+                        (R.id.btn_date_from == id) ? mDateTo : null);
     }
 
-    private void updateDate(TextView tv, Date date) {
-        tv.setText(Util.formatDateToString(date, "MM/dd/yyyy"));
+    private void updateDate(Button btn, Date date) {
+        btn.setText(Util.formatDateToString(date, "MM/dd/yyyy"));
     }
 
 }

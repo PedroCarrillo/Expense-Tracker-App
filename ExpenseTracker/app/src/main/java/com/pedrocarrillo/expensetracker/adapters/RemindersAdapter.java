@@ -69,6 +69,7 @@ public class RemindersAdapter extends BaseRecyclerViewAdapter<RemindersAdapter.V
         holder.tvDate.setText(reminder.getDay() + " - " + Util.formatDateToString(reminder.getDate(), "HH:mm"));
         holder.scState.setChecked(reminder.isState());
         holder.itemView.setTag(reminder);
+        holder.itemView.setSelected(isSelected(position));
         setAnimation(holder, position);
     }
 

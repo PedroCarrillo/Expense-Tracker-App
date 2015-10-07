@@ -193,7 +193,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     };
 
     private void eraseExpenses() {
-        DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_expense), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_items), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {

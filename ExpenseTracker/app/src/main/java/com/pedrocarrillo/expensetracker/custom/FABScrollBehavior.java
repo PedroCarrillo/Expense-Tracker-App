@@ -26,6 +26,7 @@ public class FABScrollBehavior extends FloatingActionButton.Behavior {
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout,
             FloatingActionButton child, View directTargetChild, View target, int nestedScrollAxes) {
         String a = directTargetChild.getClass().getSimpleName();
+        //excluding Statistics case for FAB behavior
         if (target instanceof NestedScrollView && target.getTag() != null && target.getTag().toString().equalsIgnoreCase(ExpenseTrackerApp.getContext().getString(R.string.statistics))) return false;
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL ||
             super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
