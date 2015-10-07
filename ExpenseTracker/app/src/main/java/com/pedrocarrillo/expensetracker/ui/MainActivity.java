@@ -26,6 +26,7 @@ import com.pedrocarrillo.expensetracker.ui.categories.CategoriesFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesContainerFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesViewPagerAdapter;
+import com.pedrocarrillo.expensetracker.ui.history.HistoryFragment;
 import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
 import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
@@ -212,6 +213,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_reminders:
                 if (!(currentFragment instanceof  ReminderFragment)) replaceFragment(ReminderFragment.newInstance(), false);
+                break;
+            case R.id.nav_history:
+                if (!(currentFragment instanceof HistoryFragment)) replaceFragment(HistoryFragment.newInstance(), false);
                 break;
         }
     }

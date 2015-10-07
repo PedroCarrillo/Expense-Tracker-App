@@ -73,6 +73,7 @@
     <string name="hint_category">Ej. Comida</string>
     <string name="pick_dates">Selecciona un rango de fechas</string>
     <string name="edit_category">Editar Categoría</string>
+    <string name="history">Historial</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

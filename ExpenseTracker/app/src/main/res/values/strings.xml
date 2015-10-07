@@ -75,6 +75,7 @@
     <string name="error_name">Please enter a name</string>
     <string name="pick_dates">Pick a range of dates</string>
     <string name="edit_category">Edit category</string>
+    <string name="history">History</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>
