@@ -87,34 +87,10 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             mCurrentDateMode = IDateMode.MODE_TODAY == mode ? IDateMode.MODE_TODAY : (IDateMode.MODE_WEEK == mode ? IDateMode.MODE_WEEK : IDateMode.MODE_MONTH);
             reloadData();
         }
-//        List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
-//        mMainActivityListener.setTitle(getString(R.string.expenses));
-//        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
-//        mMainActivityListener.setTabs(tabList, this);
-//        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onAddNewExpense();
-//            }
-//        });
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
         rvExpenses.setAdapter(mExpensesAdapter);
     }
-
-//    @Override
-//    public void onTabSelected(TabLayout.Tab tab) {
-//        if (tab.getTag()!=null) {
-//            if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.today))) {
-//                mCurrentDateMode= IDateMode.MODE_TODAY;
-//            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.week))) {
-//                mCurrentDateMode = IDateMode.MODE_WEEK;
-//            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.month))) {
-//                mCurrentDateMode = IDateMode.MODE_MONTH;
-//            }
-//        }
-//        reloadData();
-//    }
 
     private void onAddNewExpense() {
         NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE, null);
@@ -141,17 +117,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         }
     }
 
-//    @Override
-//    public void onTabUnselected(TabLayout.Tab tab) {
-//
-//    }
-//
-//    @Override
-//    public void onTabReselected(TabLayout.Tab tab) {
-//
-//    }
-
-    // Action mode for categories.
+    // Action mode for expenses.
     private android.view.ActionMode mActionMode;
 
     private android.view.ActionMode.Callback mActionModeCallback = new android.view.ActionMode.Callback() {
