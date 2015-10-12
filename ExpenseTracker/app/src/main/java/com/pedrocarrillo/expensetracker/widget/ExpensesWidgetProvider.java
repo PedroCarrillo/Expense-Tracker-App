@@ -24,7 +24,7 @@ public class ExpensesWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds){
             Intent intent = new Intent(context, MainActivity.class);
-            PendingIntent clickPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            PendingIntent clickPendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Intent widgetServiceIntent = new Intent(context, ExpensesWidgetService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
