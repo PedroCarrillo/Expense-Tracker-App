@@ -11,6 +11,7 @@ import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
+import com.pedrocarrillo.expensetracker.ui.expenses.ExpenseDetailFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
@@ -90,7 +91,9 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
         remoteView.setTextViewText(R.id.tv_total, Util.getFormattedCurrency(expense.getTotal()));
         remoteView.setViewVisibility(R.id.tv_description, (expense.getDescription() != null && !expense.getDescription().isEmpty()) ? View.VISIBLE : View.GONE);
         remoteView.setTextColor(R.id.tv_total, expense.getType() == IExpensesType.MODE_EXPENSES ? context.getResources().getColor(R.color.colorAccentRed) : context.getResources().getColor(R.color.colorAccentGreen));
-        remoteView.setOnClickFillInIntent(R.id.widget_item, new Intent());
+        Intent expenseIntent = new Intent();
+        expenseIntent.putExtra(ExpenseDetailFragment.EXPENSE_ID_KEY, expense.getId());
+        remoteView.setOnClickFillInIntent(R.id.widget_item, expenseIntent);
         return remoteView;
     }
 

@@ -56,12 +56,14 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null && getArguments().containsKey(EXPENSE_ID_KEY)) {
             setTitle(getString(R.string.expense_detail));
             String id = getArguments().getString(EXPENSE_ID_KEY);
-            expense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
-            loadData();
-            setWeekChart();
+            if( id != null) {
+                expense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
+                loadData();
+                setWeekChart();
+            }
         }
     }
 
