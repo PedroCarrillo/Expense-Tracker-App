@@ -21,8 +21,10 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.custom.SelectDateFragment;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.ISelectDateFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
@@ -37,20 +39,16 @@ import java.util.List;
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class StatisticsFragment extends MainFragment implements View.OnClickListener {
+public class StatisticsFragment extends MainFragment implements ISelectDateFragment {
 
-    private Button btnDateFrom;
-    private Button btnDateTo;
-    private TextView tvTotal;
     private TextView tvPcCategoriesEmpty;
     private TextView tvBcCategoriesEmpty;
 
     private PieChart pcCategories;
     private BarChart bcCategories;
 
-    private Date mDateFrom;
-    private Date mDateTo;
     private List<Category> mCategoryList;
+    private SelectDateFragment selectDateFragment;
 
     public static StatisticsFragment newInstance() {
         return new StatisticsFragment();
@@ -69,13 +67,12 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
-        btnDateFrom = (Button)rootView.findViewById(R.id.btn_date_from);
-        btnDateTo = (Button)rootView.findViewById(R.id.btn_date_to);
-        tvTotal = (TextView)rootView.findViewById(R.id.tv_total);
         pcCategories = (PieChart) rootView.findViewById(R.id.pc_categories);
         bcCategories = (BarChart) rootView.findViewById(R.id.bc_categories);
         tvPcCategoriesEmpty = (TextView)rootView.findViewById(R.id.tv_bar_chart_category_empty);
         tvBcCategoriesEmpty = (TextView)rootView.findViewById(R.id.tv_pie_categories_chart_empty);
+        selectDateFragment = (SelectDateFragment)getChildFragmentManager().findFragmentById(R.id.select_date_fragment);
+        selectDateFragment.setSelectDateFragment(this);
         return rootView;
     }
 
@@ -85,18 +82,46 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
         mMainActivityListener.setTitle(getString(R.string.statistics));
         mCategoryList = Category.getCategoriesExpense();
-        btnDateFrom.setOnClickListener(this);
-        btnDateTo.setOnClickListener(this);
-        mDateFrom = DateUtils.getFirstDateOfCurrentWeek();
-        mDateTo = DateUtils.getLastDateOfCurrentWeek();
-        updateDate(btnDateFrom, mDateFrom);
-        updateDate(btnDateTo, mDateTo);
-        updateData();
+        setupCharts();
     }
 
-    private void updateData() {
-        float total = Expense.getCategoryTotalByDate(mDateFrom, mDateTo, null);
-        tvTotal.setText(Util.getFormattedCurrency(total));
+    private void setupCharts() {
+
+        // set up pie chart
+        pcCategories.setCenterText("");
+        pcCategories.setCenterTextSize(10f);
+        pcCategories.setHoleRadius(50f);
+        pcCategories.setTransparentCircleRadius(55f);
+        pcCategories.setUsePercentValues(true);
+        pcCategories.setDescription("");
+        pcCategories.setNoDataText("");
+
+        Legend l = pcCategories.getLegend();
+        l.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
+        pcCategories.animateY(1500, Easing.EasingOption.EaseInOutQuad);
+
+    }
+
+    @Override
+    public void updateData() {
+        // Bar Chart
+        bcCategories.setDescription("");
+        bcCategories.setNoDataText("");
+        bcCategories.animateY(2000);
+        bcCategories.setVisibleXRangeMaximum(5);
+        bcCategories.getAxisLeft().setDrawGridLines(false);
+        bcCategories.getXAxis().setDrawGridLines(false);
+        bcCategories.getAxisRight().setDrawGridLines(false);
+        bcCategories.getAxisRight().setDrawLabels(false);
+
+        // Restarting chart views
+        bcCategories.notifyDataSetChanged();
+        bcCategories.invalidate();
+        pcCategories.notifyDataSetChanged();
+        pcCategories.invalidate();
+
+        float total = Expense.getCategoryTotalByDate(selectDateFragment.getDateFrom(), selectDateFragment.getDateTo(), null);
+        selectDateFragment.getTextViewTotal().setText(Util.getFormattedCurrency(total));
         setCategoriesBarChart();
         setCategoriesPieChart();
     }
@@ -106,7 +131,7 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         List<BarEntry> entryPerCategory = new ArrayList<>();
 
         for (int i=0; i < mCategoryList.size(); i++) {
-            float value = Expense.getCategoryTotalByDate(mDateFrom, mDateTo, mCategoryList.get(i));
+            float value = Expense.getCategoryTotalByDate(selectDateFragment.getDateFrom(), selectDateFragment.getDateTo(), mCategoryList.get(i));
             if (value > 0) {
                 categoriesNames.add(mCategoryList.get(i).getName());
                 entryPerCategory.add(new BarEntry(value, categoriesNames.size()-1));
@@ -122,35 +147,17 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         BarDataSet dataSet = new BarDataSet(entryPerCategory, getString(R.string.categories));
         dataSet.setColors(Util.getListColors());
         BarData barData = new BarData(categoriesNames, dataSet);
-        bcCategories.setVisibleXRangeMaximum(5);
-        bcCategories.getAxisLeft().setDrawGridLines(false);
-        bcCategories.getXAxis().setDrawGridLines(false);
-        bcCategories.getAxisRight().setDrawGridLines(false);
-        bcCategories.getAxisRight().setDrawLabels(false);
         bcCategories.setData(barData);
-        bcCategories.setDescription("");
-        bcCategories.setNoDataText("");
-        bcCategories.animateY(2000);
         bcCategories.invalidate();
     }
 
     private void setCategoriesPieChart() {
 
-        pcCategories.setCenterText("");
-        pcCategories.setCenterTextSize(10f);
-        pcCategories.setHoleRadius(50f);
-        pcCategories.setTransparentCircleRadius(55f);
-        pcCategories.setUsePercentValues(true);
-
-        Legend l = pcCategories.getLegend();
-        l.setPosition(Legend.LegendPosition.BELOW_CHART_RIGHT);
-        pcCategories.animateY(1500, Easing.EasingOption.EaseInOutQuad);
-
         List<String> categoriesNames = new ArrayList<>();
         List<Entry> categoryPercentagesEntries = new ArrayList<>();
 
         for (int i=0; i < mCategoryList.size(); i++) {
-            float percentage = Expense.getExpensesCategoryPercentage(mDateFrom, mDateTo, mCategoryList.get(i));
+            float percentage = Expense.getExpensesCategoryPercentage(selectDateFragment.getDateFrom(), selectDateFragment.getDateTo(), mCategoryList.get(i));
             if( percentage > 0) {
                 categoriesNames.add(mCategoryList.get(i).getName());
                 Entry pieEntry = new Entry(percentage, categoriesNames.size()-1);
@@ -176,51 +183,9 @@ public class StatisticsFragment extends MainFragment implements View.OnClickList
         data.setValueTextSize(11f);
         data.setValueTextColor(getResources().getColor(R.color.primary_dark));
         pcCategories.setData(data);
-        pcCategories.setDescription("");
-        pcCategories.setNoDataText("");
         pcCategories.invalidate();
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.btn_date_from || v.getId() == R.id.btn_date_to) {
-            showDateDialog(v.getId());
-        }
-    }
-
-    private void showDateDialog(final int id) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(id == R.id.btn_date_from ? mDateFrom : mDateTo);
-        DialogManager.getInstance()
-                .showDatePicker(
-                        getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                                calendar.set(year, month, day);
-                                DateUtils.setDateStartOfDay(calendar);
-                                if (id == R.id.btn_date_from) {
-                                    mDateFrom = calendar.getTime();
-                                    updateDate(btnDateFrom, mDateFrom);
-                                } else {
-                                    mDateTo = calendar.getTime();
-                                    updateDate(btnDateTo, mDateTo);
-                                }
-                                bcCategories.notifyDataSetChanged();
-                                bcCategories.invalidate();
-                                pcCategories.notifyDataSetChanged();
-                                pcCategories.invalidate();
-                                updateData();
-                            }
-                        },
-                        calendar,
-                        (R.id.btn_date_from == id) ? null : mDateFrom,
-                        (R.id.btn_date_from == id) ? mDateTo : null);
-    }
-
-    private void updateDate(Button btn, Date date) {
-        btn.setText(Util.formatDateToString(date, "MM/dd/yyyy"));
-    }
 
 }
