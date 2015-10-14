@@ -179,8 +179,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mainTabLayout.setupWithViewPager(vp);
     }
 
-    public ActionMode setActionMode(ActionMode.Callback actionModeCallback) {
-       return mToolbar.startActionMode(actionModeCallback);
+    public ActionMode setActionMode(final ActionMode.Callback actionModeCallback) {
+       return mToolbar.startActionMode(new ActionMode.Callback() {
+           @Override
+           public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+               mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+               return actionModeCallback.onCreateActionMode(mode,menu);
+           }
+
+           @Override
+           public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+               return actionModeCallback.onPrepareActionMode(mode, menu);
+           }
+
+           @Override
+           public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+               return actionModeCallback.onActionItemClicked(mode, item);
+           }
+
+           @Override
+           public void onDestroyActionMode(ActionMode mode) {
+               mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+               actionModeCallback.onDestroyActionMode(mode);
+           }
+       });
     }
 
     private void setNavigationModeTabs() {

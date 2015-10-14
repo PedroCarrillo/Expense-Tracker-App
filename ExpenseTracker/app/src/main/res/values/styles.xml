@@ -12,7 +12,7 @@
         <item name="android:buttonStyle">@style/ExpenseTrackerButton</item>
         <item name="android:spinnerStyle">@style/ExpenseTrackerSpinner</item>
         <item name="android:dialogTheme">@style/DialogTheme</item>
-        <item name="actionModeBackground">@color/primary</item>
+        <item name="actionModeBackground">@color/primary_dark</item>
         <item name="windowActionModeOverlay">true</item>
     </style>
 

@@ -98,7 +98,7 @@ public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.Vie
                 }
                 holder.tvTotal.setText(prefix);
                 holder.itemView.setTag(expense);
-                ViewCompat.setTransitionName(holder.tvTotal, titleTransitionName);
+//                ViewCompat.setTransitionName(holder.tvTotal, titleTransitionName);
                 break;
         }
         setAnimation(holder, position);

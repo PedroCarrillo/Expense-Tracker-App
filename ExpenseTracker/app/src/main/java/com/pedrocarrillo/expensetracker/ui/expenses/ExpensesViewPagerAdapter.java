@@ -23,7 +23,6 @@ public class ExpensesViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public ExpensesFragment getItem(int position) {
         ExpensesFragment expensesFragment = mFragmentList.get(position);
-        expensesFragment.reloadData();
         return expensesFragment;
     }
 

@@ -19,10 +19,9 @@ public class LoginActivity extends BaseActivity {
         if (logged) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            finish();
             startActivity(intent);
+            finish();
         }
-
     }
 
 }

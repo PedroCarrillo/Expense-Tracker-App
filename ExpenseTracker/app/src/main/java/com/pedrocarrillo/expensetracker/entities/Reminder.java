@@ -104,7 +104,7 @@ public class Reminder extends RealmObject {
         Calendar alarmCalendar = Calendar.getInstance();
         Calendar reminderDate = Calendar.getInstance();
         reminderDate.setTime(reminder.getDate());
-        if (reminder.getDay() <= alarmCalendar.get(Calendar.DAY_OF_MONTH) && !DateUtils.isToday(reminder.getCreatedAt())) {
+        if (reminder.getDay() <= alarmCalendar.get(Calendar.DAY_OF_MONTH) || !DateUtils.isToday(reminder.getCreatedAt())) {
             alarmCalendar.setTime(DateUtils.getLastDateOfCurrentMonth());
         }
         alarmCalendar.set(Calendar.DATE, reminder.getDay());

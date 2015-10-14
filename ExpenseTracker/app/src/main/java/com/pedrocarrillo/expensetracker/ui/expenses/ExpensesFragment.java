@@ -48,12 +48,14 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     private ExpensesAdapter mExpensesAdapter;
     private RecyclerView rvExpenses;
     private @IDateMode int mCurrentDateMode;
+    private IExpenseContainerListener expenseContainerListener;
 
-    public static ExpensesFragment newInstance(@IDateMode int mCurrentDateMode) {
+    public static ExpensesFragment newInstance(@IDateMode int mCurrentDateMode, IExpenseContainerListener expenseContainerListener) {
         ExpensesFragment expensesFragment = new ExpensesFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(IDateMode.DATE_MODE_TAG, mCurrentDateMode);
         expensesFragment.setArguments(bundle);
+        expensesFragment.setExpenseContainerListener(expenseContainerListener);
         return expensesFragment;
     }
 
@@ -70,32 +72,26 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_expenses, container, false);
         rvExpenses = (RecyclerView) rootView.findViewById(R.id.rv_expenses);
+        if (getArguments() != null) {
+            int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
+            mCurrentDateMode = IDateMode.MODE_TODAY == mode ? IDateMode.MODE_TODAY : (IDateMode.MODE_WEEK == mode ? IDateMode.MODE_WEEK : IDateMode.MODE_MONTH);
+            reloadData();
+            rvExpenses.setAdapter(mExpensesAdapter);
+        }
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mExpensesAdapter.notifyDataSetChanged();
+        if (mExpensesAdapter != null) mExpensesAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getArguments() != null) {
-            int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
-            mCurrentDateMode = IDateMode.MODE_TODAY == mode ? IDateMode.MODE_TODAY : (IDateMode.MODE_WEEK == mode ? IDateMode.MODE_WEEK : IDateMode.MODE_MONTH);
-            reloadData();
-        }
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
-        rvExpenses.setAdapter(mExpensesAdapter);
-    }
-
-    private void onAddNewExpense() {
-        NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE, null);
-        newExpenseFragment.setTargetFragment(this, RQ_NEW_EXPENSE);
-        newExpenseFragment.show(getChildFragmentManager(), "NEW_EXPENSE");
     }
 
     public void reloadData() {
@@ -180,6 +176,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
                         getActivity().sendBroadcast(i);
                     }
                     RealmManager.getInstance().delete(expensesToDelete);
+                    expenseContainerListener.updateExpensesFragments();
                 }
                 reloadData();
                 mActionMode.finish();
@@ -232,4 +229,13 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             reloadData();
         }
     }
+
+    public void setExpenseContainerListener(IExpenseContainerListener expenseContainerListener) {
+        this.expenseContainerListener = expenseContainerListener;
+    }
+
+    public interface IExpenseContainerListener {
+        void updateExpensesFragments();
+    }
+
 }

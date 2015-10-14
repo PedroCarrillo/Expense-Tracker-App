@@ -13,13 +13,14 @@
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <fragment
+            android:id="@+id/select_date_fragment"
+            android:name="com.pedrocarrillo.expensetracker.custom.SelectDateFragment"
             android:layout_marginTop="@dimen/dimen_10dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            layout="@layout/layout_date_range"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tv_empty"

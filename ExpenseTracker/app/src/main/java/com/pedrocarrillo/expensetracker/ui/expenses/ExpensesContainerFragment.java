@@ -21,7 +21,7 @@ import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExpensesContainerFragment extends MainFragment implements TabLayout.OnTabSelectedListener{
+public class ExpensesContainerFragment extends MainFragment implements TabLayout.OnTabSelectedListener, ExpensesFragment.IExpenseContainerListener {
 
     public static final int RQ_NEW_EXPENSE = 1001;
     private ViewPager vpExpensesContainer;
@@ -65,9 +65,9 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
         });
 
         expensesViewPagerAdapter = new ExpensesViewPagerAdapter(getChildFragmentManager());
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY), getString(R.string.today));
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_WEEK),  getString(R.string.week));
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_MONTH), getString(R.string.month));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY, this), getString(R.string.today));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_WEEK, this),  getString(R.string.week));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_MONTH, this), getString(R.string.month));
         vpExpensesContainer.setAdapter(expensesViewPagerAdapter);
         mMainActivityListener.setPager(vpExpensesContainer);
         mMainActivityListener.setTabs(tabList, this);
@@ -76,15 +76,14 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         vpExpensesContainer.setCurrentItem(tab.getPosition());
-        for (ExpensesFragment expensesFragment : expensesViewPagerAdapter.getFragmentList()) {
+        for (int i=0; i < expensesViewPagerAdapter.getCount(); i++) {
+            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getFragmentList().get(i);
             expensesFragment.cancelActionMode();
-            expensesFragment.reloadData();
         }
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -103,9 +102,14 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
-            vpExpensesContainer.getCurrentItem();
-            ExpensesFragment e = expensesViewPagerAdapter.getItem(vpExpensesContainer.getCurrentItem());
-            e.reloadData();
+            updateExpensesFragments();
+        }
+    }
+
+    @Override
+    public void updateExpensesFragments(){
+        for (ExpensesFragment expensesFragment : expensesViewPagerAdapter.getFragmentList()) {
+            expensesFragment.reloadData();
         }
     }
 
