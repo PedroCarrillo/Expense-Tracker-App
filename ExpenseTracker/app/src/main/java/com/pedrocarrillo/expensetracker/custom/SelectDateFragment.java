@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.interfaces.ISelectDateFragment;
+import com.pedrocarrillo.expensetracker.utils.DateManager;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
@@ -29,8 +30,6 @@ public class SelectDateFragment extends Fragment implements View.OnClickListener
     private TextView tvTotal;
 
     private ISelectDateFragment iSelectDateFragment;
-    private Date mDateFrom;
-    private Date mDateTo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +46,8 @@ public class SelectDateFragment extends Fragment implements View.OnClickListener
         super.onActivityCreated(savedInstanceState);
         btnDateFrom.setOnClickListener(this);
         btnDateTo.setOnClickListener(this);
-        mDateFrom = DateUtils.getFirstDateOfCurrentMonth();
-        mDateTo = DateUtils.getLastDateOfCurrentMonth();
-        updateDate(btnDateFrom, mDateFrom);
-        updateDate(btnDateTo, mDateTo);
+        updateDate(btnDateFrom, DateManager.getInstance().getDateFrom());
+        updateDate(btnDateTo, DateManager.getInstance().getDateTo());
         iSelectDateFragment.updateData();
     }
 
@@ -63,7 +60,7 @@ public class SelectDateFragment extends Fragment implements View.OnClickListener
 
     private void showDateDialog(final int id) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(id == R.id.btn_date_from ? mDateFrom : mDateTo);
+        calendar.setTime(id == R.id.btn_date_from ? DateManager.getInstance().getDateFrom() : DateManager.getInstance().getDateTo());
         DialogManager.getInstance()
                 .showDatePicker(
                         getActivity(),
@@ -73,30 +70,22 @@ public class SelectDateFragment extends Fragment implements View.OnClickListener
                                 calendar.set(year, month, day);
                                 DateUtils.setDateStartOfDay(calendar);
                                 if (id == R.id.btn_date_from) {
-                                    mDateFrom = calendar.getTime();
-                                    updateDate(btnDateFrom, mDateFrom);
+                                    DateManager.getInstance().setDateFrom(calendar.getTime());
+                                    updateDate(btnDateFrom, DateManager.getInstance().getDateFrom());
                                 } else {
-                                    mDateTo = calendar.getTime();
-                                    updateDate(btnDateTo, mDateTo);
+                                    DateManager.getInstance().setDateTo(calendar.getTime());
+                                    updateDate(btnDateTo, DateManager.getInstance().getDateTo());
                                 }
                                 iSelectDateFragment.updateData();
                             }
                         },
                         calendar,
-                        (R.id.btn_date_from == id) ? null : mDateFrom,
-                        (R.id.btn_date_from == id) ? mDateTo : null);
+                        (R.id.btn_date_from == id) ? null : DateManager.getInstance().getDateFrom(),
+                        (R.id.btn_date_from == id) ? DateManager.getInstance().getDateTo() : null);
     }
 
     private void updateDate(Button btn, Date date) {
         btn.setText(Util.formatDateToString(date, "MM/dd/yyyy"));
-    }
-
-    public Date getDateFrom() {
-        return mDateFrom;
-    }
-
-    public Date getDateTo() {
-        return mDateTo;
     }
 
     public TextView getTextViewTotal() {

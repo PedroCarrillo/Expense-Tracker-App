@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,25 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pedrocarrillo.expensetracker.R;
-import com.pedrocarrillo.expensetracker.adapters.ExpensesAdapter;
+import com.pedrocarrillo.expensetracker.adapters.MainExpenseAdapter;
 import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
-import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
-import com.pedrocarrillo.expensetracker.ui.BaseFragment;
-import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
-import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
-import com.pedrocarrillo.expensetracker.utils.RealmManager;
-import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetProvider;
-import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetService;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 
 /**
  * Created by pcarrillo on 17/09/2015.
@@ -44,8 +31,8 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
 
     public static final int RQ_NEW_EXPENSE = 1001;
 
-    private List<Expense> mExpenseList;
-    private ExpensesAdapter mExpensesAdapter;
+//    private List<Expense> mExpenseList;
+    private MainExpenseAdapter mMainExpenseAdapter;
     private RecyclerView rvExpenses;
     private @IDateMode int mCurrentDateMode;
     private IExpenseContainerListener expenseContainerListener;
@@ -75,41 +62,41 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         if (getArguments() != null) {
             int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
             mCurrentDateMode = IDateMode.MODE_TODAY == mode ? IDateMode.MODE_TODAY : (IDateMode.MODE_WEEK == mode ? IDateMode.MODE_WEEK : IDateMode.MODE_MONTH);
-            reloadData();
-            rvExpenses.setAdapter(mExpensesAdapter);
+            updateData();
+            rvExpenses.setAdapter(mMainExpenseAdapter);
         }
         return rootView;
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        if (mExpensesAdapter != null) mExpensesAdapter.notifyDataSetChanged();
+        if (mMainExpenseAdapter != null) mMainExpenseAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
+            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+        }
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
     }
 
-    public void reloadData() {
-        switch (mCurrentDateMode) {
-            case IDateMode.MODE_TODAY:
-                mExpenseList = Expense.getTodayExpenses();
-                break;
-            case IDateMode.MODE_WEEK:
-                mExpenseList = Expense.getWeekExpenses();
-                break;
-            case IDateMode.MODE_MONTH:
-                mExpenseList = Expense.getMonthExpenses();
-                break;
-        }
-        if (mExpensesAdapter == null) {
-            mExpensesAdapter = new ExpensesAdapter(getActivity(), this, mExpenseList, mCurrentDateMode);
+    public void updateData() {
+        ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
+        if (mMainExpenseAdapter == null) {
+            mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, ExpensesManager.getInstance().getExpensesList(), mCurrentDateMode);
         } else {
-            mExpensesAdapter.updateExpenses(mExpenseList, mCurrentDateMode);
+            mMainExpenseAdapter.updateExpenses(ExpensesManager.getInstance().getExpensesList(), mCurrentDateMode);
         }
     }
 
@@ -149,7 +136,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(android.view.ActionMode mode) {
-            mExpensesAdapter.clearSelection();
+            mMainExpenseAdapter.clearSelection();
             mActionMode = null;
         }
     };
@@ -159,26 +146,10 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
-                    boolean isToday = false;
-                    List<Expense> expensesToDelete = new ArrayList<>();
-                    for (int position : mExpensesAdapter.getSelectedItems()) {
-                        Expense expense = mExpenseList.get(position-1);
-                        expensesToDelete.add(expense);
-                        Date expenseDate = expense.getDate();
-                        // update widget if the expense is created today
-                        if (DateUtils.isToday(expenseDate)) {
-                            isToday = true;
-                        }
-                    }
-                    if (isToday) {
-                        Intent i = new Intent(getActivity(), ExpensesWidgetProvider.class);
-                        i.setAction(ExpensesWidgetService.UPDATE_WIDGET);
-                        getActivity().sendBroadcast(i);
-                    }
-                    RealmManager.getInstance().delete(expensesToDelete);
+                    ExpensesManager.getInstance().eraseSelectedExpenses();
                     expenseContainerListener.updateExpensesFragments();
                 }
-                reloadData();
+                updateData();
                 mActionMode.finish();
                 mActionMode = null;
             }
@@ -206,8 +177,8 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     }
 
     public void toggleSelection(int position) {
-        mExpensesAdapter.toggleSelection(position);
-        int count = mExpensesAdapter.getSelectedItemCount();
+        mMainExpenseAdapter.toggleSelection(position);
+        int count = mMainExpenseAdapter.getSelectedItemCount();
         if (count == 0) {
             mActionMode.finish();
         } else {
@@ -226,7 +197,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
-            reloadData();
+            updateData();
         }
     }
 

@@ -1,7 +1,6 @@
 package com.pedrocarrillo.expensetracker.adapters;
 
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
-import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
@@ -23,35 +21,19 @@ import java.util.List;
 /**
  * Created by pcarrillo on 21/09/2015.
  */
-public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.ViewHolder> {
+public class MainExpenseAdapter extends BaseExpenseAdapter {
 
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_EXPENSE_ROW = 1;
     private @IDateMode int mCurrentDateMode;
 
-    private List<Expense> mExpensesList;
-    private int lastPosition = -1;
-    private int colorExpense;
-    private int colorIncome;
-    private String prefixExpense;
-    private String prefixIncome;
-    private String titleTransitionName;
-
-    private BaseViewHolder.RecyclerClickListener onRecyclerClickListener;
-
-    public ExpensesAdapter(Context context, BaseViewHolder.RecyclerClickListener onRecyclerClickListener, List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
-        this.mExpensesList = mExpensesList;
-        this.onRecyclerClickListener = onRecyclerClickListener;
-        this.colorExpense = ExpenseTrackerApp.getContext().getResources().getColor(R.color.colorAccentRed);
-        this.colorIncome = ExpenseTrackerApp.getContext().getResources().getColor(R.color.colorAccentGreen);
-        this.prefixExpense = ExpenseTrackerApp.getContext().getResources().getString(R.string.expense_prefix);
-        this.prefixIncome = ExpenseTrackerApp.getContext().getResources().getString(R.string.income_prefix);
-        this.mCurrentDateMode = mCurrentDateMode;
-        this.titleTransitionName = ExpenseTrackerApp.getContext().getString(R.string.tv_title_transition);
+    public MainExpenseAdapter(Context context, ViewHolder.RecyclerClickListener onRecyclerClickListener, List<Expense> mExpensesList, @IDateMode int currentDateMode) {
+        super(context, onRecyclerClickListener, mExpensesList);
+        mCurrentDateMode = currentDateMode;
     }
 
     @Override
-    public ExpensesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MainExpenseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layoutId = -1;
         switch (viewType) {
             case VIEW_TYPE_HEADER: {
@@ -69,7 +51,7 @@ public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.Vie
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(BaseExpenseViewHolder holder, int position) {
         holder.itemView.setSelected(isSelected(position));
         switch (getItemViewType(position)) {
             case VIEW_TYPE_HEADER:
@@ -77,7 +59,7 @@ public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.Vie
                 holder.tvTotal.setText(Util.getFormattedCurrency(total));
                 break;
             case VIEW_TYPE_EXPENSE_ROW:
-                final Expense expense = mExpensesList.get(position-1);
+                final Expense expense = (Expense) mExpensesList.get(position-1);
                 String prefix = "";
                 switch (expense.getType()) {
                     case IExpensesType.MODE_EXPENSES:
@@ -120,25 +102,10 @@ public class ExpensesAdapter extends BaseRecyclerViewAdapter<ExpensesAdapter.Vie
         notifyDataSetChanged();
     }
 
-    private void setAnimation(ViewHolder holder, int position) {
-        if (position > lastPosition) {
-            Animation animation = AnimationUtils.loadAnimation(ExpenseTrackerApp.getContext(), R.anim.push_left_in);
-            holder.itemView.startAnimation(animation);
-            lastPosition = position;
-        }
-    }
-
-    public static class ViewHolder extends BaseViewHolder {
-
-        public TextView tvCategory;
-        public TextView tvDescription;
-        public TextView tvTotal;
+    public static class ViewHolder extends BaseExpenseViewHolder {
 
         public ViewHolder(View v, RecyclerClickListener onRecyclerClickListener) {
             super(v, onRecyclerClickListener);
-            tvCategory = (TextView)v.findViewById(R.id.tv_category);
-            tvDescription = (TextView)v.findViewById(R.id.tv_description);
-            tvTotal = (TextView)v.findViewById(R.id.tv_total);
         }
 
         @Override

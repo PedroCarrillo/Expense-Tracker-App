@@ -4,7 +4,6 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
-import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 
@@ -88,7 +86,10 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
+        for (int i=0; i < expensesViewPagerAdapter.getCount(); i++) {
+            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getFragmentList().get(i);
+            expensesFragment.cancelActionMode();
+        }
     }
 
     private void onAddNewExpense() {
@@ -109,7 +110,7 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
     @Override
     public void updateExpensesFragments(){
         for (ExpensesFragment expensesFragment : expensesViewPagerAdapter.getFragmentList()) {
-            expensesFragment.reloadData();
+            expensesFragment.updateData();
         }
     }
 

@@ -205,7 +205,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
-                    List<Category> categoriesToDelete = new ArrayList<Category>();
+                    List<Category> categoriesToDelete = new ArrayList<>();
                     for (int position : mCategoriesAdapter.getSelectedItems()) {
                         categoriesToDelete.add(mCategoryList.get(position));
                     }

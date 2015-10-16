@@ -1,7 +1,9 @@
 package com.pedrocarrillo.expensetracker.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.design.widget.AppBarLayout;
@@ -20,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 import com.pedrocarrillo.expensetracker.ui.categories.CategoriesFragment;
@@ -65,6 +68,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             int menuItemId = savedInstanceState.getInt(NAVIGATION_POSITION);
             mainNavigationView.setCheckedItem(menuItemId);
             mainNavigationView.getMenu().performIdentifierAction(menuItemId, 0);
+            if (savedInstanceState.containsKey(IConstants.TAB_SELECTED_POS_KEY)){
+                int tabPosition = savedInstanceState.getInt(IConstants.TAB_SELECTED_POS_KEY);
+                if (mainTabLayout.getTabAt(tabPosition) != null) mainTabLayout.getTabAt(tabPosition).select();
+            }
         } else {
             mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
         }
@@ -146,6 +153,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         for (String tab : tabList) {
             mainTabLayout.addTab(mainTabLayout.newTab().setText(tab).setTag(tab));
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        if(mainTabLayout.getVisibility() == View.VISIBLE) outState.putInt(IConstants.TAB_SELECTED_POS_KEY, mainTabLayout.getSelectedTabPosition());
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override

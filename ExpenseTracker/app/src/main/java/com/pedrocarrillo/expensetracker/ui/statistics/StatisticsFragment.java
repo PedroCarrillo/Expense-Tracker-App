@@ -27,6 +27,7 @@ import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.ISelectDateFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
+import com.pedrocarrillo.expensetracker.utils.DateManager;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
@@ -120,7 +121,7 @@ public class StatisticsFragment extends MainFragment implements ISelectDateFragm
         pcCategories.notifyDataSetChanged();
         pcCategories.invalidate();
 
-        float total = Expense.getCategoryTotalByDate(selectDateFragment.getDateFrom(), selectDateFragment.getDateTo(), null);
+        float total = Expense.getCategoryTotalByDate(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), null);
         selectDateFragment.getTextViewTotal().setText(Util.getFormattedCurrency(total));
         setCategoriesBarChart();
         setCategoriesPieChart();
@@ -131,7 +132,7 @@ public class StatisticsFragment extends MainFragment implements ISelectDateFragm
         List<BarEntry> entryPerCategory = new ArrayList<>();
 
         for (int i=0; i < mCategoryList.size(); i++) {
-            float value = Expense.getCategoryTotalByDate(selectDateFragment.getDateFrom(), selectDateFragment.getDateTo(), mCategoryList.get(i));
+            float value = Expense.getCategoryTotalByDate(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), mCategoryList.get(i));
             if (value > 0) {
                 categoriesNames.add(mCategoryList.get(i).getName());
                 entryPerCategory.add(new BarEntry(value, categoriesNames.size()-1));
@@ -157,7 +158,7 @@ public class StatisticsFragment extends MainFragment implements ISelectDateFragm
         List<Entry> categoryPercentagesEntries = new ArrayList<>();
 
         for (int i=0; i < mCategoryList.size(); i++) {
-            float percentage = Expense.getExpensesCategoryPercentage(selectDateFragment.getDateFrom(), selectDateFragment.getDateTo(), mCategoryList.get(i));
+            float percentage = Expense.getExpensesCategoryPercentage(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), mCategoryList.get(i));
             if( percentage > 0) {
                 categoriesNames.add(mCategoryList.get(i).getName());
                 Entry pieEntry = new Entry(percentage, categoriesNames.size()-1);

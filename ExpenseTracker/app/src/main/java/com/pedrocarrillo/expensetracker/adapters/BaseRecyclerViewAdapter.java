@@ -2,10 +2,9 @@ package com.pedrocarrillo.expensetracker.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
-import android.view.View;
 import android.view.ViewGroup;
 
-import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +13,6 @@ import java.util.List;
  * Created by pcarrillo on 02/10/2015.
  */
 abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-
-    private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
     /**
      * Indicates if the item at position position is selected
@@ -31,10 +28,10 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      * @param position Position of the item to toggle the selection status for
      */
     public void toggleSelection(int position) {
-        if (selectedItems.get(position, false)) {
-            selectedItems.delete(position);
+        if (ExpensesManager.getInstance().getSelectedExpensesItems().get(position, false)) {
+            ExpensesManager.getInstance().getSelectedExpensesItems().delete(position);
         } else {
-            selectedItems.put(position, true);
+            ExpensesManager.getInstance().getSelectedExpensesItems().put(position, true);
         }
         notifyItemChanged(position);
     }
@@ -44,7 +41,7 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      */
     public void clearSelection() {
         List<Integer> selection = getSelectedItems();
-        selectedItems.clear();
+        ExpensesManager.getInstance().getSelectedExpensesItems().clear();
         for (Integer i : selection) {
             notifyItemChanged(i);
         }
@@ -55,7 +52,7 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      * @return Selected items count
      */
     public int getSelectedItemCount() {
-        return selectedItems.size();
+        return ExpensesManager.getInstance().getSelectedExpensesItems().size();
     }
 
     /**
@@ -63,9 +60,9 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      * @return List of selected items ids
      */
     public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<>(selectedItems.size());
-        for (int i = 0; i < selectedItems.size(); ++i) {
-            items.add(selectedItems.keyAt(i));
+        List<Integer> items = new ArrayList<>(ExpensesManager.getInstance().getSelectedExpensesItems().size());
+        for (int i = 0; i < ExpensesManager.getInstance().getSelectedExpensesItems().size(); ++i) {
+            items.add(ExpensesManager.getInstance().getSelectedExpensesItems().keyAt(i));
         }
         return items;
     }
