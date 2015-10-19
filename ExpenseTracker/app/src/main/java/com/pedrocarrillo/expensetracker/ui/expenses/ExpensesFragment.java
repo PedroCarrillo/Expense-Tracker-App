@@ -1,6 +1,7 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,18 +32,16 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
 
     public static final int RQ_NEW_EXPENSE = 1001;
 
-//    private List<Expense> mExpenseList;
     private MainExpenseAdapter mMainExpenseAdapter;
     private RecyclerView rvExpenses;
     private @IDateMode int mCurrentDateMode;
     private IExpenseContainerListener expenseContainerListener;
 
-    public static ExpensesFragment newInstance(@IDateMode int mCurrentDateMode, IExpenseContainerListener expenseContainerListener) {
+    public static ExpensesFragment newInstance(@IDateMode int dateMode) {
         ExpensesFragment expensesFragment = new ExpensesFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(IDateMode.DATE_MODE_TAG, mCurrentDateMode);
+        bundle.putInt(IDateMode.DATE_MODE_TAG, dateMode);
         expensesFragment.setArguments(bundle);
-        expensesFragment.setExpenseContainerListener(expenseContainerListener);
         return expensesFragment;
     }
 
@@ -52,6 +51,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setRetainInstance(true);
     }
 
     @Override
@@ -59,17 +59,12 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_expenses, container, false);
         rvExpenses = (RecyclerView) rootView.findViewById(R.id.rv_expenses);
-        if (getArguments() != null) {
-            int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
-            mCurrentDateMode = IDateMode.MODE_TODAY == mode ? IDateMode.MODE_TODAY : (IDateMode.MODE_WEEK == mode ? IDateMode.MODE_WEEK : IDateMode.MODE_MONTH);
-            updateData();
-            rvExpenses.setAdapter(mMainExpenseAdapter);
-        }
         return rootView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+//        outState.putInt(IDateMode.DATE_MODE_TAG, mCurrentDateMode);
         outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
         super.onSaveInstanceState(outState);
     }
@@ -77,15 +72,44 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     @Override
     public void onResume() {
         super.onResume();
-        if (mMainExpenseAdapter != null) mMainExpenseAdapter.notifyDataSetChanged();
+//        if (mMainExpenseAdapter != null) mMainExpenseAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getParentFragment() != null) {
+            expenseContainerListener = (IExpenseContainerListener) getParentFragment();
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
+            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (getParentFragment() != null) {
+            expenseContainerListener = null;
+            cancelActionMode();
+            mActionMode = null;
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
-            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+        if (getArguments() != null) {
+            @IDateMode int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
+            mCurrentDateMode = mode;
+            updateData();
+            rvExpenses.setAdapter(mMainExpenseAdapter);
         }
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
@@ -94,9 +118,9 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     public void updateData() {
         ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
         if (mMainExpenseAdapter == null) {
-            mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, ExpensesManager.getInstance().getExpensesList(), mCurrentDateMode);
+            mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, mCurrentDateMode);
         } else {
-            mMainExpenseAdapter.updateExpenses(ExpensesManager.getInstance().getExpensesList(), mCurrentDateMode);
+            mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
         }
     }
 
@@ -147,7 +171,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
                     ExpensesManager.getInstance().eraseSelectedExpenses();
-                    expenseContainerListener.updateExpensesFragments();
+                    if (expenseContainerListener != null) expenseContainerListener.updateExpensesFragments();
                 }
                 updateData();
                 mActionMode.finish();
@@ -199,10 +223,6 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
             updateData();
         }
-    }
-
-    public void setExpenseContainerListener(IExpenseContainerListener expenseContainerListener) {
-        this.expenseContainerListener = expenseContainerListener;
     }
 
     public interface IExpenseContainerListener {

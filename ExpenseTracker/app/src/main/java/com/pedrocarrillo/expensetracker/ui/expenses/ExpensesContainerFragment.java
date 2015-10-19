@@ -2,10 +2,12 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,7 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setRetainInstance(true);
     }
 
     @Override
@@ -61,23 +64,44 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
                 onAddNewExpense();
             }
         });
-
         expensesViewPagerAdapter = new ExpensesViewPagerAdapter(getChildFragmentManager());
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY, this), getString(R.string.today));
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_WEEK, this),  getString(R.string.week));
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_MONTH, this), getString(R.string.month));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY), getString(R.string.today));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_WEEK), getString(R.string.week));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_MONTH), getString(R.string.month));
         vpExpensesContainer.setAdapter(expensesViewPagerAdapter);
         mMainActivityListener.setPager(vpExpensesContainer);
         mMainActivityListener.setTabs(tabList, this);
+        vpExpensesContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                ExpensesFragment expensesFragment = expensesViewPagerAdapter.getItem(position);
+                expensesFragment.updateData();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         vpExpensesContainer.setCurrentItem(tab.getPosition());
-        for (int i=0; i < expensesViewPagerAdapter.getCount(); i++) {
-            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getFragmentList().get(i);
-            expensesFragment.cancelActionMode();
-        }
+//        for (int i=0; i < expensesViewPagerAdapter.getCount(); i++) {
+//            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getFragmentList().get(i);
+//            expensesFragment.cancelActionMode();
+//        }
     }
 
     @Override
@@ -86,10 +110,10 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-        for (int i=0; i < expensesViewPagerAdapter.getCount(); i++) {
-            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getFragmentList().get(i);
-            expensesFragment.cancelActionMode();
-        }
+//        for (int i=0; i < expensesViewPagerAdapter.getCount(); i++) {
+//            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getFragmentList().get(i);
+//            expensesFragment.cancelActionMode();
+//        }
     }
 
     private void onAddNewExpense() {
@@ -109,9 +133,7 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
 
     @Override
     public void updateExpensesFragments(){
-        for (ExpensesFragment expensesFragment : expensesViewPagerAdapter.getFragmentList()) {
-            expensesFragment.updateData();
-        }
+        expensesViewPagerAdapter.getItem(vpExpensesContainer.getCurrentItem()).updateData();
     }
 
 }

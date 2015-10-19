@@ -84,7 +84,7 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
         float total = Expense.getCategoryTotalByDate(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), null);
         ExpensesManager.getInstance().setExpensesList(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), IExpensesType.MODE_EXPENSES, null);
         if ( mExpensesAdapter == null ) {
-            mExpensesAdapter = new BaseExpenseAdapter(getActivity(), this, ExpensesManager.getInstance().getExpensesList());
+            mExpensesAdapter = new BaseExpenseAdapter(getActivity(), this);
             rvHistory.setAdapter(mExpensesAdapter);
         } else {
             mExpensesAdapter.updateExpenses(ExpensesManager.getInstance().getExpensesList());

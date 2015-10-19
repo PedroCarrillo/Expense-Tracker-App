@@ -14,6 +14,7 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.List;
@@ -27,8 +28,8 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
     private static final int VIEW_TYPE_EXPENSE_ROW = 1;
     private @IDateMode int mCurrentDateMode;
 
-    public MainExpenseAdapter(Context context, ViewHolder.RecyclerClickListener onRecyclerClickListener, List<Expense> mExpensesList, @IDateMode int currentDateMode) {
-        super(context, onRecyclerClickListener, mExpensesList);
+    public MainExpenseAdapter(Context context, ViewHolder.RecyclerClickListener onRecyclerClickListener, @IDateMode int currentDateMode) {
+        super(context, onRecyclerClickListener);
         mCurrentDateMode = currentDateMode;
     }
 
@@ -96,9 +97,10 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
         return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_EXPENSE_ROW;
     }
 
-    public void updateExpenses(List<Expense> mExpensesList, @IDateMode int mCurrentDateMode) {
+    public void updateExpenses( @IDateMode int mCurrentDateMode) {
         this.mCurrentDateMode = mCurrentDateMode;
-        this.mExpensesList = mExpensesList;
+        ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
+        this.mExpensesList = ExpensesManager.getInstance().getExpensesList();
         notifyDataSetChanged();
     }
 
