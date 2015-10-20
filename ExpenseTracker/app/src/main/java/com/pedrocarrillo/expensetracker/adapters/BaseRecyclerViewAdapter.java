@@ -14,6 +14,8 @@ import java.util.List;
  */
 abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
+    private SparseBooleanArray selectedItems = new SparseBooleanArray();
+
     /**
      * Indicates if the item at position position is selected
      * @param position Position of the item to check
@@ -29,9 +31,9 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      */
     public void toggleSelection(int position) {
         if (ExpensesManager.getInstance().getSelectedExpensesItems().get(position, false)) {
-            ExpensesManager.getInstance().getSelectedExpensesItems().delete(position);
+            selectedItems.delete(position);
         } else {
-            ExpensesManager.getInstance().getSelectedExpensesItems().put(position, true);
+            selectedItems.put(position, true);
         }
         notifyItemChanged(position);
     }
@@ -41,7 +43,7 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      */
     public void clearSelection() {
         List<Integer> selection = getSelectedItems();
-        ExpensesManager.getInstance().getSelectedExpensesItems().clear();
+        selectedItems.clear();
         for (Integer i : selection) {
             notifyItemChanged(i);
         }
@@ -52,7 +54,7 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      * @return Selected items count
      */
     public int getSelectedItemCount() {
-        return ExpensesManager.getInstance().getSelectedExpensesItems().size();
+        return selectedItems.size();
     }
 
     /**
@@ -60,11 +62,19 @@ abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> exten
      * @return List of selected items ids
      */
     public List<Integer> getSelectedItems() {
-        List<Integer> items = new ArrayList<>(ExpensesManager.getInstance().getSelectedExpensesItems().size());
-        for (int i = 0; i < ExpensesManager.getInstance().getSelectedExpensesItems().size(); ++i) {
-            items.add(ExpensesManager.getInstance().getSelectedExpensesItems().keyAt(i));
+        List<Integer> items = new ArrayList<>(selectedItems.size());
+        for (int i = 0; i < selectedItems.size(); ++i) {
+            items.add(selectedItems.keyAt(i));
         }
         return items;
+    }
+
+    public SparseBooleanArray getSelectedBooleanArray() {
+        return selectedItems;
+    }
+
+    public void setSelectedItems(SparseBooleanArray selectedItems) {
+        this.selectedItems = selectedItems;
     }
 
 }

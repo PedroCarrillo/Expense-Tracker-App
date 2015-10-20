@@ -1,12 +1,16 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +22,7 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.MainExpenseAdapter;
 import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
+import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
@@ -36,6 +41,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     private RecyclerView rvExpenses;
     private @IDateMode int mCurrentDateMode;
     private IExpenseContainerListener expenseContainerListener;
+    private ExpenseChangeReceiver expenseChangeReceiver = new ExpenseChangeReceiver();
 
     public static ExpensesFragment newInstance(@IDateMode int dateMode) {
         ExpensesFragment expensesFragment = new ExpensesFragment();
@@ -51,7 +57,6 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setRetainInstance(true);
     }
 
     @Override
@@ -64,15 +69,21 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-//        outState.putInt(IDateMode.DATE_MODE_TAG, mCurrentDateMode);
         outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
+        outState.putParcelable("selected_items", new SparseBooleanArrayParcelable(mMainExpenseAdapter.getSelectedBooleanArray()));
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        if (mMainExpenseAdapter != null) mMainExpenseAdapter.notifyDataSetChanged();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(expenseChangeReceiver, new IntentFilter("HOLI"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(expenseChangeReceiver);
     }
 
     @Override
@@ -80,15 +91,6 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         super.onAttach(context);
         if (getParentFragment() != null) {
             expenseContainerListener = (IExpenseContainerListener) getParentFragment();
-        }
-    }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
-            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
         }
     }
 
@@ -108,20 +110,33 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         if (getArguments() != null) {
             @IDateMode int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
             mCurrentDateMode = mode;
-            updateData();
+            ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
+            mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, mCurrentDateMode);
             rvExpenses.setAdapter(mMainExpenseAdapter);
+        }
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("selected_items")) {
+                mMainExpenseAdapter.setSelectedItems((SparseBooleanArray)savedInstanceState.getParcelable("selected_items"));
+                mMainExpenseAdapter.notifyDataSetChanged();
+            }
         }
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
     }
 
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
+            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+        }
+
+    }
+
     public void updateData() {
         ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
-        if (mMainExpenseAdapter == null) {
-            mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, mCurrentDateMode);
-        } else {
-            mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
-        }
+        if (mMainExpenseAdapter != null) mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
     }
 
     // Action mode for expenses.
@@ -160,7 +175,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(android.view.ActionMode mode) {
-            mMainExpenseAdapter.clearSelection();
+//            mMainExpenseAdapter.clearSelection();
             mActionMode = null;
         }
     };
@@ -171,7 +186,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
                     ExpensesManager.getInstance().eraseSelectedExpenses();
-                    if (expenseContainerListener != null) expenseContainerListener.updateExpensesFragments();
+                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("HOLI"));
                 }
                 updateData();
                 mActionMode.finish();
@@ -221,6 +236,13 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
+            updateData();
+        }
+    }
+
+    public class ExpenseChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
             updateData();
         }
     }
