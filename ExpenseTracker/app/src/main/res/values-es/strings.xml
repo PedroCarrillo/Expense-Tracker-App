@@ -55,7 +55,7 @@
     <string name="confirm_reminder_delete">Seguro de borrar este recordatorio?</string>
     <string name="this_week">Esta semana</string>
     <string name="reminder_name_hint">Ej. Compañía de la Tarjeta de Crédito</string>
-    <string name="reminder_schedule_title">El recordatorio esta guardado para el día:</string>
+    <string name="reminder_schedule_title">El recordatorio esta guardado para el día: (Día del mes)</string>
     <string name="reminder_time_sent_title">Será enviado a la siguiente hora:</string>
     <string name="reminder_help">Crea un recordatorio para recibir una notificación en cada día del mes para recordar cuando se vencen tus deudas.\n Una notificación te hará recordar cuando se ha asignado. \nRecuerda que puedes apagar el recordatorio cuando desees.</string>
     <string name="create_a_reminder">Crea un recordatorio</string>
