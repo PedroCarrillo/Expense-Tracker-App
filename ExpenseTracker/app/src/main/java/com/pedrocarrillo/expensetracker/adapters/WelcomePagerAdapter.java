@@ -12,7 +12,7 @@ import com.pedrocarrillo.expensetracker.ui.login.WelcomePage;
  */
 public class WelcomePagerAdapter extends FragmentStatePagerAdapter {
 
-    public static final int NUM_PAGES = 3;
+    private static final int NUM_PAGES = 3;
 
     public WelcomePagerAdapter(FragmentManager fm) {
         super(fm);

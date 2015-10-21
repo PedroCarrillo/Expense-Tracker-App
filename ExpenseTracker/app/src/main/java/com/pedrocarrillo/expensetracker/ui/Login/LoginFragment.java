@@ -1,13 +1,10 @@
 package com.pedrocarrillo.expensetracker.ui.login;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +12,9 @@ import android.view.ViewGroup;
 import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.WelcomePagerAdapter;
+import com.pedrocarrillo.expensetracker.custom.CrossfadePageTransformer;
 import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
-import com.pedrocarrillo.expensetracker.custom.CrossfadePageTransformer;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class LoginFragment extends BaseFragment implements View.OnClickListener  {
@@ -27,8 +24,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private static final int RC_SIGN_IN = 0;
 //    private GoogleApiClient mGoogleApiClient;
 
-    private boolean mIsResolving = false;
-    private boolean mShouldResolve = false;
+//    private boolean mIsResolving = false;
+//    private boolean mShouldResolve = false;
 
     private ViewPager vpWelcome;
 
@@ -135,7 +132,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private void onSignInClicked() {
         // User clicked the sign-in button, so begin the sign-in process and automatically
         // attempt to resolve any errors that occur.
-        mShouldResolve = true;
+//        mShouldResolve = true;
 //        mGoogleApiClient.connect();
 
         // Show a message to the user that we are signing in.

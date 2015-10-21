@@ -33,10 +33,10 @@ public class DialogManager {
     private DialogManager() {
     }
 
-    public void createEditTextDialog(Activity activity, String title, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
+    public AlertDialog createEditTextDialog(Activity activity, String title, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
         LayoutInflater inflater = activity.getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.layout_dialog_edit_text, null);
-        createAlertDialog(activity, title, dialogLayout, null, confirmText, negativeText, listener);
+        return createAlertDialog(activity, title, dialogLayout, null, confirmText, negativeText, listener);
     }
 
     public void createCustomAcceptDialog(Activity activity, String title, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
@@ -54,7 +54,7 @@ public class DialogManager {
         new TimePickerDialog(activity, listener, hour, minute, DateFormat.is24HourFormat(activity)).show();
     }
 
-    private void createAlertDialog(Activity activity, String title, View dialogLayout, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
+    private AlertDialog createAlertDialog(Activity activity, String title, View dialogLayout, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
         dialogBuilder.setTitle(title);
         if (dialogLayout != null) dialogBuilder.setView(dialogLayout);
@@ -62,7 +62,9 @@ public class DialogManager {
         dialogBuilder.setCancelable(false);
         dialogBuilder.setPositiveButton(confirmText, listener);
         dialogBuilder.setNegativeButton(negativeText, listener);
-        dialogBuilder.create().show();
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        return alertDialog;
     }
 
     public void showShortSnackBar(View view, String message) {

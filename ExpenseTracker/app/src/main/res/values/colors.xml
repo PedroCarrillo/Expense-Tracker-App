@@ -20,7 +20,8 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#d5d5d5</color>
 
-    <color name="grey">#4f4f4f</color>
+    <color name="grey">#4d4d4d</color>
+    <color name="grey_transparent">#20000000</color>
     <color name="teal">#00796B</color>
     <color name="white">#FFFFFF</color>
     <color name="purple">#7E57C2</color>

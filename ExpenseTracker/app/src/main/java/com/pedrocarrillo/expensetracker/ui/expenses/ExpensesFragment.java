@@ -1,49 +1,54 @@
 package com.pedrocarrillo.expensetracker.ui.expenses;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.pedrocarrillo.expensetracker.R;
-import com.pedrocarrillo.expensetracker.adapters.ExpensesAdapter;
+import com.pedrocarrillo.expensetracker.adapters.MainExpenseAdapter;
+import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
+import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
-import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
-import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
-import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
-import com.pedrocarrillo.expensetracker.utils.RealmManager;
-import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetProvider;
-import com.pedrocarrillo.expensetracker.widget.ExpensesWidgetService;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSelectedListener, ExpensesAdapter.ExpenseAdapterOnClickHandler {
+public class ExpensesFragment extends MainFragment implements BaseViewHolder.RecyclerClickListener {
 
     public static final int RQ_NEW_EXPENSE = 1001;
 
-    private List<Expense> mExpenseList;
-    private ExpensesAdapter mExpensesAdapter;
+    private MainExpenseAdapter mMainExpenseAdapter;
     private RecyclerView rvExpenses;
     private @IDateMode int mCurrentDateMode;
+    private IExpenseContainerListener expenseContainerListener;
+    private ExpenseChangeReceiver expenseChangeReceiver = new ExpenseChangeReceiver();
 
-    public static ExpensesFragment newInstance() {
-        return new ExpensesFragment();
+    public static ExpensesFragment newInstance(@IDateMode int dateMode) {
+        ExpensesFragment expensesFragment = new ExpensesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(IDateMode.DATE_MODE_TAG, dateMode);
+        expensesFragment.setArguments(bundle);
+        return expensesFragment;
     }
 
     public ExpensesFragment() {
@@ -63,129 +68,123 @@ public class ExpensesFragment extends MainFragment implements TabLayout.OnTabSel
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(IConstants.TAG_SELECTED_ITEMS, new SparseBooleanArrayParcelable(mMainExpenseAdapter.getSelectedBooleanArray()));
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        mExpensesAdapter.notifyDataSetChanged();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(expenseChangeReceiver, new IntentFilter(IConstants.BROADCAST_UPDATE_EXPENSES));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(expenseChangeReceiver);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getParentFragment() != null) {
+            expenseContainerListener = (IExpenseContainerListener) getParentFragment();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (getParentFragment() != null) {
+            expenseContainerListener = null;
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
-        mMainActivityListener.setTitle(getString(R.string.expenses));
-        mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
-        mMainActivityListener.setTabs(tabList, this);
-        mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAddNewExpense();
+        if (getArguments() != null) {
+            @IDateMode int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
+            mCurrentDateMode = mode;
+            ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
+            mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, mCurrentDateMode);
+            rvExpenses.setAdapter(mMainExpenseAdapter);
+        }
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(IConstants.TAG_SELECTED_ITEMS)) {
+                mMainExpenseAdapter.setSelectedItems((SparseBooleanArray)savedInstanceState.getParcelable(IConstants.TAG_SELECTED_ITEMS));
+                mMainExpenseAdapter.notifyDataSetChanged();
             }
-        });
+        }
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
-        rvExpenses.setAdapter(mExpensesAdapter);
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
+    }
 
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                final Expense expense= (Expense) viewHolder.itemView.getTag();
-                DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_expense), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            Date expenseDate = expense.getDate();
-                            RealmManager.getInstance().delete(expense);
-                            // update widget if the expense is created today
-                            if (DateUtils.isToday(expenseDate)) {
-                                Intent i = new Intent(getActivity(), ExpensesWidgetProvider.class);
-                                i.setAction(ExpensesWidgetService.UPDATE_WIDGET);
-                                getActivity().sendBroadcast(i);
-                            }
-                        }
-                        reloadData();
-                    }
-                });
-            }
-
-            @Override
-            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder.itemView.getTag() == null) return 0;
-                return super.getSwipeDirs(recyclerView, viewHolder);
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(rvExpenses);
+    public void updateData() {
+        ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
+        ExpensesManager.getInstance().resetSelectedItems();
+        if (mMainExpenseAdapter != null) mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
     }
 
     @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        if (tab.getTag()!=null) {
-            if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.today))) {
-                mCurrentDateMode= IDateMode.MODE_TODAY;
-            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.week))) {
-                mCurrentDateMode = IDateMode.MODE_WEEK;
-            } else if (tab.getTag().toString().equalsIgnoreCase(getString(R.string.month))) {
-                mCurrentDateMode = IDateMode.MODE_MONTH;
-            }
-        }
-        reloadData();
-    }
-
-    private void onAddNewExpense() {
-        NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE, null);
-        newExpenseFragment.setTargetFragment(this, RQ_NEW_EXPENSE);
-        newExpenseFragment.show(getChildFragmentManager(), "NEW_EXPENSE");
-    }
-
-    private void reloadData() {
-        switch (mCurrentDateMode) {
-            case IDateMode.MODE_TODAY:
-                mExpenseList = Expense.getTodayExpenses();
-                break;
-            case IDateMode.MODE_WEEK:
-                mExpenseList = Expense.getWeekExpenses();
-                break;
-            case IDateMode.MODE_MONTH:
-                mExpenseList = Expense.getMonthExpenses();
-                break;
-        }
-        if (mExpensesAdapter == null) {
-            mExpensesAdapter = new ExpensesAdapter(getActivity(), this, mExpenseList, mCurrentDateMode);
+    public void onClick(RecyclerView.ViewHolder vh, int position) {
+        if (!expenseContainerListener.isActionMode()) {
+            Expense expenseSelected = (Expense) vh.itemView.getTag();
+            Intent expenseDetail = new Intent(getActivity(), ExpenseDetailActivity.class);
+            expenseDetail.putExtra(ExpenseDetailFragment.EXPENSE_ID_KEY, expenseSelected.getId());
+            startActivity(expenseDetail);
         } else {
-            mExpensesAdapter.updateExpenses(mExpenseList, mCurrentDateMode);
+            toggleSelection(position);
         }
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
+    public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+        if (!expenseContainerListener.isActionMode()) {
+            expenseContainerListener.startActionMode();
+        }
+        toggleSelection(position);
     }
 
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
+    public void toggleSelection(int position) {
+        mMainExpenseAdapter.toggleSelection(position);
+        int count = mMainExpenseAdapter.getSelectedItemCount();
+        if (count == 0) {
+            expenseContainerListener.endActionMode();
+        } else {
+            expenseContainerListener.setActionModeTitle(String.valueOf(count));
+        }
     }
 
-    @Override
-    public void onClick(ExpensesAdapter.ViewHolder vh) {
-        Expense expenseSelected = (Expense) vh.itemView.getTag();
-        Intent expenseDetail = new Intent(getActivity(), ExpenseDetailActivity.class);
-        expenseDetail.putExtra(ExpenseDetailFragment.EXPENSE_ID_KEY, expenseSelected.getId());
-        startActivity(expenseDetail);
+    public void cancelActionMode() {
+        if (expenseContainerListener.isActionMode()) {
+            expenseContainerListener.endActionMode();
+            mMainExpenseAdapter.clearSelection();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
-            reloadData();
+            updateData();
         }
+    }
+
+    public class ExpenseChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            updateData();
+        }
+    }
+
+    public interface IExpenseContainerListener {
+        void updateExpensesFragments();
+        boolean isActionMode();
+        void startActionMode();
+        void endActionMode();
+        void setActionModeTitle(String title);
     }
 
 }

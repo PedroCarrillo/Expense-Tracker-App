@@ -44,10 +44,4 @@ public class CategoriesSpinnerAdapter extends ArrayAdapter<Category> {
         return row;
     }
 
-    public void updateSpinnerData(Category[] categoriesList) {
-        this.categoriesList = categoriesList;
-        notifyDataSetChanged();
-    }
-
-
 }
