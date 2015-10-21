@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import com.pedrocarrillo.expensetracker.adapters.BaseExpenseAdapter;
 import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
 import com.pedrocarrillo.expensetracker.custom.SelectDateFragment;
+import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.custom.WrapContentManagerRecyclerView;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
@@ -66,10 +68,6 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
-            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
-        }
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
         mMainActivityListener.setTitle(getString(R.string.history));
 
@@ -80,11 +78,28 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
     }
 
     @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(IConstants.TAG_SELECTED_ITEMS)) {
+                mExpensesAdapter.setSelectedItems((SparseBooleanArray) savedInstanceState.getParcelable(IConstants.TAG_SELECTED_ITEMS));
+                mExpensesAdapter.notifyDataSetChanged();
+            }
+            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
+            if(isActionMode) {
+                mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+                mActionMode.setTitle(String.valueOf(mExpensesAdapter.getSelectedItems().size()));
+                mActionMode.invalidate();
+            }
+        }
+    }
+
+    @Override
     public void updateData() {
         float total = Expense.getCategoryTotalByDate(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), null);
         ExpensesManager.getInstance().setExpensesList(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), IExpensesType.MODE_EXPENSES, null);
         if ( mExpensesAdapter == null ) {
-            mExpensesAdapter = new BaseExpenseAdapter(getActivity(), this, ExpensesManager.getInstance().getExpensesList());
+            mExpensesAdapter = new BaseExpenseAdapter(getActivity(), this);
             rvHistory.setAdapter(mExpensesAdapter);
         } else {
             mExpensesAdapter.updateExpenses(ExpensesManager.getInstance().getExpensesList());
@@ -173,6 +188,7 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
+        outState.putParcelable(IConstants.TAG_SELECTED_ITEMS, new SparseBooleanArrayParcelable(mExpensesAdapter.getSelectedBooleanArray()));
         super.onSaveInstanceState(outState);
     }
 

@@ -68,10 +68,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             int menuItemId = savedInstanceState.getInt(NAVIGATION_POSITION);
             mainNavigationView.setCheckedItem(menuItemId);
             mainNavigationView.getMenu().performIdentifierAction(menuItemId, 0);
-            if (savedInstanceState.containsKey(IConstants.TAB_SELECTED_POS_KEY)){
-                int tabPosition = savedInstanceState.getInt(IConstants.TAB_SELECTED_POS_KEY);
-                if (mainTabLayout.getTabAt(tabPosition) != null) mainTabLayout.getTabAt(tabPosition).select();
-            }
         } else {
             mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
         }
@@ -140,7 +136,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         menuItem.setChecked(true);
         mainDrawerLayout.closeDrawers();
-        idSelectedNavigationItem = menuItem.getItemId();
         switchFragment(menuItem.getItemId());
         return false;
     }
@@ -153,12 +148,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         for (String tab : tabList) {
             mainTabLayout.addTab(mainTabLayout.newTab().setText(tab).setTag(tab));
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        if(mainTabLayout.getVisibility() == View.VISIBLE) outState.putInt(IConstants.TAB_SELECTED_POS_KEY, mainTabLayout.getSelectedTabPosition());
-        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
@@ -188,8 +177,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void setPager(ViewPager vp) {
+    public void setPager(ViewPager vp, TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener) {
         mainTabLayout.setupWithViewPager(vp);
+        mainTabLayout.setOnTabSelectedListener(viewPagerOnTabSelectedListener);
     }
 
     public ActionMode setActionMode(final ActionMode.Callback actionModeCallback) {

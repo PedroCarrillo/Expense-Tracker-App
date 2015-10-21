@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,11 +21,14 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.CategoriesAdapter;
 import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
+import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.entities.Category;
+import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
@@ -72,6 +76,26 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
+        outState.putParcelable(IConstants.TAG_SELECTED_ITEMS, new SparseBooleanArrayParcelable(mCategoriesAdapter.getSelectedBooleanArray()));
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
+            if(isActionMode) {
+                mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+                mActionMode.setTitle(String.valueOf(mCategoriesAdapter.getSelectedItems().size()));
+                mActionMode.invalidate();
+            }
+        }
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        tabList = Arrays.asList(getString(R.string.expenses), getString(R.string.income));
@@ -90,6 +114,13 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         rvCategories.setAdapter(mCategoriesAdapter);
         rvCategories.setHasFixedSize(true);
         rvCategories.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(IConstants.TAG_SELECTED_ITEMS)) {
+                mCategoriesAdapter.setSelectedItems((SparseBooleanArray) savedInstanceState.getParcelable(IConstants.TAG_SELECTED_ITEMS));
+                mCategoriesAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
