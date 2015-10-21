@@ -31,6 +31,12 @@ public class DateUtils {
         return cal.getTime();
     }
 
+    public static Date getRealLastDateOfCurrentMonth() {
+        Calendar cal = setDateStartOfDay(Calendar.getInstance());
+        cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
+        return cal.getTime();
+    }
+
     public static Date getFirstDateOfCurrentWeek() {
         return getCalendarFirstDayOfCurrentWeek().getTime();
     }
@@ -46,6 +52,13 @@ public class DateUtils {
 //        Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_WEEK);
         cal.set(Calendar.DAY_OF_WEEK, 7);
         cal.add(Calendar.DATE, 2);
+        return cal.getTime();
+    }
+
+    public static Date getRealLastDateOfCurrentWeek() {
+        Calendar cal = setDateStartOfDay(Calendar.getInstance());
+        cal.set(Calendar.DAY_OF_WEEK, 7);
+        cal.add(Calendar.DATE, 1);
         return cal.getTime();
     }
 

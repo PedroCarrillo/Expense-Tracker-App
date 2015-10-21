@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Pedro on 9/29/2015.
+ * @author Pedro on 9/29/2015.
  */
 public class ExpensesViewPagerAdapter extends FragmentStatePagerAdapter {
 

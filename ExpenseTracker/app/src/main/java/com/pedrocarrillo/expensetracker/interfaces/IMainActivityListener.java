@@ -19,7 +19,7 @@ public interface IMainActivityListener {
     void setTabs(List<String> tabList, TabLayout.OnTabSelectedListener onTabSelectedListener);
     void setFAB(@DrawableRes int drawableId, View.OnClickListener onClickListener);
     void setTitle(String title);
-    void setPager(ViewPager vp);
+    void setPager(ViewPager vp, TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener);
     ActionMode setActionMode(ActionMode.Callback actionModeCallback);
 
 }

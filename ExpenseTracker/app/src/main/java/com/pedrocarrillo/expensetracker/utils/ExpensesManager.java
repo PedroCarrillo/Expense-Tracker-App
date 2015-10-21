@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by pcarrillo on 16/10/2015.
+ * @author  pcarrillo on 16/10/2015.
  */
 public class ExpensesManager {
 
@@ -92,6 +92,10 @@ public class ExpensesManager {
             ExpenseTrackerApp.getContext().sendBroadcast(i);
         }
         RealmManager.getInstance().delete(expensesToDelete);
+    }
+
+    public void setSelectedItems(SparseBooleanArray selectedItems) {
+        this.mSelectedExpensesItems = selectedItems;
     }
 
 }
