@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by pcarrillo on 07/10/2015.
  */
-public class BaseExpenseAdapter<VH extends RecyclerView.ViewHolder> extends BaseRecyclerViewAdapter<BaseExpenseAdapter.BaseExpenseViewHolder> {
+public class BaseExpenseAdapter<VH extends RecyclerView.ViewHolder> extends BaseExpenseRecyclerViewAdapter<BaseExpenseAdapter.BaseExpenseViewHolder> {
 
     protected List<Expense> mExpensesList;
     protected int lastPosition = -1;

@@ -73,6 +73,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
         tvExpenseTotal.setTextColor(getResources().getColor(expense.getType() == IExpensesType.MODE_EXPENSES ? R.color.colorAccentRed : R.color.colorAccentGreen));
         ((TextView)getView().findViewById(R.id.tv_category)).setText(String.valueOf(expense.getCategory().getName()));
         ((TextView)getView().findViewById(R.id.tv_description)).setText(String.valueOf(expense.getDescription()));
+        ((TextView)getView().findViewById(R.id.tv_date)).setText(Util.formatDateToString(expense.getDate(), "MM/dd/yyyy"));
         (getView().findViewById(R.id.fab_edit)).setOnClickListener(this);
     }
 

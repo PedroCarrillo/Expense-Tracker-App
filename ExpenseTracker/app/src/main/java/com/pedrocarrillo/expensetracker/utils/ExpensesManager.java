@@ -63,7 +63,7 @@ public class ExpensesManager {
     }
 
     public void resetSelectedItems() {
-//        mSelectedExpensesItems.clear();
+        mSelectedExpensesItems.clear();
     }
 
     public List<Integer> getSelectedExpensesIndex() {
@@ -92,6 +92,10 @@ public class ExpensesManager {
             ExpenseTrackerApp.getContext().sendBroadcast(i);
         }
         RealmManager.getInstance().delete(expensesToDelete);
+    }
+
+    public void setSelectedItems(SparseBooleanArray selectedItems) {
+        this.mSelectedExpensesItems = selectedItems;
     }
 
 }

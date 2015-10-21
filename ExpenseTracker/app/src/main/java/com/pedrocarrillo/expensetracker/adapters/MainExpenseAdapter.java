@@ -1,14 +1,17 @@
 package com.pedrocarrillo.expensetracker.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
+import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
@@ -51,10 +54,26 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
             case VIEW_TYPE_HEADER:
                 float total = Expense.getTotalExpensesByDateMode(mCurrentDateMode);
                 holder.tvTotal.setText(Util.getFormattedCurrency(total));
+                String date;
+                switch (mCurrentDateMode) {
+                    case IDateMode.MODE_TODAY:
+                        date = Util.formatDateToString(DateUtils.getToday(), "MM/dd/yyyy");
+                        break;
+                    case IDateMode.MODE_WEEK:
+                        date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), "MM/dd/yyyy"));
+                        break;
+                    case IDateMode.MODE_MONTH:
+                        date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), "MM/dd/yyyy"));
+                        break;
+                    default:
+                        date = "";
+                        break;
+                }
+                ((ViewHolder)holder).tvDate.setText(date);
                 break;
             case VIEW_TYPE_EXPENSE_ROW:
                 final Expense expense = (Expense) mExpensesList.get(position-1);
-                String prefix = "";
+                String prefix;
                 switch (expense.getType()) {
                     case IExpensesType.MODE_EXPENSES:
                         holder.tvTotal.setTextColor(colorExpense);
@@ -64,6 +83,8 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
                         holder.tvTotal.setTextColor(colorIncome);
                         prefix = String.format(prefixIncome, Util.getFormattedCurrency(expense.getTotal()));
                         break;
+                    default:
+                        prefix = "";
                 }
                 if (expense.getCategory() != null)holder.tvCategory.setText(expense.getCategory().getName());
                 if (expense.getDescription() != null && !expense.getDescription().isEmpty()) {
@@ -90,7 +111,7 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
         return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_EXPENSE_ROW;
     }
 
-    public void updateExpenses( @IDateMode int mCurrentDateMode) {
+    public void updateExpenses(@IDateMode int mCurrentDateMode) {
         this.mCurrentDateMode = mCurrentDateMode;
         ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
         this.mExpensesList = ExpensesManager.getInstance().getExpensesList();
@@ -99,8 +120,11 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
 
     public static class ViewHolder extends BaseExpenseViewHolder {
 
+        TextView tvDate;
+
         public ViewHolder(View v, RecyclerClickListener onRecyclerClickListener) {
             super(v, onRecyclerClickListener);
+            tvDate = (TextView)v.findViewById(R.id.tv_date);
         }
 
         @Override

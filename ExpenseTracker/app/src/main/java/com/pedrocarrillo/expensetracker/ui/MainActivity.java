@@ -68,12 +68,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             int menuItemId = savedInstanceState.getInt(NAVIGATION_POSITION);
             mainNavigationView.setCheckedItem(menuItemId);
             mainNavigationView.getMenu().performIdentifierAction(menuItemId, 0);
-            if (savedInstanceState.containsKey("hola")){
-//                MainFragment fragment = (MainFragment)getSupportFragmentManager().getFragment(savedInstanceState, "hola");
-//                replaceFragment(fragment, false);
-//                int tabPosition = savedInstanceState.getInt(IConstants.TAB_SELECTED_POS_KEY);
-//                if (mainTabLayout.getTabAt(tabPosition) != null) mainTabLayout.getTabAt(tabPosition).select();
-            }
         } else {
             mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
         }
@@ -135,8 +129,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(NAVIGATION_POSITION, idSelectedNavigationItem);
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
-        getSupportFragmentManager().putFragment(outState, "hola", currentFragment);
         super.onSaveInstanceState(outState);
     }
 
@@ -185,8 +177,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void setPager(ViewPager vp) {
+    public void setPager(ViewPager vp, TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener) {
         mainTabLayout.setupWithViewPager(vp);
+        mainTabLayout.setOnTabSelectedListener(viewPagerOnTabSelectedListener);
     }
 
     public ActionMode setActionMode(final ActionMode.Callback actionModeCallback) {

@@ -69,15 +69,14 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
-        outState.putParcelable("selected_items", new SparseBooleanArrayParcelable(mMainExpenseAdapter.getSelectedBooleanArray()));
+        outState.putParcelable(IConstants.TAG_SELECTED_ITEMS, new SparseBooleanArrayParcelable(mMainExpenseAdapter.getSelectedBooleanArray()));
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(expenseChangeReceiver, new IntentFilter("HOLI"));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(expenseChangeReceiver, new IntentFilter(IConstants.BROADCAST_UPDATE_EXPENSES));
     }
 
     @Override
@@ -99,8 +98,6 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         super.onDetach();
         if (getParentFragment() != null) {
             expenseContainerListener = null;
-            cancelActionMode();
-            mActionMode = null;
         }
     }
 
@@ -115,8 +112,8 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             rvExpenses.setAdapter(mMainExpenseAdapter);
         }
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("selected_items")) {
-                mMainExpenseAdapter.setSelectedItems((SparseBooleanArray)savedInstanceState.getParcelable("selected_items"));
+            if (savedInstanceState.containsKey(IConstants.TAG_SELECTED_ITEMS)) {
+                mMainExpenseAdapter.setSelectedItems((SparseBooleanArray)savedInstanceState.getParcelable(IConstants.TAG_SELECTED_ITEMS));
                 mMainExpenseAdapter.notifyDataSetChanged();
             }
         }
@@ -124,80 +121,15 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
     }
 
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
-            if(isActionMode) mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
-        }
-
-    }
-
     public void updateData() {
         ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
+        ExpensesManager.getInstance().resetSelectedItems();
         if (mMainExpenseAdapter != null) mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
-    }
-
-    // Action mode for expenses.
-    private android.view.ActionMode mActionMode;
-
-    private android.view.ActionMode.Callback mActionModeCallback = new android.view.ActionMode.Callback() {
-
-        // Called when the action mode is created; startActionMode() was called
-        @Override
-        public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
-            // Inflate a menu resource providing context menu items
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.expenses_context_menu, menu);
-            return true;
-        }
-
-        // Called each time the action mode is shown. Always called after onCreateActionMode, but
-        // may be called multiple times if the mode is invalidated.
-        @Override
-        public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
-            return false; // Return false if nothing is done
-        }
-
-        // Called when the user selects a contextual menu item
-        @Override
-        public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.delete:
-                    eraseExpenses();
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        // Called when the user exits the action mode
-        @Override
-        public void onDestroyActionMode(android.view.ActionMode mode) {
-//            mMainExpenseAdapter.clearSelection();
-            mActionMode = null;
-        }
-    };
-
-    private void eraseExpenses() {
-        DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_items), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == DialogInterface.BUTTON_POSITIVE) {
-                    ExpensesManager.getInstance().eraseSelectedExpenses();
-                    LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("HOLI"));
-                }
-                updateData();
-                mActionMode.finish();
-                mActionMode = null;
-            }
-        });
     }
 
     @Override
     public void onClick(RecyclerView.ViewHolder vh, int position) {
-        if (mActionMode == null) {
+        if (!expenseContainerListener.isActionMode()) {
             Expense expenseSelected = (Expense) vh.itemView.getTag();
             Intent expenseDetail = new Intent(getActivity(), ExpenseDetailActivity.class);
             expenseDetail.putExtra(ExpenseDetailFragment.EXPENSE_ID_KEY, expenseSelected.getId());
@@ -209,8 +141,8 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
 
     @Override
     public void onLongClick(RecyclerView.ViewHolder vh, int position) {
-        if (mActionMode == null) {
-            mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+        if (!expenseContainerListener.isActionMode()) {
+            expenseContainerListener.startActionMode();
         }
         toggleSelection(position);
     }
@@ -219,16 +151,16 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         mMainExpenseAdapter.toggleSelection(position);
         int count = mMainExpenseAdapter.getSelectedItemCount();
         if (count == 0) {
-            mActionMode.finish();
+            expenseContainerListener.endActionMode();
         } else {
-            mActionMode.setTitle(String.valueOf(count));
-            mActionMode.invalidate();
+            expenseContainerListener.setActionModeTitle(String.valueOf(count));
         }
     }
 
     public void cancelActionMode() {
-        if (mActionMode != null) {
-            mActionMode.finish();
+        if (expenseContainerListener.isActionMode()) {
+            expenseContainerListener.endActionMode();
+            mMainExpenseAdapter.clearSelection();
         }
     }
 
@@ -249,6 +181,10 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
 
     public interface IExpenseContainerListener {
         void updateExpensesFragments();
+        boolean isActionMode();
+        void startActionMode();
+        void endActionMode();
+        void setActionModeTitle(String title);
     }
 
 }
