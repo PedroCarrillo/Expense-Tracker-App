@@ -17,6 +17,7 @@
 
         <fragment
             android:id="@+id/select_date_fragment"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:name="com.pedrocarrillo.expensetracker.custom.SelectDateFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

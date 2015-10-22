@@ -66,7 +66,7 @@ public class RemindersAdapter extends BaseRecyclerViewAdapter<RemindersAdapter.V
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Reminder reminder = mReminderList.get(position);
         if (reminder.getName() != null) holder.tvTitle.setText(reminder.getName());
-        holder.tvDate.setText(reminder.getDay() + " - " + Util.formatDateToString(reminder.getDate(), "HH:mm"));
+        holder.tvDate.setText("Day of the Month: ".concat(String.valueOf(reminder.getDay())).concat(" - ").concat("Time: ").concat(Util.formatDateToString(reminder.getDate(), "HH:mm")));
         holder.scState.setChecked(reminder.isState());
         holder.itemView.setTag(reminder);
         holder.itemView.setSelected(isSelected(position));

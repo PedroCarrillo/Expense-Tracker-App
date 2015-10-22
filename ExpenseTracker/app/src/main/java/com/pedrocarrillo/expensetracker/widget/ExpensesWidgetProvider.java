@@ -61,8 +61,6 @@ public class ExpensesWidgetProvider extends AppWidgetProvider {
             AppWidgetManager gm = AppWidgetManager.getInstance(context);
             int[] ids = gm.getAppWidgetIds(new ComponentName(context, ExpensesWidgetProvider.class));
             this.onUpdate(context, gm, ids);
-        } else {
-            super.onReceive(context, intent);
         }
     }
 }

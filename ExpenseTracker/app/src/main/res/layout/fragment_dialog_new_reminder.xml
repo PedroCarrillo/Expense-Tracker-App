@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:lineSpacingExtra="@dimen/dimen_5dp"
         android:gravity="center"
+        style="@style/HeaderTextView"
+        android:textSize="@dimen/text_size_14"
         android:text="@string/reminder_help" />
 
     <EditText
@@ -23,6 +25,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/HeaderTextView"
+        android:textSize="@dimen/text_size_14"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:text="@string/reminder_schedule_title"/>
 
@@ -37,6 +41,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/HeaderTextView"
+        android:textSize="@dimen/text_size_14"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:text="@string/reminder_time_sent_title"/>
 
@@ -45,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/HeaderTextView"
+        android:textSize="@dimen/text_size_14"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:layout_gravity="center"/>
 
