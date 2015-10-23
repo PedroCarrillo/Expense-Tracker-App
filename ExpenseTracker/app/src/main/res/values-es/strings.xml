@@ -34,6 +34,7 @@
     <string name="add_new_expense">Añade un nuevo Gasto</string>
     <string name="optional_description">Descripción (Opcional)</string>
     <string name="total">Total</string>
+    <string name="confirm_delete_items">Seguro de borrar este/estos item(s)</string>
     <string name="confirm_delete_expense">Seguro de borrar este gasto?</string>
     <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
@@ -54,7 +55,7 @@
     <string name="confirm_reminder_delete">Seguro de borrar este recordatorio?</string>
     <string name="this_week">Esta semana</string>
     <string name="reminder_name_hint">Ej. Compañía de la Tarjeta de Crédito</string>
-    <string name="reminder_schedule_title">El recordatorio esta guardado para el día:</string>
+    <string name="reminder_schedule_title">El recordatorio esta guardado para el día: (Día del mes)</string>
     <string name="reminder_time_sent_title">Será enviado a la siguiente hora:</string>
     <string name="reminder_help">Crea un recordatorio para recibir una notificación en cada día del mes para recordar cuando se vencen tus deudas.\n Una notificación te hará recordar cuando se ha asignado. \nRecuerda que puedes apagar el recordatorio cuando desees.</string>
     <string name="create_a_reminder">Crea un recordatorio</string>
@@ -62,7 +63,7 @@
     <string name="expense_detail">Detalle de un Gasto</string>
     <string name="same_category_this_week">Otros gastos en esta categoría esta semana:</string>
     <string name="start_using_expense">Empieza a user Control de Gastos!</string>
-    <string name="reminders_empty">No se encontraron recordatorios. Agrega uno para recordar fechas imnportantes</string>
+    <string name="reminders_empty">No se encontraron recordatorios. Agrega uno para recordar fechas importantes</string>
     <string name="categories_empty">No se encontraron categorías. Empieza creando algunas para poder tomar ventaja de las estadísticas.</string>
     <string name="no_chart_data">No hay información disponible</string>
     <string name="no_categories_error">Crea categorías para poder registrar gastos</string>
@@ -70,6 +71,11 @@
     <string name="no_expenses_today">No hay gastos hoy</string>
     <string name="start">Inicio</string>
     <string name="hint_category">Ej. Comida</string>
+    <string name="pick_dates">Selecciona un rango de fechas</string>
+    <string name="edit_category">Editar Categoría</string>
+    <string name="history">Historial</string>
+    <string name="action_help">Ayuda</string>
+    <string name="help_text">Puedes borrar Gastos, Categorías y Recordatorios si mantienes presionado un item. Puedes seleccionar varios elementos al mismo tiempo.\n\nElige la fecha en la que deseas crear el gasto en la ventana de Nuevo Gasto.\n\nCrea recordatorios que se crearan para ayudarte a recordar fechas importantes.\n\nEdita el nombre de la categoría presionando en un item.\n\nAlguna duda o sugerencia no dudes en contactar carrillochero6@gmail.com</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

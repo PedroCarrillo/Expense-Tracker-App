@@ -166,7 +166,7 @@ public class Expense extends RealmObject {
 
     public static float getExpensesCategoryPercentage(Date fromDate, Date toDate, Category category) {
         float totalCategory = getCategoryTotalByDate(fromDate, toDate, category);
-        float total = getExpensesList(fromDate, toDate, IExpensesType.MODE_EXPENSES, null).sum("total").floatValue();
+        float total = getExpensesList(fromDate, DateUtils.addDaysToDate(toDate, 1), IExpensesType.MODE_EXPENSES, null).sum("total").floatValue();
         return totalCategory * 100 / total;
     }
 

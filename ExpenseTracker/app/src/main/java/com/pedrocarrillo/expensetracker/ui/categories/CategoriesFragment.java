@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -15,13 +19,18 @@ import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.CategoriesAdapter;
+import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
+import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.entities.Category;
+import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
+import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +38,7 @@ import java.util.List;
 /**
  * Created by pcarrillo on 17/09/2015.
  */
-public class CategoriesFragment extends MainFragment implements TabLayout.OnTabSelectedListener {
+public class CategoriesFragment extends MainFragment implements TabLayout.OnTabSelectedListener, BaseViewHolder.RecyclerClickListener{
 
     private @IExpensesType int mCurrentMode = IExpensesType.MODE_EXPENSES;
 
@@ -39,6 +48,9 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
 
     private List<Category> mCategoryList;
     private CategoriesAdapter mCategoriesAdapter;
+
+    // Action mode for categories.
+    private ActionMode mActionMode;
 
     public static CategoriesFragment newInstance() {
         return new CategoriesFragment();
@@ -51,7 +63,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategoryList = new ArrayList<>();
-        mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
+        mCategoriesAdapter = new CategoriesAdapter(mCategoryList, this);
     }
 
     @Override
@@ -64,6 +76,26 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(IConstants.IS_ACTION_MODE_ACTIVATED, mActionMode != null);
+        outState.putParcelable(IConstants.TAG_SELECTED_ITEMS, new SparseBooleanArrayParcelable(mCategoriesAdapter.getSelectedBooleanArray()));
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            boolean isActionMode = savedInstanceState.getBoolean(IConstants.IS_ACTION_MODE_ACTIVATED);
+            if(isActionMode) {
+                mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+                mActionMode.setTitle(String.valueOf(mCategoriesAdapter.getSelectedItems().size()));
+                mActionMode.invalidate();
+            }
+        }
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        tabList = Arrays.asList(getString(R.string.expenses), getString(R.string.income));
@@ -73,17 +105,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogManager.getInstance().createEditTextDialog(getActivity(), getString(R.string.create_category), getString(R.string.save), getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            EditText etTest = (EditText) ((AlertDialog) dialog).findViewById(R.id.et_main);
-                            Category category = new Category(etTest.getText().toString(), mCurrentMode);
-                            RealmManager.getInstance().save(category, Category.class);
-                            reloadData();
-                        }
-                    }
-                });
+                createCategoryDialog(null);
             }
         });
         mMainActivityListener.setTitle(getString(R.string.categories));
@@ -93,30 +115,12 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         rvCategories.setHasFixedSize(true);
         rvCategories.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
 
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT ) {
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(IConstants.TAG_SELECTED_ITEMS)) {
+                mCategoriesAdapter.setSelectedItems((SparseBooleanArray) savedInstanceState.getParcelable(IConstants.TAG_SELECTED_ITEMS));
+                mCategoriesAdapter.notifyDataSetChanged();
             }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                final Category category = (Category) viewHolder.itemView.getTag();
-                DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete).concat(category.getName()), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            RealmManager.getInstance().delete(category);
-                        }
-                        reloadData();
-                    }
-                });
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(rvCategories);
+        }
     }
 
     @Override
@@ -138,11 +142,7 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
         } else {
             tvEmpty.setVisibility(View.GONE);
         }
-        if (mCategoriesAdapter == null) {
-            mCategoriesAdapter = new CategoriesAdapter(mCategoryList);
-        } else {
-            mCategoriesAdapter.updateCategories(mCategoryList);
-        }
+        mCategoriesAdapter.updateCategories(mCategoryList);
     }
 
     @Override
@@ -153,6 +153,119 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onClick(RecyclerView.ViewHolder vh, int position) {
+        if (mActionMode == null) {
+            createCategoryDialog(vh);
+        } else {
+            toggleSelection(position);
+        }
+    }
+
+    private void createCategoryDialog(final RecyclerView.ViewHolder vh) {
+        AlertDialog alertDialog = DialogManager.getInstance().createEditTextDialog(getActivity(), vh != null ? getString(R.string.edit_category) : getString(R.string.create_category), getString(R.string.save), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    EditText etTest = (EditText) ((AlertDialog) dialog).findViewById(R.id.et_main);
+                    if (!Util.isEmptyField(etTest)) {
+                        Category category = new Category(etTest.getText().toString(), mCurrentMode);
+                        if (vh != null) {
+                            Category categoryToUpdate = (Category)vh.itemView.getTag();
+                            category.setId(categoryToUpdate.getId());
+                            RealmManager.getInstance().update(category);
+                        } else {
+                            RealmManager.getInstance().save(category, Category.class);
+                        }
+                        reloadData();
+                    } else {
+                        DialogManager.getInstance().showShortToast(getString(R.string.error_name));
+                    }
+                }
+            }
+        });
+        if (vh != null) {
+            EditText etCategoryName = (EditText) alertDialog.findViewById(R.id.et_main);
+            Category category = (Category) vh.itemView.getTag();
+            etCategoryName.setText(category.getName());
+        }
+    }
+
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.expenses_context_menu, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.delete:
+                    eraseCategories();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mCategoriesAdapter.clearSelection();
+            mActionMode = null;
+        }
+    };
+
+    private void eraseCategories() {
+        DialogManager.getInstance().createCustomAcceptDialog(getActivity(), getString(R.string.delete), getString(R.string.confirm_delete_items), getString(R.string.confirm), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    List<Category> categoriesToDelete = new ArrayList<>();
+                    for (int position : mCategoriesAdapter.getSelectedItems()) {
+                        categoriesToDelete.add(mCategoryList.get(position));
+                    }
+                    RealmManager.getInstance().delete(categoriesToDelete);
+                }
+                reloadData();
+                mActionMode.finish();
+                mActionMode = null;
+            }
+        });
+    }
+
+    @Override
+    public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+        if (mActionMode == null) {
+            mActionMode = mMainActivityListener.setActionMode(mActionModeCallback);
+        }
+        toggleSelection(position);
+    }
+
+    public void toggleSelection(int position) {
+        mCategoriesAdapter.toggleSelection(position);
+        int count = mCategoriesAdapter.getSelectedItemCount();
+        if (count == 0) {
+            mActionMode.finish();
+        } else {
+            mActionMode.setTitle(String.valueOf(count));
+            mActionMode.invalidate();
+        }
     }
 
 }

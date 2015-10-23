@@ -14,13 +14,15 @@
         android:textSize="@dimen/text_size_20"
         android:layout_marginTop="@dimen/dimen_20dp" />
 
-    <TextView
-        android:id="@+id/tv_date"
+    <Button
+        android:id="@+id/btn_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_20"
         android:textColor="@color/primary_dark"
-        android:layout_marginTop="@dimen/dimen_20dp"/>
+        android:layout_marginTop="@dimen/dimen_20dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:elevation="@dimen/elevation_dp"/>
 
     <Spinner
         android:id="@+id/sp_categories"

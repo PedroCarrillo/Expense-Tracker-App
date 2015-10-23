@@ -34,6 +34,7 @@
     <string name="add_new_expense">Add new Expense</string>
     <string name="optional_description">Description (Optional)</string>
     <string name="total">Total</string>
+    <string name="confirm_delete_items">Are you sure to delete this item(s)</string>
     <string name="confirm_delete_expense">Are you sure you want to delete this expense?</string>
     <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
@@ -54,8 +55,8 @@
     <string name="confirm_reminder_delete">Are you sure you want to delete this reminder?</string>
     <string name="this_week">This week</string>
     <string name="reminder_name_hint">Ex. Company Credit Card</string>
-    <string name="reminder_schedule_title">The alarm is schedule for:</string>
-    <string name="reminder_time_sent_title">It will be sent at:</string>
+    <string name="reminder_schedule_title">The alarm is schedule for (day of the month):</string>
+    <string name="reminder_time_sent_title">It will be sent at: (Time of the day)</string>
     <string name="reminder_help">Create a reminder to help you set a notification for a day in every month to remember when your debts are due.\n A notification will be shown when the time is right. \nRemember you can turn them off anytime you like.</string>
     <string name="create_a_reminder">Create a Reminder</string>
     <string name="edit_a_reminder">Edit a reminder</string>
@@ -70,7 +71,12 @@
     <string name="today_expenses_total">Today: %s</string>
     <string name="no_expenses_today">No expenses today</string>
     <string name="start">Start</string>
-    <string name="hint_category">Ex. Food</string>
+    <string name="hint_category">Eg. Food</string>
+    <string name="error_name">Please enter a name</string>
+    <string name="pick_dates">Pick a range of dates</string>
+    <string name="edit_category">Edit category</string>
+    <string name="history">History</string>
+    <string name="action_help">Help</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>
@@ -586,4 +592,6 @@
         <item>ZM</item>
         <item>ZW</item>
     </string-array>
+    <string name="title_activity_help">Help Activity</string>
+    <string name="help_text">You can delete Expenses, Categories and Reminders by holding an item and a menu will let you select one or more items to delete\n\nChoose the date you wish to create the expenses in the New Dialog Expense by tapping the date\n\nCreate reminders to set a notification for the specified date and hour.\n\nEdit Categories name by tapping the item once.\n\nAny doubts or ideas don\'t doubt to contact carrillochero6@gmail.com</string>
 </resources>

@@ -3,4 +3,5 @@
     android:minHeight="@dimen/widget_default_height"
     android:minWidth="@dimen/widget_default_width"
     android:resizeMode="horizontal|vertical"
+    android:previewImage="@drawable/expense_tracker_widget_preview"
     android:updatePeriodMillis="108000"/>

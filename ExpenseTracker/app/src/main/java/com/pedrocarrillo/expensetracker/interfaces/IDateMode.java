@@ -14,5 +14,9 @@ public @interface IDateMode {
     int MODE_TODAY = 100;
     int MODE_WEEK = 101;
     int MODE_MONTH = 102;
+    String DATE_TODAY_TAG = "_today";
+    String DATE_WEEK_TAG = "_week";
+    String DATE_MONTH_TAG = "_month";
+    String DATE_MODE_TAG = "_date_user_mode";
 }
 

@@ -1,7 +1,9 @@
 package com.pedrocarrillo.expensetracker.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.design.widget.AppBarLayout;
@@ -11,16 +13,24 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.interfaces.IConstants;
+import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 import com.pedrocarrillo.expensetracker.ui.categories.CategoriesFragment;
+import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesContainerFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesFragment;
+import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesViewPagerAdapter;
+import com.pedrocarrillo.expensetracker.ui.help.HelpActivity;
+import com.pedrocarrillo.expensetracker.ui.history.HistoryFragment;
 import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
 import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
@@ -112,8 +122,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
+        } else if (id == R.id.action_help) {
+            startActivity(new Intent(this, HelpActivity.class));
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -127,7 +139,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         menuItem.setChecked(true);
         mainDrawerLayout.closeDrawers();
-        idSelectedNavigationItem = menuItem.getItemId();
         switchFragment(menuItem.getItemId());
         return false;
     }
@@ -168,6 +179,38 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         getSupportActionBar().setTitle(title);
     }
 
+    @Override
+    public void setPager(ViewPager vp, TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener) {
+        mainTabLayout.setupWithViewPager(vp);
+        mainTabLayout.setOnTabSelectedListener(viewPagerOnTabSelectedListener);
+    }
+
+    public ActionMode setActionMode(final ActionMode.Callback actionModeCallback) {
+       return mToolbar.startActionMode(new ActionMode.Callback() {
+           @Override
+           public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+               mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+               return actionModeCallback.onCreateActionMode(mode,menu);
+           }
+
+           @Override
+           public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+               return actionModeCallback.onPrepareActionMode(mode, menu);
+           }
+
+           @Override
+           public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+               return actionModeCallback.onActionItemClicked(mode, item);
+           }
+
+           @Override
+           public void onDestroyActionMode(ActionMode mode) {
+               mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+               actionModeCallback.onDestroyActionMode(mode);
+           }
+       });
+    }
+
     private void setNavigationModeTabs() {
         mainTabLayout.setVisibility(View.VISIBLE);
     }
@@ -188,7 +231,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
         switch (menuItemId) {
             case R.id.nav_expenses:
-                if (!(currentFragment instanceof  ExpensesFragment)) replaceFragment(ExpensesFragment.newInstance(), false);
+                if (!(currentFragment instanceof ExpensesContainerFragment)) replaceFragment(ExpensesContainerFragment.newInstance(), false);
                 break;
             case R.id.nav_categories:
                 if (!(currentFragment instanceof  CategoriesFragment)) replaceFragment(CategoriesFragment.newInstance(), false);
@@ -198,6 +241,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_reminders:
                 if (!(currentFragment instanceof  ReminderFragment)) replaceFragment(ReminderFragment.newInstance(), false);
+                break;
+            case R.id.nav_history:
+                if (!(currentFragment instanceof HistoryFragment)) replaceFragment(HistoryFragment.newInstance(), false);
                 break;
         }
     }

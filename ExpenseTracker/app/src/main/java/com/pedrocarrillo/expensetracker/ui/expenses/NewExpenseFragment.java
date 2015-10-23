@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -38,7 +39,7 @@ import java.util.List;
 public class NewExpenseFragment extends DialogFragment implements View.OnClickListener{
 
     private TextView tvTitle;
-    private TextView tvDate;
+    private Button btnDate;
     private Spinner spCategory;
     private EditText etDescription;
     private EditText etTotal;
@@ -64,7 +65,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dialog_new_expense, container, false);
         tvTitle = (TextView)rootView.findViewById(R.id.tv_title);
-        tvDate = (TextView)rootView.findViewById(R.id.tv_date);
+        btnDate = (Button)rootView.findViewById(R.id.btn_date);
         spCategory = (Spinner)rootView.findViewById(R.id.sp_categories);
         etDescription = (EditText)rootView.findViewById(R.id.et_description);
         etTotal = (EditText)rootView.findViewById(R.id.et_total);
@@ -86,7 +87,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
             mUserActionMode = getArguments().getInt(IUserActionsMode.MODE_TAG) == IUserActionsMode.MODE_CREATE ? IUserActionsMode.MODE_CREATE : IUserActionsMode.MODE_UPDATE;
         }
         setModeViews();
-        tvDate.setOnClickListener(this);
+        btnDate.setOnClickListener(this);
         (getView().findViewById(R.id.btn_cancel)).setOnClickListener(this);
         (getView().findViewById(R.id.btn_save)).setOnClickListener(this);
     }
@@ -134,7 +135,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.tv_date) {
+        if(view.getId() == R.id.btn_date) {
             showDateDialog();
         } else if (view.getId() == R.id.btn_cancel) {
             dismiss();
@@ -190,7 +191,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void updateDate() {
-        tvDate.setText(Util.formatDateToString(selectedDate, "MM/dd/yyyy"));
+        btnDate.setText(Util.formatDateToString(selectedDate, "MM/dd/yyyy"));
     }
 
 }
