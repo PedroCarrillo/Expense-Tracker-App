@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-           <include layout="@layout/tool_bar"/>
+           <include layout="@layout/tool_bar_test"/>
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"

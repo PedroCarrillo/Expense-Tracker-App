@@ -77,4 +77,8 @@
         parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TitleDescriptionTextStyle">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
 </resources>

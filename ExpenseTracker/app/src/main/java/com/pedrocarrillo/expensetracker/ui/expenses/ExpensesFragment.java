@@ -124,7 +124,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     public void updateData() {
         ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
         ExpensesManager.getInstance().resetSelectedItems();
-        if (mMainExpenseAdapter != null) mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
+       if (mMainExpenseAdapter != null) mMainExpenseAdapter.updateExpenses(mCurrentDateMode);
     }
 
     @Override
@@ -177,6 +177,10 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         public void onReceive(final Context context, final Intent intent) {
             updateData();
         }
+    }
+
+    public @IDateMode int getCurrentDateMode() {
+        return mCurrentDateMode;
     }
 
     public interface IExpenseContainerListener {

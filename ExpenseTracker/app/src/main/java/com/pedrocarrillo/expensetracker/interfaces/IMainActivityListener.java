@@ -20,6 +20,7 @@ public interface IMainActivityListener {
     void setFAB(@DrawableRes int drawableId, View.OnClickListener onClickListener);
     void setTitle(String title);
     void setPager(ViewPager vp, TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener);
+    void setExpensesSummary(@IDateMode int dateMode);
     ActionMode setActionMode(ActionMode.Callback actionModeCallback);
 
 }

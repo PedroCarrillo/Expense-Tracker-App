@@ -20,8 +20,11 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
@@ -34,6 +37,8 @@ import com.pedrocarrillo.expensetracker.ui.history.HistoryFragment;
 import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
 import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
+import com.pedrocarrillo.expensetracker.utils.DateUtils;
+import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -57,6 +62,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private Toolbar mToolbar;
     private TabLayout mainTabLayout;
     private FloatingActionButton mFloatingActionButton;
+
+    // Expenses Summary related views
+    private LinearLayout llExpensesSummary;
+    private TextView tvDate;
+    private TextView tvDescription;
+    private TextView tvTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +95,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mainTabLayout = (TabLayout)findViewById(R.id.tab_layout);
         mainNavigationView = (NavigationView)findViewById(R.id.nav_view);
         mFloatingActionButton = (FloatingActionButton)findViewById(R.id.fab_main);
+        llExpensesSummary = (LinearLayout)findViewById(R.id.ll_expense_container);
+        tvDate = (TextView)findViewById(R.id.tv_date);
+        tvDescription = (TextView)findViewById(R.id.tv_description);
+        tvTotal = (TextView)findViewById(R.id.tv_total);
     }
 
     private void setUpDrawer() {
@@ -144,7 +159,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void setTabs(List<String> tabList, TabLayout.OnTabSelectedListener onTabSelectedListener) {
+    public void setTabs(List<String> tabList, final TabLayout.OnTabSelectedListener onTabSelectedListener) {
         mainTabLayout.removeAllTabs();
         mainTabLayout.setVisibility(View.VISIBLE);
         mainTabLayout.setOnTabSelectedListener(onTabSelectedListener);
@@ -156,6 +171,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setMode(@NavigationMode int mode) {
         mFloatingActionButton.setVisibility(View.GONE);
+        llExpensesSummary.setVisibility(View.GONE);
         mCurrentMode = mode;
         switch (mode) {
             case NAVIGATION_MODE_STANDARD:
@@ -165,6 +181,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 setNavigationModeTabs();
                 break;
         }
+    }
+
+    @Override
+    public void setExpensesSummary(@IDateMode int dateMode) {
+        float total = Expense.getTotalExpensesByDateMode(dateMode);
+        tvTotal.setText(Util.getFormattedCurrency(total));
+        String date;
+        switch (dateMode) {
+            case IDateMode.MODE_TODAY:
+                date = Util.formatDateToString(DateUtils.getToday(), "MM/dd/yyyy");
+                break;
+            case IDateMode.MODE_WEEK:
+                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), "MM/dd/yyyy"));
+                break;
+            case IDateMode.MODE_MONTH:
+                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), "MM/dd/yyyy"));
+                break;
+            default:
+                date = "";
+                break;
+        }
+        tvDate.setText(date);
     }
 
     @Override
@@ -180,9 +218,35 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void setPager(ViewPager vp, TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener) {
+    public void setPager(ViewPager vp, final TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener) {
         mainTabLayout.setupWithViewPager(vp);
-        mainTabLayout.setOnTabSelectedListener(viewPagerOnTabSelectedListener);
+        mainTabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                @IDateMode int dateMode;
+                switch (tab.getPosition()) {
+                    case 0:
+                        dateMode = IDateMode.MODE_TODAY;
+                        break;
+                    case 1:
+                        dateMode = IDateMode.MODE_WEEK;
+                        break;
+                    case 2:
+                        dateMode = IDateMode.MODE_MONTH;
+                        break;
+                    default:
+                        dateMode = IDateMode.MODE_TODAY;
+                }
+                setExpensesSummary(dateMode);
+                viewPagerOnTabSelectedListener.onTabSelected(tab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                viewPagerOnTabSelectedListener.onTabUnselected(tab);
+            }
+
+        });
     }
 
     public ActionMode setActionMode(final ActionMode.Callback actionModeCallback) {
@@ -213,6 +277,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void setNavigationModeTabs() {
         mainTabLayout.setVisibility(View.VISIBLE);
+        llExpensesSummary.setVisibility(View.VISIBLE);
     }
 
     private void setNavigationModeStandard() {

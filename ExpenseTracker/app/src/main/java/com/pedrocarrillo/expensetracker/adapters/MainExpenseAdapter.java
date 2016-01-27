@@ -72,7 +72,8 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
                 ((ViewHolder)holder).tvDate.setText(date);
                 break;
             case VIEW_TYPE_EXPENSE_ROW:
-                final Expense expense = (Expense) mExpensesList.get(position-1);
+//                final Expense expense = (Expense) mExpensesList.get(position-1);
+                final Expense expense = (Expense) mExpensesList.get(position);
                 String prefix;
                 switch (expense.getType()) {
                     case IExpensesType.MODE_EXPENSES:
@@ -103,12 +104,13 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
 
     @Override
     public int getItemCount() {
-        return mExpensesList.size()+1;
+        return mExpensesList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_EXPENSE_ROW;
+//        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_EXPENSE_ROW;
+        return VIEW_TYPE_EXPENSE_ROW;
     }
 
     public void updateExpenses(@IDateMode int mCurrentDateMode) {
