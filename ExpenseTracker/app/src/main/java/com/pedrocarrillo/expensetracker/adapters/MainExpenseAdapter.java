@@ -129,18 +129,6 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
             tvDate = (TextView)v.findViewById(R.id.tv_date);
         }
 
-        @Override
-        public void onClick(View v) {
-            if (getAdapterPosition() == 0) return;
-            super.onClick(v);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (getAdapterPosition() == 0) return false;
-            return super.onLongClick(v);
-        }
-
     }
 
 }

@@ -220,7 +220,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setPager(ViewPager vp, final TabLayout.ViewPagerOnTabSelectedListener viewPagerOnTabSelectedListener) {
         mainTabLayout.setupWithViewPager(vp);
-        mainTabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp){
+        mainTabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 @IDateMode int dateMode;
@@ -245,8 +245,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public void onTabUnselected(TabLayout.Tab tab) {
                 viewPagerOnTabSelectedListener.onTabUnselected(tab);
             }
-
         });
+        setExpensesSummary(IDateMode.MODE_TODAY);
     }
 
     public ActionMode setActionMode(final ActionMode.Callback actionModeCallback) {
