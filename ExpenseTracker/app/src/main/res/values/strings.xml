@@ -592,6 +592,15 @@
         <item>ZM</item>
         <item>ZW</item>
     </string-array>
+
+    <string-array name="date_formats">
+        <item>MM/dd/yyyy</item>
+        <item>dd/MM/yyyy</item>
+    </string-array>
+
     <string name="title_activity_help">Help Activity</string>
     <string name="help_text">You can delete Expenses, Categories and Reminders by holding an item and a menu will let you select one or more items to delete\n\nChoose the date you wish to create the expenses in the New Dialog Expense by tapping the date\n\nCreate reminders to set a notification for the specified date and hour.\n\nEdit Categories name by tapping the item once.\n\nAny doubts or ideas don\'t doubt to contact carrillochero6@gmail.com</string>
+    <string name="default_date_format">MM/dd/yyyy</string>
+    <string name="date_format_key">date_format_key</string>
+    <string name="date_format">Date Format</string>
 </resources>

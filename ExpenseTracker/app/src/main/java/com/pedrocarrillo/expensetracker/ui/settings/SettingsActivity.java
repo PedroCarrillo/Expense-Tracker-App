@@ -35,6 +35,7 @@ public class SettingsActivity  extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_country_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.date_format_key)));
     }
 
     private void setToolbar(Toolbar mToolbar) {

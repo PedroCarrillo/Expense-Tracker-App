@@ -54,4 +54,8 @@ public class Util {
         return formattedNumber.replace(symbol, symbol+" ");
     }
 
+    public static String getCurrentDateFormat() {
+        return PreferenceManager.getDefaultSharedPreferences(ExpenseTrackerApp.getContext()).getString(ExpenseTrackerApp.getContext().getString(R.string.date_format_key), ExpenseTrackerApp.getContext().getString(R.string.default_date_format));
+    }
+
 }

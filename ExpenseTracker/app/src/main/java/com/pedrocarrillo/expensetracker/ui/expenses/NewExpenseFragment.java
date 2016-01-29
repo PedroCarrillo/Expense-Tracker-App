@@ -191,7 +191,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void updateDate() {
-        btnDate.setText(Util.formatDateToString(selectedDate, "MM/dd/yyyy"));
+        btnDate.setText(Util.formatDateToString(selectedDate, Util.getCurrentDateFormat()));
     }
 
 }

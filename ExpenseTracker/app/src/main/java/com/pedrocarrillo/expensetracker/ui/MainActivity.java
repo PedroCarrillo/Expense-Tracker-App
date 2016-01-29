@@ -190,13 +190,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         String date;
         switch (dateMode) {
             case IDateMode.MODE_TODAY:
-                date = Util.formatDateToString(DateUtils.getToday(), "MM/dd/yyyy");
+                date = Util.formatDateToString(DateUtils.getToday(), Util.getCurrentDateFormat());
                 break;
             case IDateMode.MODE_WEEK:
-                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), "MM/dd/yyyy"));
+                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), Util.getCurrentDateFormat()));
                 break;
             case IDateMode.MODE_MONTH:
-                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), "MM/dd/yyyy"));
+                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), Util.getCurrentDateFormat()));
                 break;
             default:
                 date = "";

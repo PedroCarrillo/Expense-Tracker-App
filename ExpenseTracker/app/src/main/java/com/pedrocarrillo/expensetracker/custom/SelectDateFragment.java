@@ -85,7 +85,7 @@ public class SelectDateFragment extends Fragment implements View.OnClickListener
     }
 
     private void updateDate(Button btn, Date date) {
-        btn.setText(Util.formatDateToString(date, "MM/dd/yyyy"));
+        btn.setText(Util.formatDateToString(date, Util.getCurrentDateFormat()));
     }
 
     public TextView getTextViewTotal() {
