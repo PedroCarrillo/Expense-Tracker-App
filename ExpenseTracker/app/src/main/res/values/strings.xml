@@ -603,4 +603,9 @@
     <string name="default_date_format">MM/dd/yyyy</string>
     <string name="date_format_key">date_format_key</string>
     <string name="date_format">Date Format</string>
+    <string name="export">Export</string>
+    <string name="write_external_message">Expense Tracker would like to create Files in order to export your expenses data</string>
+    <string name="ok">Ok</string>
+    <string name="expenses_mail_content">Expenses Record by Expense Tracker</string>
+    <string name="share_title">Send your record to your mail</string>
 </resources>
