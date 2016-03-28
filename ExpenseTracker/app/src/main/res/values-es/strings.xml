@@ -76,6 +76,11 @@
     <string name="history">Historial</string>
     <string name="action_help">Ayuda</string>
     <string name="help_text">Puedes borrar Gastos, Categorías y Recordatorios si mantienes presionado un item. Puedes seleccionar varios elementos al mismo tiempo.\n\nElige la fecha en la que deseas crear el gasto en la ventana de Nuevo Gasto.\n\nCrea recordatorios que se crearan para ayudarte a recordar fechas importantes.\n\nEdita el nombre de la categoría presionando en un item.\n\nAlguna duda o sugerencia no dudes en contactar carrillochero6@gmail.com</string>
+    <string name="export">Exportar</string>
+    <string name="write_external_message">Expense Tracker creara archivos en memoria para poder exportar tu data.</string>
+    <string name="ok">Ok</string>
+    <string name="expenses_mail_content">Record de tus gastos por Expense Tracker</string>
+    <string name="share_title">Envia tus gastos a tu mail.</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

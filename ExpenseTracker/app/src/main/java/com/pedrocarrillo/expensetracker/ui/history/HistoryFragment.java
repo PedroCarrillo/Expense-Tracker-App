@@ -1,8 +1,15 @@
 package com.pedrocarrillo.expensetracker.ui.history;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -11,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.BaseExpenseAdapter;
@@ -20,6 +28,7 @@ import com.pedrocarrillo.expensetracker.custom.SelectDateFragment;
 import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.custom.WrapContentManagerRecyclerView;
 import com.pedrocarrillo.expensetracker.entities.Expense;
+import com.pedrocarrillo.expensetracker.interfaces.FileGeneratorParser;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.ISelectDateFragment;
@@ -30,7 +39,11 @@ import com.pedrocarrillo.expensetracker.ui.expenses.ExpenseDetailFragment;
 import com.pedrocarrillo.expensetracker.utils.DateManager;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
+import com.pedrocarrillo.expensetracker.utils.FileManager;
+import com.pedrocarrillo.expensetracker.utils.HistoryFileParser;
 import com.pedrocarrillo.expensetracker.utils.Util;
+
+import java.io.File;
 
 /**
  * Created by pcarrillo on 07/10/2015.
@@ -41,6 +54,8 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
 
     private BaseExpenseAdapter mExpensesAdapter;
     private SelectDateFragment selectDateFragment;
+
+    public static final int REQUEST_WRITE_EXTERNAL_STORE = 101;
 
     public static HistoryFragment newInstance() {
         return new HistoryFragment();
@@ -61,6 +76,7 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
         rvHistory = (RecyclerView)rootView.findViewById(R.id.rv_history);
         selectDateFragment = (SelectDateFragment)getChildFragmentManager().findFragmentById(R.id.select_date_fragment);
         selectDateFragment.setSelectDateFragment(this);
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -205,4 +221,80 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
             }
         });
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_history, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_export) {
+            exportExpenses();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void exportExpenses() {
+        if(PackageManager.PERMISSION_GRANTED== ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            writeFile();
+        } else{
+            requestPermission(getActivity());
+        }
+    }
+
+    public void requestPermission(final Context context) {
+        if(ActivityCompat.shouldShowRequestPermissionRationale((Activity)context,Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // For example if the user has previously denied the permission.
+
+            new AlertDialog.Builder(context)
+                    .setMessage(context.getString(R.string.write_external_message))
+                    .setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((Activity) context,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    REQUEST_WRITE_EXTERNAL_STORE);
+                        }
+                    }).show();
+
+        }else {
+            // permission has not been granted yet. Request it directly.
+            ActivityCompat.requestPermissions((Activity)context,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL_STORE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_WRITE_EXTERNAL_STORE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    writeFile();
+                }
+                return;
+            }
+        }
+    }
+
+    private void writeFile() {
+        File expensesFile = FileManager.generateFile(new HistoryFileParser());
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(expensesFile));
+        StringBuilder titleBuilder = new StringBuilder();
+        titleBuilder.append(getString(R.string.app_name)).append(" ").append(Util.formatDateToString(DateManager.getInstance().getDateFrom(), Util.getCurrentDateFormat())).append(" - ").append(Util.formatDateToString(DateManager.getInstance().getDateTo(), Util.getCurrentDateFormat()));
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, titleBuilder.toString());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.expenses_mail_content));
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.share_title)));
+    }
+    
 }

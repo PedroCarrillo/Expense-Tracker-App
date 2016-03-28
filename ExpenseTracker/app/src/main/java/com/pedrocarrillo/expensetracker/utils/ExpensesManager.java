@@ -22,7 +22,6 @@ public class ExpensesManager {
 
     private List<Expense> mExpensesList = new ArrayList<>();
     private SparseBooleanArray mSelectedExpensesItems = new SparseBooleanArray();
-    private boolean isMainExpenses = false;
 
     private static ExpensesManager ourInstance = new ExpensesManager();
 
@@ -35,7 +34,6 @@ public class ExpensesManager {
 
     public void setExpensesList(Date dateFrom, Date dateTo, @IExpensesType int type,  Category category) {
         mExpensesList = Expense.getExpensesList(dateFrom, dateTo, type, category);
-        isMainExpenses = false;
         resetSelectedItems();
     }
 
@@ -51,7 +49,6 @@ public class ExpensesManager {
                 mExpensesList = Expense.getMonthExpenses();
                 break;
         }
-        isMainExpenses = true;
     }
 
     public List<Expense> getExpensesList() {
@@ -78,7 +75,7 @@ public class ExpensesManager {
         boolean isToday = false;
         List<Expense> expensesToDelete = new ArrayList<>();
         for (int position : getSelectedExpensesIndex()) {
-            Expense expense = mExpensesList.get(isMainExpenses ? position - 1 : position);
+            Expense expense = mExpensesList.get(position);
             expensesToDelete.add(expense);
             Date expenseDate = expense.getDate();
             // update widget if the expense is created today

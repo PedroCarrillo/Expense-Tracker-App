@@ -34,7 +34,7 @@ import java.util.List;
  * @author  pcarrillo on 16/10/2015.
  */
 
-public class ExpensesContainerFragment extends MainFragment implements TabLayout.OnTabSelectedListener, ExpensesFragment.IExpenseContainerListener {
+public class ExpensesContainerFragment extends MainFragment implements ExpensesFragment.IExpenseContainerListener {
 
     public static final int RQ_NEW_EXPENSE = 1001;
     private ViewPager vpExpensesContainer;
@@ -70,7 +70,6 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<String> tabList = Arrays.asList(getString(R.string.today), getString(R.string.week), getString(R.string.month));
         mMainActivityListener.setTitle(getString(R.string.expenses));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
@@ -79,7 +78,6 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
                 onAddNewExpense();
             }
         });
-        mMainActivityListener.setTabs(tabList, this);
 
         expensesViewPagerAdapter = new ExpensesViewPagerAdapter(getChildFragmentManager());
         expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY), getString(R.string.today));
@@ -88,25 +86,17 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
         vpExpensesContainer.setAdapter(expensesViewPagerAdapter);
         mMainActivityListener.setPager(vpExpensesContainer, new TabLayout.ViewPagerOnTabSelectedListener(vpExpensesContainer) {
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                super.onTabUnselected(tab);
                 endActionMode();
             }
         });
 
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        vpExpensesContainer.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
     }
 
     private void onAddNewExpense() {
@@ -126,6 +116,7 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
 
     @Override
     public void updateExpensesFragments(){
+        updateExpenseSummary();
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent(IConstants.BROADCAST_UPDATE_EXPENSES));
     }
 
@@ -224,6 +215,12 @@ public class ExpensesContainerFragment extends MainFragment implements TabLayout
         });
     }
 
-
+    private void updateExpenseSummary() {
+        if (vpExpensesContainer != null && expensesViewPagerAdapter != null) {
+            ExpensesFragment expensesFragment = expensesViewPagerAdapter.getItem(vpExpensesContainer.getCurrentItem());
+            if (mMainActivityListener != null)
+                mMainActivityListener.setExpensesSummary(expensesFragment.getCurrentDateMode());
+        }
+    }
 
 }

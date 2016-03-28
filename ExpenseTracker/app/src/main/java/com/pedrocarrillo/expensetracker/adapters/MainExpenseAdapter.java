@@ -57,13 +57,13 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
                 String date;
                 switch (mCurrentDateMode) {
                     case IDateMode.MODE_TODAY:
-                        date = Util.formatDateToString(DateUtils.getToday(), "MM/dd/yyyy");
+                        date = Util.formatDateToString(DateUtils.getToday(), Util.getCurrentDateFormat());
                         break;
                     case IDateMode.MODE_WEEK:
-                        date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), "MM/dd/yyyy"));
+                        date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), Util.getCurrentDateFormat()));
                         break;
                     case IDateMode.MODE_MONTH:
-                        date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), "MM/dd/yyyy").concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), "MM/dd/yyyy"));
+                        date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), Util.getCurrentDateFormat()));
                         break;
                     default:
                         date = "";
@@ -72,7 +72,7 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
                 ((ViewHolder)holder).tvDate.setText(date);
                 break;
             case VIEW_TYPE_EXPENSE_ROW:
-                final Expense expense = (Expense) mExpensesList.get(position-1);
+                final Expense expense = (Expense) mExpensesList.get(position);
                 String prefix;
                 switch (expense.getType()) {
                     case IExpensesType.MODE_EXPENSES:
@@ -103,12 +103,13 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
 
     @Override
     public int getItemCount() {
-        return mExpensesList.size()+1;
+        return mExpensesList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_EXPENSE_ROW;
+//        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_EXPENSE_ROW;
+        return VIEW_TYPE_EXPENSE_ROW;
     }
 
     public void updateExpenses(@IDateMode int mCurrentDateMode) {
@@ -125,18 +126,6 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
         public ViewHolder(View v, RecyclerClickListener onRecyclerClickListener) {
             super(v, onRecyclerClickListener);
             tvDate = (TextView)v.findViewById(R.id.tv_date);
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (getAdapterPosition() == 0) return;
-            super.onClick(v);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (getAdapterPosition() == 0) return false;
-            return super.onLongClick(v);
         }
 
     }

@@ -12,4 +12,11 @@
         android:entryValues="@array/country_values"
         android:entries="@array/countries_names" />
 
+    <ListPreference
+        android:title="@string/date_format"
+        android:key="@string/date_format_key"
+        android:defaultValue="@string/default_date_format"
+        android:entryValues="@array/date_formats"
+        android:entries="@array/date_formats" />
+
 </PreferenceScreen>
