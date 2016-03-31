@@ -16,7 +16,7 @@
 
     <!--General-->
     <string name="expenses">Gastos</string>
-    <string name="income">Ganancias</string>
+    <string name="income">Ingresos</string>
     <string name="categories">Categorías</string>
     <string name="statistics">Estadísticas</string>
     <string name="reminders">Recordatorios</string>
@@ -46,7 +46,7 @@
     <string name="date_placeholder">placeholder de la fecha</string>
     <string name="to_date">Desde</string>
     <string name="date_from">Hasta</string>
-    <string name="categories_percentage">Porcentage de las Categorías</string>
+    <string name="categories_percentage">Porcentaje de las Categorías</string>
     <string name="total_expenses_per_category">Total de Gastos por categoría</string>
     <string name="Save">Guardar</string>
     <string name="hour_format"><xliff:g id="hour" example="09">%02d</xliff:g>:<xliff:g id="minute" example="09">%02d</xliff:g></string>
@@ -81,6 +81,10 @@
     <string name="ok">Ok</string>
     <string name="expenses_mail_content">Record de tus gastos por Expense Tracker</string>
     <string name="share_title">Envia tus gastos a tu mail.</string>
+    <string name="food_category">Comida</string>
+    <string name="transportation_category">Transporte</string>
+    <string name="other_category">Otros</string>
+    <string name="select_date_hint">Selecciona una fecha</string>
 
     <string-array name="reminder_days_available">
         <item>1</item>

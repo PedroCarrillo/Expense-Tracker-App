@@ -24,6 +24,7 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.BaseExpenseAdapter;
 import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
+import com.pedrocarrillo.expensetracker.custom.DividerRecyclerItemDecorator;
 import com.pedrocarrillo.expensetracker.custom.SelectDateFragment;
 import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.custom.WrapContentManagerRecyclerView;
@@ -89,7 +90,9 @@ public class HistoryFragment extends MainFragment implements BaseViewHolder.Recy
 
         rvHistory.setLayoutManager(new WrapContentManagerRecyclerView(getActivity()));
         rvHistory.setHasFixedSize(true);
-        rvHistory.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
+        rvHistory.addItemDecoration(
+                new DividerRecyclerItemDecorator(getActivity()));
+//        rvHistory.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_10dp)));
         rvHistory.setNestedScrollingEnabled(false);
     }
 

@@ -24,9 +24,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 import com.pedrocarrillo.expensetracker.ui.categories.CategoriesFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesContainerFragment;
@@ -38,6 +40,7 @@ import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
 import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
+import com.pedrocarrillo.expensetracker.utils.RealmManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.lang.annotation.Retention;
@@ -99,6 +102,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvDate = (TextView)findViewById(R.id.tv_date);
         tvDescription = (TextView)findViewById(R.id.tv_description);
         tvTotal = (TextView)findViewById(R.id.tv_total);
+
+        if (Category.getCategoriesExpense().isEmpty()) {
+            Category foodCategory = new Category(getString(R.string.food_category), IExpensesType.MODE_EXPENSES);
+            Category transportCategory = new Category(getString(R.string.transportation_category), IExpensesType.MODE_EXPENSES);
+            Category otherCategory = new Category(getString(R.string.other_category), IExpensesType.MODE_EXPENSES);
+            RealmManager.getInstance().save(foodCategory, Category.class);
+            RealmManager.getInstance().save(transportCategory, Category.class);
+            RealmManager.getInstance().save(otherCategory, Category.class);
+        }
     }
 
     private void setUpDrawer() {
