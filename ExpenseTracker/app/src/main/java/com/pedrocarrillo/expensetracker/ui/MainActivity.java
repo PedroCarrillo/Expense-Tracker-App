@@ -293,14 +293,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void setNavigationModeStandard() {
-        CoordinatorLayout coordinator = (CoordinatorLayout) findViewById(R.id.main_coordinator);
-        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar_layout);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
-        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
-        if (behavior != null && appbar != null) {
-            int[] consumed = new int[2];
-            behavior.onNestedPreScroll(coordinator, appbar, null, 0, -1000, consumed);
-        }
+//        CoordinatorLayout coordinator = (CoordinatorLayout) findViewById(R.id.main_coordinator);
+//        AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar_layout);
+//        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
+//        AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+//        if (behavior != null && appbar != null) {
+//            int[] consumed = new int[2];
+//            behavior.onNestedPreScroll(coordinator, appbar, null, 0, -1000, consumed);
+//        }
         mainTabLayout.setVisibility(View.GONE);
     }
 

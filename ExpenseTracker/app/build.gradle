@@ -8,8 +8,8 @@ android {
         applicationId "com.pedrocarrillo.expensetracker"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.4"
     }
 
     signingConfigs {
@@ -36,16 +36,18 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+def supportLibraryVersion = "23.2.1"
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 //    compile 'com.google.android.gms:play-services:7.8.0'
-    compile 'com.android.support:gridlayout-v7:23.0.1'
-    compile 'com.android.support:support-annotations:23.0.1'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.android.support:recyclerview-v7:23.0.1'
-    compile 'com.android.support:cardview-v7:23.0.1'
+    compile "com.android.support:gridlayout-v7:$supportLibraryVersion"
+    compile "com.android.support:support-annotations:$supportLibraryVersion"
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
+    compile "com.android.support:design:$supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$supportLibraryVersion"
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'io.realm:realm-android:0.82.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.4'
