@@ -24,9 +24,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
+import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesMode;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 import com.pedrocarrillo.expensetracker.interfaces.IMainActivityListener;
 import com.pedrocarrillo.expensetracker.ui.categories.CategoriesFragment;
 import com.pedrocarrillo.expensetracker.ui.expenses.ExpensesContainerFragment;
@@ -38,6 +41,8 @@ import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
 import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
+import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
+import com.pedrocarrillo.expensetracker.utils.RealmManager;
 import com.pedrocarrillo.expensetracker.utils.Util;
 
 import java.lang.annotation.Retention;
@@ -76,13 +81,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         initUI();
         setUpDrawer();
         setUpToolbar();
-        if ( savedInstanceState != null) {
+        if (savedInstanceState != null) {
             int menuItemId = savedInstanceState.getInt(NAVIGATION_POSITION);
             mainNavigationView.setCheckedItem(menuItemId);
             mainNavigationView.getMenu().performIdentifierAction(menuItemId, 0);
         } else {
             mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
         }
+        List<Category> categories = RealmManager.getInstance().getAllObjects(Category.class);
+        if (categories.isEmpty()) {
+            Category foodCategory = new Category();
+            foodCategory.setName(getString(R.string.food_title));
+            foodCategory.setType(IExpensesType.MODE_EXPENSES);
+            RealmManager.getInstance().save(foodCategory, Category.class);
+            Category transportationCategory = new Category();
+            transportationCategory.setName(getString(R.string.transportation_title));
+            transportationCategory.setType(IExpensesType.MODE_EXPENSES);
+            RealmManager.getInstance().save(transportationCategory, Category.class);
+            Category othersCategory = new Category();
+            othersCategory.setName(getString(R.string.others_title));
+            othersCategory.setType(IExpensesType.MODE_EXPENSES);
+            RealmManager.getInstance().save(othersCategory, Category.class);
+        }
+
     }
 
     @NavigationMode
@@ -296,7 +317,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
         switch (menuItemId) {
             case R.id.nav_expenses:
-                if (!(currentFragment instanceof ExpensesContainerFragment)) replaceFragment(ExpensesContainerFragment.newInstance(), false);
+                replaceFragment(ExpensesContainerFragment.newInstance(IExpensesMode.EXPENSES), false);
+                break;
+            case R.id.nav_budget:
+                replaceFragment(ExpensesContainerFragment.newInstance(IExpensesMode.BUDGET), false);
                 break;
             case R.id.nav_categories:
                 if (!(currentFragment instanceof  CategoriesFragment)) replaceFragment(CategoriesFragment.newInstance(), false);

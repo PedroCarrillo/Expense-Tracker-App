@@ -6,6 +6,10 @@
             android:checked="true"
             android:title="@string/expenses" />
         <item
+            android:id="@+id/nav_budget"
+            android:icon="@drawable/ic_account_balance_wallet_black_24dp"
+            android:title="@string/budget"/>
+        <item
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_label_black_48dp"
             android:title="@string/categories" />

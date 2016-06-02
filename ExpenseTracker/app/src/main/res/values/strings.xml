@@ -603,4 +603,9 @@
     <string name="default_date_format">MM/dd/yyyy</string>
     <string name="date_format_key">date_format_key</string>
     <string name="date_format">Date Format</string>
+    <string name="others_title">Others</string>
+    <string name="transportation_title">Transportation</string>
+    <string name="food_title">Food</string>
+    <string name="budget">Budget</string>
+    <string name="change_budget">Budget</string>
 </resources>

@@ -6,10 +6,12 @@ import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.entities.Reminder;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 /**
@@ -118,6 +120,11 @@ public class RealmManager {
                 repeated = false;
             }
         }
+    }
+
+    public <E extends RealmObject> List<E> getAllObjects(Class<E> clazz) {
+        RealmQuery<E> realmQuery = RealmManager.getInstance().getRealmInstance().where(clazz);
+        return realmQuery.findAll();
     }
 
 }

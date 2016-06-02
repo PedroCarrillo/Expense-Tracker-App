@@ -26,9 +26,12 @@ import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesMode;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
+
+import static com.pedrocarrillo.expensetracker.ui.expenses.ExpensesContainerFragment.EXPENSES_MODE_KEY;
 
 /**
  * Created by pcarrillo on 17/09/2015.
@@ -42,11 +45,13 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
     private @IDateMode int mCurrentDateMode;
     private IExpenseContainerListener expenseContainerListener;
     private ExpenseChangeReceiver expenseChangeReceiver = new ExpenseChangeReceiver();
+    public IExpensesMode expensesMode;
 
-    public static ExpensesFragment newInstance(@IDateMode int dateMode) {
+    public static ExpensesFragment newInstance(@IDateMode int dateMode, IExpensesMode expensesMode) {
         ExpensesFragment expensesFragment = new ExpensesFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(IDateMode.DATE_MODE_TAG, dateMode);
+        bundle.putSerializable(EXPENSES_MODE_KEY, expensesMode);
         expensesFragment.setArguments(bundle);
         return expensesFragment;
     }
@@ -106,6 +111,7 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null) {
             @IDateMode int mode = getArguments().getInt(IDateMode.DATE_MODE_TAG);
+            expensesMode = (IExpensesMode) getArguments().getSerializable(EXPENSES_MODE_KEY);
             mCurrentDateMode = mode;
             ExpensesManager.getInstance().setExpensesListByDateMode(mCurrentDateMode);
             mMainExpenseAdapter = new MainExpenseAdapter(getActivity(), this, mCurrentDateMode);
