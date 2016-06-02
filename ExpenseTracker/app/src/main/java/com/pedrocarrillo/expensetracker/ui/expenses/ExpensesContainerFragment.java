@@ -2,14 +2,12 @@ package com.pedrocarrillo.expensetracker.ui.expenses;
 
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,14 +18,12 @@ import android.view.ViewGroup;
 import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
 import com.pedrocarrillo.expensetracker.interfaces.IDateMode;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesMode;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -39,13 +35,17 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     public static final int RQ_NEW_EXPENSE = 1001;
     private ViewPager vpExpensesContainer;
     private ExpensesViewPagerAdapter expensesViewPagerAdapter;
+    public static final String EXPENSES_MODE_KEY = "_expenses_mode_key";
+    public IExpensesMode expensesMode;
+    public MenuItem budgetMenuItem;
 
     // Action mode for expenses.
     private android.view.ActionMode mActionMode;
 
-    public static ExpensesContainerFragment newInstance() {
+    public static ExpensesContainerFragment newInstance(IExpensesMode expensesMode) {
         ExpensesContainerFragment fragment = new ExpensesContainerFragment();
         Bundle args = new Bundle();
+        args.putSerializable(EXPENSES_MODE_KEY, expensesMode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,6 +57,32 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_expenses, menu);
+        budgetMenuItem = menu.findItem(R.id.action_budget);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_budget) {
+            onBudgetClicked();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void onBudgetClicked() {
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (expensesMode != IExpensesMode.BUDGET) {
+            budgetMenuItem.setVisible(false);
+        }
     }
 
     @Override
@@ -70,6 +96,9 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (getArguments() != null && getArguments().containsKey(EXPENSES_MODE_KEY)) {
+            expensesMode = (IExpensesMode) getArguments().getSerializable(EXPENSES_MODE_KEY);
+        }
         mMainActivityListener.setTitle(getString(R.string.expenses));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
@@ -80,9 +109,9 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
         });
 
         expensesViewPagerAdapter = new ExpensesViewPagerAdapter(getChildFragmentManager());
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY), getString(R.string.today));
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_WEEK), getString(R.string.week));
-        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_MONTH), getString(R.string.month));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_TODAY, expensesMode), getString(R.string.today));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_WEEK, expensesMode), getString(R.string.week));
+        expensesViewPagerAdapter.addFrag(ExpensesFragment.newInstance(IDateMode.MODE_MONTH, expensesMode), getString(R.string.month));
         vpExpensesContainer.setAdapter(expensesViewPagerAdapter);
         mMainActivityListener.setPager(vpExpensesContainer, new TabLayout.ViewPagerOnTabSelectedListener(vpExpensesContainer) {
             @Override

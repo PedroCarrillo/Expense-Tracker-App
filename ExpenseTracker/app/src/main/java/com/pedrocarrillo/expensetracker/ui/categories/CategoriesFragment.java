@@ -41,8 +41,6 @@ import java.util.List;
 public class CategoriesFragment extends MainFragment implements TabLayout.OnTabSelectedListener, BaseViewHolder.RecyclerClickListener{
 
     private @IExpensesType int mCurrentMode = IExpensesType.MODE_EXPENSES;
-
-//    private List<String> tabList;
     private RecyclerView rvCategories;
     private TextView tvEmpty;
 
@@ -98,8 +96,6 @@ public class CategoriesFragment extends MainFragment implements TabLayout.OnTabS
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        tabList = Arrays.asList(getString(R.string.expenses), getString(R.string.income));
-//        mMainActivityListener.setTabs(tabList, this);
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_STANDARD);
         reloadData();
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
