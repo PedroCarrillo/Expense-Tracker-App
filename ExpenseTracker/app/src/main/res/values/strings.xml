@@ -16,6 +16,7 @@
 
     <!--General-->
     <string name="expenses">Expenses</string>
+    <string name="expense">Expense</string>
     <string name="income">Income</string>
     <string name="categories">Categories</string>
     <string name="statistics">Statistics</string>

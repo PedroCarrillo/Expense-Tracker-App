@@ -1,5 +1,7 @@
 package com.pedrocarrillo.expensetracker.utils;
 
+import com.pedrocarrillo.expensetracker.ExpenseTrackerApp;
+import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.FileGeneratorParser;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
@@ -21,9 +23,9 @@ public class HistoryFileParser implements FileGeneratorParser {
             contentBuilder.append(Util.formatDateToString(expense.getDate(), Util.getCurrentDateFormat())).append(addTab());
             String type;
             if (expense.getType() == IExpensesType.MODE_EXPENSES) {
-                type = "Expense";
+                type = ExpenseTrackerApp.getContext().getResources().getString(R.string.expense);
             } else {
-                type = "Income";
+                type = ExpenseTrackerApp.getContext().getResources().getString(R.string.income);
             }
             contentBuilder.append(type).append(addTab());
             contentBuilder.append(expense.getCategory().getName()).append(addTab());

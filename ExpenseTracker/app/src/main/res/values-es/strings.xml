@@ -16,6 +16,7 @@
 
     <!--General-->
     <string name="expenses">Gastos</string>
+    <string name="expense">Gasto</string>
     <string name="income">Ganancias</string>
     <string name="budget">Presupuesto</string>
     <string name="categories">Categorías</string>
