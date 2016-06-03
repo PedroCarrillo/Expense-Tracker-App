@@ -14,13 +14,21 @@
         android:textSize="@dimen/text_size_20"
         android:layout_marginTop="@dimen/dimen_20dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ExpenseTrackerTextView"
+        android:text="@string/select_date_hint"
+        android:textColor="@color/primary"
+        android:layout_marginTop="@dimen/dimen_20dp" />
+
     <Button
         android:id="@+id/btn_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_20"
         android:textColor="@color/primary_dark"
-        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/dimen_5dp"
         style="?android:attr/borderlessButtonStyle"
         android:elevation="@dimen/elevation_dp"/>
 
@@ -28,7 +36,7 @@
         android:id="@+id/sp_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/dimen_20dp"
         android:layout_marginRight="@dimen/dimen_20dp"
         style="@style/ExpenseTrackerSpinner"/>
@@ -42,13 +50,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/optional_description"
-            android:layout_marginTop="@dimen/dimen_20dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:maxLines="2"
             android:layout_marginLeft="@dimen/dimen_20dp"
             android:layout_marginRight="@dimen/dimen_20dp"
             style="@style/ExpenseTrackerEditText"/>
 
     </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/dimen_20dp"
+            android:layout_marginRight="@dimen/dimen_20dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_expenses"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:checked="true"
+                android:text="@string/expenses"/>
+
+            <RadioButton
+                android:id="@+id/rb_income"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:text="@string/income"/>
+        </RadioGroup>
+
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="@dimen/dimen_10_10dp"

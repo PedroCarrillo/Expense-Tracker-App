@@ -35,4 +35,5 @@
     <dimen name="dimen_25_10dp">250dp</dimen>
     <dimen name="dimen_25dp">25dp</dimen>
     <dimen name="text_size_14">14sp</dimen>
+    <dimen name="dimen_16dp">16dp</dimen>
 </resources>

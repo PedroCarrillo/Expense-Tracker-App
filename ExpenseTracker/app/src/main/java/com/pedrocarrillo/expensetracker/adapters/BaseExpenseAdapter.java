@@ -48,7 +48,7 @@ public class BaseExpenseAdapter<VH extends RecyclerView.ViewHolder> extends Base
     @Override
     public BaseExpenseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_expense_item, parent, false);
+                .inflate(R.layout.layout_expense_item_test, parent, false);
         return new BaseExpenseViewHolder(v, onRecyclerClickListener);
     }
 

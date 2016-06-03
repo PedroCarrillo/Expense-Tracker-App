@@ -608,4 +608,13 @@
     <string name="food_title">Food</string>
     <string name="budget">Budget</string>
     <string name="change_budget">Budget</string>
+    <string name="export">Export</string>
+    <string name="write_external_message">Expense Tracker would like to create Files in order to export your expenses data</string>
+    <string name="ok">Ok</string>
+    <string name="expenses_mail_content">Expenses Record by Expense Tracker</string>
+    <string name="share_title">Send your record to your mail</string>
+    <string name="food_category">Food</string>
+    <string name="transportation_category">Transportation</string>
+    <string name="other_category">Others</string>
+    <string name="select_date_hint">Select a date</string>
 </resources>

@@ -37,6 +37,11 @@ public class ExpensesManager {
         resetSelectedItems();
     }
 
+    public void setExpensesList(Date dateFrom, Date dateTo,  Category category) {
+        mExpensesList = Expense.getExpensesListResults(dateFrom, dateTo, category);
+        resetSelectedItems();
+    }
+
     public void setExpensesListByDateMode(@IDateMode int mCurrentDateMode) {
         switch (mCurrentDateMode) {
             case IDateMode.MODE_TODAY:

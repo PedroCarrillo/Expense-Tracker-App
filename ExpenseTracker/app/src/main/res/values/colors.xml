@@ -9,7 +9,8 @@
     <!--<color name="primary_dark">#3949AB</color>-->
     <!--<color name="accent">#FFFFFF</color>-->
     <color name="colorAccentRed">#FF5252</color>
-    <color name="colorAccentGreen">#76FF03</color>
+    <!--<color name="colorAccentGreen">#76FF03</color>-->
+    <color name="colorAccentGreen">#2EB47E</color>
 
     <color name="primary">#3F51B5</color>
     <color name="primary_dark">#303F9F</color>

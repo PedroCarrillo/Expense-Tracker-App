@@ -22,6 +22,7 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.adapters.MainExpenseAdapter;
 import com.pedrocarrillo.expensetracker.custom.BaseViewHolder;
 import com.pedrocarrillo.expensetracker.custom.DefaultRecyclerViewItemDecorator;
+import com.pedrocarrillo.expensetracker.custom.DividerRecyclerItemDecorator;
 import com.pedrocarrillo.expensetracker.custom.SparseBooleanArrayParcelable;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IConstants;
@@ -124,7 +125,10 @@ public class ExpensesFragment extends MainFragment implements BaseViewHolder.Rec
             }
         }
         rvExpenses.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
+//        rvExpenses.addItemDecoration(new DefaultRecyclerViewItemDecorator(getResources().getDimension(R.dimen.dimen_5dp)));
+
+        rvExpenses.addItemDecoration(
+                new DividerRecyclerItemDecorator(getActivity()));
     }
 
     public void updateData() {

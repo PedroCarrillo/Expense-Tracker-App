@@ -88,22 +88,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else {
             mainNavigationView.getMenu().performIdentifierAction(R.id.nav_expenses, 0);
         }
-        List<Category> categories = RealmManager.getInstance().getAllObjects(Category.class);
-        if (categories.isEmpty()) {
-            Category foodCategory = new Category();
-            foodCategory.setName(getString(R.string.food_title));
-            foodCategory.setType(IExpensesType.MODE_EXPENSES);
-            RealmManager.getInstance().save(foodCategory, Category.class);
-            Category transportationCategory = new Category();
-            transportationCategory.setName(getString(R.string.transportation_title));
-            transportationCategory.setType(IExpensesType.MODE_EXPENSES);
-            RealmManager.getInstance().save(transportationCategory, Category.class);
-            Category othersCategory = new Category();
-            othersCategory.setName(getString(R.string.others_title));
-            othersCategory.setType(IExpensesType.MODE_EXPENSES);
-            RealmManager.getInstance().save(othersCategory, Category.class);
-        }
-
     }
 
     @NavigationMode
@@ -120,6 +104,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tvDate = (TextView)findViewById(R.id.tv_date);
         tvDescription = (TextView)findViewById(R.id.tv_description);
         tvTotal = (TextView)findViewById(R.id.tv_total);
+
+        if (Category.getCategoriesExpense().isEmpty()) {
+            Category foodCategory = new Category(getString(R.string.food_category), IExpensesType.MODE_EXPENSES);
+            Category transportCategory = new Category(getString(R.string.transportation_category), IExpensesType.MODE_EXPENSES);
+            Category otherCategory = new Category(getString(R.string.other_category), IExpensesType.MODE_EXPENSES);
+            RealmManager.getInstance().save(foodCategory, Category.class);
+            RealmManager.getInstance().save(transportCategory, Category.class);
+            RealmManager.getInstance().save(otherCategory, Category.class);
+        }
     }
 
     private void setUpDrawer() {
@@ -207,7 +200,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void setExpensesSummary(@IDateMode int dateMode) {
         float total = Expense.getTotalExpensesByDateMode(dateMode);
-        tvTotal.setText(Util.getFormattedCurrency(total));
+        int resourceColor = Expense.getExpensesTotalIntColorResource(dateMode);
+        StringBuilder totalString = new StringBuilder();
+        if (resourceColor == R.color.colorAccentGreen) {
+            totalString.append("+ ");
+        } else if (resourceColor == R.color.colorAccentRed) {
+            totalString.append("- ");
+        }
+        totalString.append(Util.getFormattedCurrency(total));
+        tvTotal.setText(totalString.toString());
         String date;
         switch (dateMode) {
             case IDateMode.MODE_TODAY:

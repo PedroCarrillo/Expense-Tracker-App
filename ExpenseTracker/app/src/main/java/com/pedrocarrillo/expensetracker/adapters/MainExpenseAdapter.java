@@ -38,7 +38,7 @@ public class MainExpenseAdapter extends BaseExpenseAdapter {
                 break;
             }
             case VIEW_TYPE_EXPENSE_ROW: {
-                layoutId = R.layout.layout_expense_item;
+                layoutId = R.layout.layout_expense_item_test;
                 break;
             }
         }

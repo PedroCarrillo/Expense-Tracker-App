@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,13 +38,15 @@ import java.util.List;
 /**
  * Created by pcarrillo on 21/09/2015.
  */
-public class NewExpenseFragment extends DialogFragment implements View.OnClickListener{
+public class NewExpenseFragment extends DialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     private TextView tvTitle;
     private Button btnDate;
     private Spinner spCategory;
     private EditText etDescription;
     private EditText etTotal;
+    private RadioButton rbExpenses;
+    private RadioButton rbIncome;
 
     private CategoriesSpinnerAdapter mCategoriesSpinnerAdapter;
     private Date selectedDate;
@@ -69,6 +73,8 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
         spCategory = (Spinner)rootView.findViewById(R.id.sp_categories);
         etDescription = (EditText)rootView.findViewById(R.id.et_description);
         etTotal = (EditText)rootView.findViewById(R.id.et_total);
+        rbExpenses = (RadioButton)rootView.findViewById(R.id.rb_expenses);
+        rbIncome = (RadioButton)rootView.findViewById(R.id.rb_income);
         mExpenseType = IExpensesType.MODE_EXPENSES;
         return rootView;
     }
@@ -88,6 +94,8 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
         }
         setModeViews();
         btnDate.setOnClickListener(this);
+        rbExpenses.setOnCheckedChangeListener(this);
+        rbIncome.setOnCheckedChangeListener(this);
         (getView().findViewById(R.id.btn_cancel)).setOnClickListener(this);
         (getView().findViewById(R.id.btn_save)).setOnClickListener(this);
     }
@@ -107,7 +115,13 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
                     String id = getArguments().getString(ExpenseDetailFragment.EXPENSE_ID_KEY);
                     mExpense = (Expense) RealmManager.getInstance().findById(Expense.class, id);
                     tvTitle.setText("Edit");
+                    mExpenseType = mExpense.getType() == IExpensesType.MODE_EXPENSES ? IExpensesType.MODE_EXPENSES : IExpensesType.MODE_INCOME;
                     selectedDate = mExpense.getDate();
+                    if (mExpenseType == IExpensesType.MODE_EXPENSES) {
+                        rbExpenses.setChecked(true);
+                    } else {
+                        rbIncome.setChecked(true);
+                    }
                     etDescription.setText(mExpense.getDescription());
                     etTotal.setText(String.valueOf(mExpense.getTotal()));
                     int categoryPosition = 0;
@@ -144,6 +158,17 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            if(buttonView.getId() == R.id.rb_expenses) {
+                mExpenseType = IExpensesType.MODE_EXPENSES;
+            } else if (buttonView.getId() == R.id.rb_income) {
+                mExpenseType = IExpensesType.MODE_INCOME;
+            }
+        }
+    }
+
     private void onSaveExpense() {
         if (mCategoriesSpinnerAdapter.getCount() > 0 ) {
             if (!Util.isEmptyField(etTotal)) {
@@ -159,6 +184,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
                     editExpense.setDescription(description);
                     editExpense.setCategory(currentCategory);
                     editExpense.setDate(selectedDate);
+                    editExpense.setType(mExpenseType);
                     RealmManager.getInstance().update(editExpense);
                 }
                 // update widget if the expense is created today
