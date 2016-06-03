@@ -605,4 +605,5 @@
         <item>ZM</item>
         <item>ZW</item>
     </string-array>
+    <string name="budget_info" formatted="false">With the current budget and intended savings you would need to spend %s daily, %s weekly and %s monthly for the month of %s</string>
 </resources>

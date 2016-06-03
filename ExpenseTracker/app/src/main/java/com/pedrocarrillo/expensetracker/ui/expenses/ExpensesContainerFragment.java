@@ -22,6 +22,7 @@ import com.pedrocarrillo.expensetracker.interfaces.IExpensesMode;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
+import com.pedrocarrillo.expensetracker.ui.budget.BudgetActivity;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 
@@ -33,6 +34,7 @@ import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 public class ExpensesContainerFragment extends MainFragment implements ExpensesFragment.IExpenseContainerListener {
 
     public static final int RQ_NEW_EXPENSE = 1001;
+    public static final int RQ_BUDGET = 1002;
     private ViewPager vpExpensesContainer;
     private ExpensesViewPagerAdapter expensesViewPagerAdapter;
     public static final String EXPENSES_MODE_KEY = "_expenses_mode_key";
@@ -75,6 +77,8 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     }
 
     private void onBudgetClicked() {
+        Intent budgetIntent = new Intent(getActivity(), BudgetActivity.class);
+        startActivityForResult(budgetIntent, RQ_BUDGET);
     }
 
     @Override
