@@ -16,6 +16,7 @@ import java.util.List;
 public interface IMainActivityListener {
 
     void setMode(@MainActivity.NavigationMode int mode);
+    void setExpenseMode(IExpensesMode expenseMode);
     void setTabs(List<String> tabList, TabLayout.OnTabSelectedListener onTabSelectedListener);
     void setFAB(@DrawableRes int drawableId, View.OnClickListener onClickListener);
     void setTitle(String title);

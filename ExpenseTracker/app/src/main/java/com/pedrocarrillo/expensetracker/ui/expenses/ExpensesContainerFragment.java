@@ -98,6 +98,7 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
         super.onActivityCreated(savedInstanceState);
         if (getArguments() != null && getArguments().containsKey(EXPENSES_MODE_KEY)) {
             expensesMode = (IExpensesMode) getArguments().getSerializable(EXPENSES_MODE_KEY);
+            setExpensesMode(expensesMode);
         }
         mMainActivityListener.setTitle(getString(R.string.expenses));
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
@@ -250,6 +251,10 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
             if (mMainActivityListener != null)
                 mMainActivityListener.setExpensesSummary(expensesFragment.getCurrentDateMode());
         }
+    }
+
+    public void setExpensesMode(IExpensesMode expensesMode) {
+        if(mMainActivityListener != null) mMainActivityListener.setExpenseMode(expensesMode);
     }
 
 }

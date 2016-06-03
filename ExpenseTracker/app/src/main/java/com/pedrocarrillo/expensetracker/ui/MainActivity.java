@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final String NAVIGATION_POSITION = "navigation_position";
 
     private int mCurrentMode = NAVIGATION_MODE_STANDARD;
+    private IExpensesMode currentExpensesMode;
     private int idSelectedNavigationItem;
 
     private DrawerLayout mainDrawerLayout;
@@ -67,6 +68,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private Toolbar mToolbar;
     private TabLayout mainTabLayout;
     private FloatingActionButton mFloatingActionButton;
+
 
     // Expenses Summary related views
     private LinearLayout llExpensesSummary;
@@ -225,6 +227,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
         }
         tvDate.setText(date);
+    }
+
+    @Override
+    public void setExpenseMode(IExpensesMode expenseMode) {
+        currentExpensesMode = expenseMode;
     }
 
     @Override
