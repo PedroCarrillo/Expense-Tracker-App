@@ -2,6 +2,7 @@ package com.pedrocarrillo.expensetracker.utils;
 
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.FileGeneratorParser;
+import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
 
 import java.util.List;
 
@@ -18,9 +19,17 @@ public class HistoryFileParser implements FileGeneratorParser {
         contentBuilder.append(addNextLine());
         for (Expense expense : expenseList) {
             contentBuilder.append(Util.formatDateToString(expense.getDate(), Util.getCurrentDateFormat())).append(addTab());
+            String type;
+            if (expense.getType() == IExpensesType.MODE_EXPENSES) {
+                type = "Expense";
+            } else {
+                type = "Income";
+            }
+            contentBuilder.append(type).append(addTab());
             contentBuilder.append(expense.getCategory().getName()).append(addTab());
             contentBuilder.append(expense.getDescription()).append(addTab());
             contentBuilder.append(expense.getTotal()).append(addNextLine());
+
         }
         contentBuilder.append(addNextLine());
         float total = Expense.getCategoryTotalByDate(DateManager.getInstance().getDateFrom(), DateManager.getInstance().getDateTo(), null);
