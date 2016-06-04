@@ -56,6 +56,7 @@
     <string name="pick_day_of_month">Selecciona un día del mes</string>
     <string name="confirm_reminder_delete">Seguro de borrar este recordatorio?</string>
     <string name="this_week">Esta semana</string>
+    <string name="this_month">Este mes</string>
     <string name="reminder_name_hint">Ej. Compañía de la Tarjeta de Crédito</string>
     <string name="reminder_schedule_title">El recordatorio esta guardado para el día: (Día del mes)</string>
     <string name="reminder_time_sent_title">Será enviado a la siguiente hora:</string>
@@ -605,4 +606,8 @@
         <item>ZM</item>
         <item>ZW</item>
     </string-array>
+    <string name="budget_info" formatted="false">Con tu presupuesto y la cantidad de ahorro podras gastar %s diario, %s semanal y %s mensual para el mes de %s</string>
+    <string name="you_have_available" formatted="false">%s tienes disponible:</string>
+    <string name="budget_goal_info" formatted="false">Puedes gastar un total de %s para ahorrar %s</string>
+    <string name="change_budget">Actualizar</string>
 </resources>

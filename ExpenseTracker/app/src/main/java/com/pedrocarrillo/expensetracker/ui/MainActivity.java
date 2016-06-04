@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
+import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +41,7 @@ import com.pedrocarrillo.expensetracker.ui.history.HistoryFragment;
 import com.pedrocarrillo.expensetracker.ui.reminders.ReminderFragment;
 import com.pedrocarrillo.expensetracker.ui.settings.SettingsActivity;
 import com.pedrocarrillo.expensetracker.ui.statistics.StatisticsFragment;
+import com.pedrocarrillo.expensetracker.utils.BudgetManager;
 import com.pedrocarrillo.expensetracker.utils.DateUtils;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 import com.pedrocarrillo.expensetracker.utils.RealmManager;
@@ -71,10 +73,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     // Expenses Summary related views
-    private LinearLayout llExpensesSummary;
+    private LinearLayout llExpensesSummary, llBudgetSummary;
     private TextView tvDate;
     private TextView tvDescription;
     private TextView tvTotal;
+
+    //Budget Summary related views
+    private TextView tvBudgetInfo;
+    private TextView tvBudgetTotal;
+    private TextView tvBudgetDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +110,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mainNavigationView = (NavigationView)findViewById(R.id.nav_view);
         mFloatingActionButton = (FloatingActionButton)findViewById(R.id.fab_main);
         llExpensesSummary = (LinearLayout)findViewById(R.id.ll_expense_container);
+        llBudgetSummary = (LinearLayout)findViewById(R.id.ll_budget_container);
         tvDate = (TextView)findViewById(R.id.tv_date);
         tvDescription = (TextView)findViewById(R.id.tv_description);
         tvTotal = (TextView)findViewById(R.id.tv_total);
+        tvBudgetInfo = (TextView)findViewById(R.id.tv_budget_info);
+        tvBudgetDescription = (TextView)findViewById(R.id.tv_budget_description);
+        tvBudgetTotal = (TextView)findViewById(R.id.tv_budget_total);
 
         if (Category.getCategoriesExpense().isEmpty()) {
             Category foodCategory = new Category(getString(R.string.food_category), IExpensesType.MODE_EXPENSES);
@@ -188,6 +199,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void setMode(@NavigationMode int mode) {
         mFloatingActionButton.setVisibility(View.GONE);
         llExpensesSummary.setVisibility(View.GONE);
+        llBudgetSummary.setVisibility(View.GONE);
         mCurrentMode = mode;
         switch (mode) {
             case NAVIGATION_MODE_STANDARD:
@@ -201,32 +213,68 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void setExpensesSummary(@IDateMode int dateMode) {
-        float total = Expense.getTotalExpensesByDateMode(dateMode);
-        int resourceColor = Expense.getExpensesTotalIntColorResource(dateMode);
-        StringBuilder totalString = new StringBuilder();
-        if (resourceColor == R.color.colorAccentGreen) {
-            totalString.append("+ ");
-        } else if (resourceColor == R.color.colorAccentRed) {
-            totalString.append("- ");
+        if (currentExpensesMode == IExpensesMode.EXPENSES) {
+            llExpensesSummary.setVisibility(View.VISIBLE);
+            llBudgetSummary.setVisibility(View.GONE);
+            float total = Expense.getTotalExpensesByDateMode(dateMode);
+            int resourceColor = Expense.getExpensesTotalIntColorResource(dateMode);
+            StringBuilder totalString = new StringBuilder();
+            if (resourceColor == R.color.colorAccentGreen) {
+                totalString.append("+ ");
+            } else if (resourceColor == R.color.colorAccentRed) {
+                totalString.append("- ");
+            }
+            totalString.append(Util.getFormattedCurrency(total));
+            tvTotal.setText(totalString.toString());
+            String date;
+            switch (dateMode) {
+                case IDateMode.MODE_TODAY:
+                    date = Util.formatDateToString(DateUtils.getToday(), Util.getCurrentDateFormat());
+                    break;
+                case IDateMode.MODE_WEEK:
+                    date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), Util.getCurrentDateFormat()));
+                    break;
+                case IDateMode.MODE_MONTH:
+                    date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), Util.getCurrentDateFormat()));
+                    break;
+                default:
+                    date = "";
+                    break;
+            }
+            tvDate.setText(date);
+        } else {
+            llExpensesSummary.setVisibility(View.GONE);
+            llBudgetSummary.setVisibility(View.VISIBLE);
+            float total = Expense.getTotalExpensesByDateMode(dateMode);
+            int resourceColor = Expense.getExpensesTotalIntColorResource(dateMode);
+            float availableTotal;
+            float budgetTotal;
+            String dateModeString;
+            switch (dateMode) {
+                case IDateMode.MODE_TODAY:
+                    dateModeString = getString(R.string.today);
+                    budgetTotal = BudgetManager.getInstance().getDailyAvailableBudget();
+                    availableTotal = BudgetManager.getInstance().getDailyAvailableBudget() - total;
+                    break;
+                case IDateMode.MODE_WEEK:
+                    dateModeString = getString(R.string.this_week);
+                    budgetTotal = BudgetManager.getInstance().getWeeklyAvailableBudget();
+                    availableTotal = BudgetManager.getInstance().getWeeklyAvailableBudget() - total;
+                    break;
+                case IDateMode.MODE_MONTH:
+                    dateModeString = getString(R.string.this_month);
+                    budgetTotal = BudgetManager.getInstance().getMonthlyAvailableBudget();
+                    availableTotal = BudgetManager.getInstance().getMonthlyAvailableBudget() - total;
+                    break;
+                default:
+                    availableTotal = 0;
+                    dateModeString = "";
+                    budgetTotal = 0;
+            }
+            tvBudgetDescription.setText(getString(R.string.you_have_available, dateModeString));
+            tvBudgetInfo.setText(getString(R.string.budget_goal_info, String.valueOf(budgetTotal), String.valueOf(BudgetManager.getInstance().getIntendedSavings())));
+            tvBudgetTotal.setText(String.valueOf(availableTotal));
         }
-        totalString.append(Util.getFormattedCurrency(total));
-        tvTotal.setText(totalString.toString());
-        String date;
-        switch (dateMode) {
-            case IDateMode.MODE_TODAY:
-                date = Util.formatDateToString(DateUtils.getToday(), Util.getCurrentDateFormat());
-                break;
-            case IDateMode.MODE_WEEK:
-                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentWeek(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentWeek(), Util.getCurrentDateFormat()));
-                break;
-            case IDateMode.MODE_MONTH:
-                date = Util.formatDateToString(DateUtils.getFirstDateOfCurrentMonth(), Util.getCurrentDateFormat()).concat(" - ").concat(Util.formatDateToString(DateUtils.getRealLastDateOfCurrentMonth(), Util.getCurrentDateFormat()));
-                break;
-            default:
-                date = "";
-                break;
-        }
-        tvDate.setText(date);
     }
 
     @Override
@@ -306,7 +354,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void setNavigationModeTabs() {
         mainTabLayout.setVisibility(View.VISIBLE);
-        llExpensesSummary.setVisibility(View.VISIBLE);
     }
 
     private void setNavigationModeStandard() {

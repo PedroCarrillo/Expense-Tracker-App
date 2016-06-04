@@ -55,6 +55,7 @@
     <string name="pick_day_of_month">Pick a day of the month</string>
     <string name="confirm_reminder_delete">Are you sure you want to delete this reminder?</string>
     <string name="this_week">This week</string>
+    <string name="this_month">This month</string>
     <string name="reminder_name_hint">Ex. Company Credit Card</string>
     <string name="reminder_schedule_title">The alarm is schedule for (day of the month):</string>
     <string name="reminder_time_sent_title">It will be sent at: (Time of the day)</string>
@@ -608,7 +609,7 @@
     <string name="transportation_title">Transportation</string>
     <string name="food_title">Food</string>
     <string name="budget">Budget</string>
-    <string name="change_budget">Budget</string>
+    <string name="change_budget">Update</string>
     <string name="export">Export</string>
     <string name="write_external_message">Expense Tracker would like to create Files in order to export your expenses data</string>
     <string name="ok">Ok</string>
@@ -620,4 +621,7 @@
     <string name="select_date_hint">Select a date</string>
     <string name="budget_shared_key">budget_shared_key</string>
     <string name="intented_savings_key">intented_savings_key</string>
+    <string name="budget_info" formatted="false">With the current budget and intended savings you would need to spend %s daily, %s weekly and %s monthly for the month of %s</string>
+    <string name="you_have_available" formatted="false">%s you have available:</string>
+    <string name="budget_goal_info" formatted="false">You can spend a total of %s to reach the goal of saving %s</string>
 </resources>

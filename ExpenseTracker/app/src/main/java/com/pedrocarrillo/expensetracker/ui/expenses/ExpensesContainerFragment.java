@@ -22,6 +22,7 @@ import com.pedrocarrillo.expensetracker.interfaces.IExpensesMode;
 import com.pedrocarrillo.expensetracker.interfaces.IUserActionsMode;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.pedrocarrillo.expensetracker.ui.MainFragment;
+import com.pedrocarrillo.expensetracker.ui.budget.BudgetActivity;
 import com.pedrocarrillo.expensetracker.utils.DialogManager;
 import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 
@@ -33,6 +34,7 @@ import com.pedrocarrillo.expensetracker.utils.ExpensesManager;
 public class ExpensesContainerFragment extends MainFragment implements ExpensesFragment.IExpenseContainerListener {
 
     public static final int RQ_NEW_EXPENSE = 1001;
+    public static final int RQ_BUDGET = 1002;
     private ViewPager vpExpensesContainer;
     private ExpensesViewPagerAdapter expensesViewPagerAdapter;
     public static final String EXPENSES_MODE_KEY = "_expenses_mode_key";
@@ -75,6 +77,8 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     }
 
     private void onBudgetClicked() {
+        Intent budgetIntent = new Intent(getActivity(), BudgetActivity.class);
+        startActivityForResult(budgetIntent, RQ_BUDGET);
     }
 
     @Override
@@ -100,7 +104,11 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
             expensesMode = (IExpensesMode) getArguments().getSerializable(EXPENSES_MODE_KEY);
             setExpensesMode(expensesMode);
         }
-        mMainActivityListener.setTitle(getString(R.string.expenses));
+        if (expensesMode == IExpensesMode.EXPENSES) {
+            mMainActivityListener.setTitle(getString(R.string.expenses));
+        } else {
+            mMainActivityListener.setTitle(getString(R.string.budget));
+        }
         mMainActivityListener.setMode(MainActivity.NAVIGATION_MODE_TABS);
         mMainActivityListener.setFAB(R.drawable.ic_add_white_48dp, new View.OnClickListener() {
             @Override
@@ -140,6 +148,8 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_NEW_EXPENSE && resultCode == Activity.RESULT_OK) {
+            updateExpensesFragments();
+        } else if (requestCode == RQ_BUDGET && resultCode == Activity.RESULT_OK) {
             updateExpensesFragments();
         }
     }

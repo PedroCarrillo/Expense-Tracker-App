@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Pedro on 9/21/2015.
@@ -91,6 +92,21 @@ public class DateUtils {
 
     public static Date getToday() {
         return setDateStartOfDay(Calendar.getInstance()).getTime();
+    }
+
+    public static int getDaysOfCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
+    public static int getNumberOfWeeksOfCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+    }
+
+    public static String currentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
     }
 
 }
