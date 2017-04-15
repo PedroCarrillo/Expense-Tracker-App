@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.support.annotation.ArrayRes;
 import android.support.design.widget.Snackbar;
 import android.text.format.DateFormat;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -55,7 +56,8 @@ public class DialogManager {
     }
 
     private AlertDialog createAlertDialog(Activity activity, String title, View dialogLayout, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
+        ContextThemeWrapper ctw = new ContextThemeWrapper(activity, R.style.DialogTheme);
+        AlertDialog.Builder dialogBuilder= new AlertDialog.Builder(ctw);
         dialogBuilder.setTitle(title);
         if (dialogLayout != null) dialogBuilder.setView(dialogLayout);
         if (message != null) dialogBuilder.setMessage(message);
