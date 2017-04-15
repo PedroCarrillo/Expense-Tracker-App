@@ -2,14 +2,19 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.pedrocarrillo.expensetracker"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 4
         versionName "1.4"
+        javaCompileOptions{
+            annotationProcessorOptions{
+                includeCompileClasspath true
+            }
+        }
     }
 
     signingConfigs {
@@ -30,13 +35,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 repositories {
     maven { url "https://jitpack.io" }
 }
 
-def supportLibraryVersion = "23.2.1"
+def supportLibraryVersion = "25.2.0"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
