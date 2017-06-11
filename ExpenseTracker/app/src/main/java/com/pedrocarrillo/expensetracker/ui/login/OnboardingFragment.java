@@ -17,9 +17,9 @@ import com.pedrocarrillo.expensetracker.ui.BaseFragment;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 import com.viewpagerindicator.CirclePageIndicator;
 
-public class LoginFragment extends BaseFragment implements View.OnClickListener  {
+public class OnboardingFragment extends BaseFragment implements View.OnClickListener  {
 
-    public static final String TAG = LoginFragment.class.getSimpleName();
+    public static final String TAG = OnboardingFragment.class.getSimpleName();
 
     private static final int RC_SIGN_IN = 0;
 //    private GoogleApiClient mGoogleApiClient;
@@ -29,11 +29,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     private ViewPager vpWelcome;
 
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
+    public static OnboardingFragment newInstance() {
+        return new OnboardingFragment();
     }
 
-    public LoginFragment() {
+    public OnboardingFragment() {
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_onboarding, container, false);
         vpWelcome = (ViewPager)rootView.findViewById(R.id.vp_welcome);
         return rootView;
     }
