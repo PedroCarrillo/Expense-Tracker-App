@@ -3,18 +3,22 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.pedrocarrillo.expensetracker"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 4
         versionName "1.4"
-        javaCompileOptions{
-            annotationProcessorOptions{
+        javaCompileOptions {
+            annotationProcessorOptions {
                 includeCompileClasspath true
             }
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
     }
 
     signingConfigs {
@@ -45,7 +49,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-def supportLibraryVersion = "25.2.0"
+def supportLibraryVersion = "25.3.0"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -60,4 +64,9 @@ dependencies {
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'io.realm:realm-android:0.82.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.4'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.0'
+    compile group: 'io.reactivex', name: 'rxandroid', version: '1.2.1'
+    compile group: 'com.jakewharton', name: 'butterknife', version: '8.6.0'
 }

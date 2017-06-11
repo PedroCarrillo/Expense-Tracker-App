@@ -36,8 +36,8 @@
     <string name="total">Total</string>
     <string name="confirm_delete_items">Seguro de borrar este/estos item(s)</string>
     <string name="confirm_delete_expense">Seguro de borrar este gasto?</string>
-    <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
-    <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
+    <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%1$s</xliff:g></string>
+    <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%1$s</xliff:g></string>
     <string name="country_currency">Moneda del país</string>
     <string name="pref_country_key">country_key</string>
     <string name="default_country">US</string>
@@ -49,7 +49,7 @@
     <string name="categories_percentage">Porcentaje de las Categorías</string>
     <string name="total_expenses_per_category">Total de Gastos por categoría</string>
     <string name="Save">Guardar</string>
-    <string name="hour_format"><xliff:g id="hour" example="09">%02d</xliff:g>:<xliff:g id="minute" example="09">%02d</xliff:g></string>
+    <string name="hour_format"><xliff:g id="hour" example="09">%1$02d</xliff:g>:<xliff:g id="minute" example="09">%2$02d</xliff:g></string>
     <string name="reminder_name_validation">Asigna un nombre al recordatorio</string>
     <string name="pick_day_of_month">Selecciona un día del mes</string>
     <string name="confirm_reminder_delete">Seguro de borrar este recordatorio?</string>
@@ -67,7 +67,7 @@
     <string name="categories_empty">No se encontraron categorías. Empieza creando algunas para poder tomar ventaja de las estadísticas.</string>
     <string name="no_chart_data">No hay información disponible</string>
     <string name="no_categories_error">Crea categorías para poder registrar gastos</string>
-    <string name="today_expenses_total">Hoy: %s</string>
+    <string name="today_expenses_total">Hoy: %1$s</string>
     <string name="no_expenses_today">No hay gastos hoy</string>
     <string name="start">Inicio</string>
     <string name="hint_category">Ej. Comida</string>

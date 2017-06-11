@@ -1,59 +1,28 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:fillViewport="true"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <EditText
+        android:layout_width="@dimen/dimen_20_10dp"
+        android:layout_height="@dimen/dimen_4_10dp"
+        android:id="@+id/username"
+        android:layout_margin="@dimen/dimen_20dp"/>
+    <EditText
+        android:layout_width="@dimen/dimen_20_10dp"
+        android:layout_height="@dimen/dimen_4_10dp"
+        android:layout_margin="@dimen/dimen_20dp"
+        android:id="@+id/password"/>
+    <Button
+        android:layout_width="@dimen/dimen_20_10dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context="com.pedrocarrillo.expensetracker.ui.login.LoginFragment">
+        android:id="@+id/login"
+        android:text="Log IN"
+        android:gravity="center"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vp_welcome"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <com.viewpagerindicator.CirclePageIndicator
-                android:id="@+id/cpi_welcome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/dimen_10dp"/>
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_15_10dp"
-            android:elevation="@dimen/dimen_10dp"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_10dp"
-                android:text="@string/start_using_expense"/>
-
-            <!--<com.google.android.gms.common.SignInButton-->
-                <!--android:id="@+id/sign_in_button"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
-            <Button
-                android:id="@+id/sign_in"
-                android:layout_height="wrap_content"
-                android:layout_width="@dimen/dimen_8_10dp"
-                android:gravity="center"
-                style="@style/ExpenseTrackerButton"
-                android:text="@string/start"/>
-        </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

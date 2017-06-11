@@ -9,12 +9,12 @@ import com.pedrocarrillo.expensetracker.R;
 import com.pedrocarrillo.expensetracker.ui.BaseActivity;
 import com.pedrocarrillo.expensetracker.ui.MainActivity;
 
-public class LoginActivity extends BaseActivity {
+public class OnboardingActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_onboarding);
         boolean logged = PreferenceManager.getDefaultSharedPreferences(ExpenseTrackerApp.getContext()).getBoolean(getString(R.string.already_accepted_user_key), false);
         if (logged) {
             Intent intent = new Intent(this, MainActivity.class);
