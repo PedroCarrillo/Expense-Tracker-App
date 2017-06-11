@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.pedrocarrillo.expensetracker"
         minSdkVersion 16
@@ -45,7 +45,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-def supportLibraryVersion = "25.2.0"
+def supportLibraryVersion = "25.3.0"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
