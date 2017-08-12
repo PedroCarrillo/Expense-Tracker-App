@@ -20,12 +20,15 @@ public abstract class BaseButterKnifeFragment<P extends IPresenter>
     protected P mPresenter;
     protected CompositeDisposable mSubscriptions;
     protected Unbinder unbinder;
+    protected abstract void initView();
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
+        initView();
     }
+
 
     @Override
     public void onResume() {

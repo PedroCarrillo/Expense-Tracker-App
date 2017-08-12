@@ -1,5 +1,7 @@
 package com.pedrocarrillo.expensetracker.presenters;
 
+import android.text.TextUtils;
+
 import com.pedrocarrillo.expensetracker.contract.LoginContract;
 
 /**
@@ -7,6 +9,9 @@ import com.pedrocarrillo.expensetracker.contract.LoginContract;
  */
 
 public class LoginPresenter extends BasePresenter<LoginContract.View> implements LoginContract.Presenter{
+
+    private CharSequence email;
+    private CharSequence password;
 
     public LoginPresenter(LoginContract.View view) {
         super(view);
@@ -24,7 +29,27 @@ public class LoginPresenter extends BasePresenter<LoginContract.View> implements
     }
 
     @Override
-    public void loginClicked(String userName, String password) {
-
+    public void loginClicked() {
+        if(isValidEmail(email) && !TextUtils.isEmpty(password)){
+            //TODO call firebase login
+        }else{
+            mView.showError("Your Email or password is not valid");
+        }
     }
+
+    @Override
+    public void setEmail(CharSequence email) {
+        this.email = email;
+    }
+
+    @Override
+    public void setPassword(CharSequence password) {
+        this.password = password;
+    }
+
+    private boolean isValidEmail(CharSequence target) {
+        return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+
 }

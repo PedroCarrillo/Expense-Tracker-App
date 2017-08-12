@@ -13,7 +13,11 @@ public class LoginContract {
 
         void fbLoginClicked();
 
-        void loginClicked(String userName, String password);
+        void loginClicked();
+
+        void setEmail(CharSequence email);
+
+        void setPassword(CharSequence password);
     }
 
     public interface View extends IBaseView<Presenter> {
