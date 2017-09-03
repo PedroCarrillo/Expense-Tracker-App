@@ -24,14 +24,14 @@
         style="?android:attr/borderlessButtonStyle"
         android:elevation="@dimen/elevation_dp"/>
 
-    <Spinner
-        android:id="@+id/sp_categories"
+    <AutoCompleteTextView
+        android:id="@+id/actv_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_20dp"
         android:layout_marginLeft="@dimen/dimen_20dp"
         android:layout_marginRight="@dimen/dimen_20dp"
-        style="@style/ExpenseTrackerSpinner"/>
+        style="@style/ExpenseTrackerAutocomplete" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"

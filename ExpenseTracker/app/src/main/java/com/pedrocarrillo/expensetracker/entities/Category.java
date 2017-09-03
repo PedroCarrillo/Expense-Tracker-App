@@ -70,10 +70,27 @@ public class Category extends RealmObject {
         return getCategoriesForType(IExpensesType.MODE_EXPENSES);
     }
 
-    public static List<Category> getCategoriesForType(@IExpensesType int type){
+    public static List<Category> getCategoriesForType(@IExpensesType int type) {
         return RealmManager.getInstance().getRealmInstance().where(Category.class)
                 .equalTo("type", type)
                 .findAll();
+    }
+
+    public static Category getCategoryByName(String name) {
+        Category result = RealmManager.getInstance().getRealmInstance().where(Category.class)
+                .equalTo("name", name)
+                .findFirst();
+
+        if(result == null){
+            result = new Category(name,IExpensesType.MODE_EXPENSES);
+            RealmManager.getInstance().save(result,Category.class);
+        }
+
+        Category c =  RealmManager.getInstance().getRealmInstance().where(Category.class)
+                .equalTo("name", name)
+                .findFirst();
+
+        return result;
     }
 
 }
