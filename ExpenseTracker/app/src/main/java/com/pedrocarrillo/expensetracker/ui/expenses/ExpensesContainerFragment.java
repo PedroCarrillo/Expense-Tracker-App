@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
@@ -102,7 +103,7 @@ public class ExpensesContainerFragment extends MainFragment implements ExpensesF
     private void onAddNewExpense() {
         NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_CREATE, null);
         newExpenseFragment.setTargetFragment(this, RQ_NEW_EXPENSE);
-        newExpenseFragment.show(getChildFragmentManager(), "NEW_EXPENSE");
+        newExpenseFragment.show(getFragmentManager(), "NEW_EXPENSE");
     }
 
 

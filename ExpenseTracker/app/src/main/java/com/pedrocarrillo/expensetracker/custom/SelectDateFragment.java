@@ -63,7 +63,7 @@ public class SelectDateFragment extends Fragment implements View.OnClickListener
         calendar.setTime(id == R.id.btn_date_from ? DateManager.getInstance().getDateFrom() : DateManager.getInstance().getDateTo());
         DialogManager.getInstance()
                 .showDatePicker(
-                        getActivity(),
+                        getContext(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
