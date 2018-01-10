@@ -87,7 +87,7 @@ public class ExpenseDetailFragment extends BaseFragment implements View.OnClickL
     private void onEditExpense() {
         NewExpenseFragment newExpenseFragment = NewExpenseFragment.newInstance(IUserActionsMode.MODE_UPDATE, expense.getId());
         newExpenseFragment.setTargetFragment(this, RQ_EDIT_EXPENSE);
-        newExpenseFragment.show(getChildFragmentManager(), "EDIT_EXPENSE");
+        newExpenseFragment.show(getFragmentManager(), "EDIT_EXPENSE");
     }
 
     private void setWeekChart() {
