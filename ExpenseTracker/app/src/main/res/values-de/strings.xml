@@ -23,7 +23,7 @@
     <string name="date_from">Datum von</string>
     <string name="date_placeholder">datums platzhalter</string>
     <string name="default_country">DE</string>
-    <string name="default_date_format">dd/MM/yyyy</string>
+    <string name="default_date_format">dd.MM.yyyy</string>
     <string name="delete">Löschen</string>
     <string name="description">Beschreibung</string>
     <string name="edit_a_reminder">Bearbeite eine Erinnerung</string>
