@@ -10,7 +10,7 @@
     <string name="categories_empty">Bisher existieren keine Kategorien. Fange an, Kategorien zu erstellen und nutze den Vorteil der Statistiken.</string>
     <string name="categories_percentage">Kategorien (prozentual)</string>
     <string name="confirm">Bestätigen</string>
-    <string name="confirm_delete">\"Bist du dir sicher, dass du etwas löschen möchtest?\"</string>
+    <string name="confirm_delete">Bist du dir sicher, dass du etwas löschen möchtest?</string>
     <string name="confirm_delete_expense">Bist du dir sicher, dass du diese Ausgabe löschen möchtest?</string>
     <string name="confirm_delete_items">Bist du dir sicher, dass du diese Einträge entfernen möchtest</string>
     <string name="confirm_reminder_delete">Bist du dir sicher, dass du diese Erinnerung entfernen möchtest?</string>
