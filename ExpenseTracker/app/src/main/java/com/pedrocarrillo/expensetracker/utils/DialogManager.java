@@ -57,7 +57,7 @@ public class DialogManager {
 
     private AlertDialog createAlertDialog(Activity activity, String title, View dialogLayout, String message, String confirmText, String negativeText, final DialogInterface.OnClickListener listener) {
         ContextThemeWrapper ctw = new ContextThemeWrapper(activity, R.style.DialogTheme);
-        AlertDialog.Builder dialogBuilder= new AlertDialog.Builder(ctw);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ctw);
         dialogBuilder.setTitle(title);
         if (dialogLayout != null) dialogBuilder.setView(dialogLayout);
         if (message != null) dialogBuilder.setMessage(message);
@@ -82,7 +82,7 @@ public class DialogManager {
     }
 
     public void showDatePicker(Context context, DatePickerDialog.OnDateSetListener dateSetListener, Calendar calendar, Date minDate, Date maxDate) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, R.style.DialogTheme, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         if (minDate != null) datePickerDialog.getDatePicker().setMinDate(minDate.getTime());
         if (maxDate != null) datePickerDialog.getDatePicker().setMaxDate(maxDate.getTime());
         datePickerDialog.show();

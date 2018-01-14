@@ -85,6 +85,16 @@
     <string name="transportation_category">Transporte</string>
     <string name="other_category">Otros</string>
     <string name="select_date_hint">Selecciona una fecha</string>
+    <string name="error_name">Porfavor ingresa un nombre</string>
+    <string name="title_activity_help">Ayuda</string>
+    <string name="default_date_format">MM/dd/yyyy</string>
+    <string name="date_format_key">date_format_key</string>
+    <string name="date_format">Date Format</string>
+
+    <string-array name="date_formats">
+        <item>MM/dd/yyyy</item>
+        <item>dd/MM/yyyy</item>
+    </string-array>
 
     <string-array name="reminder_days_available">
         <item>1</item>

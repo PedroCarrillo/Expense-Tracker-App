@@ -2,18 +2,15 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
     defaultConfig {
         applicationId "com.pedrocarrillo.expensetracker"
         minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 4
-        versionName "1.4"
-        javaCompileOptions{
-            annotationProcessorOptions{
-                includeCompileClasspath true
-            }
+        targetSdkVersion 26
+        versionCode 12
+        versionName "1.7"
+        javaCompileOptions {
+            annotationProcessorOptions.includeCompileClasspath = true
         }
     }
 
@@ -45,18 +42,18 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-def supportLibraryVersion = "25.2.0"
+def androidSdkVersion = "26.1.0"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 //    compile 'com.google.android.gms:play-services:7.8.0'
-    compile "com.android.support:gridlayout-v7:$supportLibraryVersion"
-    compile "com.android.support:support-annotations:$supportLibraryVersion"
-    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-    compile "com.android.support:design:$supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$supportLibraryVersion"
+    compile "com.android.support:gridlayout-v7:$androidSdkVersion"
+    compile "com.android.support:support-annotations:$androidSdkVersion"
+    compile "com.android.support:appcompat-v7:$androidSdkVersion"
+    compile "com.android.support:design:$androidSdkVersion"
+    compile "com.android.support:recyclerview-v7:$androidSdkVersion"
+    compile "com.android.support:cardview-v7:$androidSdkVersion"
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'io.realm:realm-android:0.82.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.4'

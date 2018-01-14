@@ -41,7 +41,7 @@ public class SettingsActivity  extends PreferenceActivity
     private void setToolbar(Toolbar mToolbar) {
         setSupportActionBar(mToolbar);
         getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.abc_ic_ab_back_material));
+        mToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp));
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
