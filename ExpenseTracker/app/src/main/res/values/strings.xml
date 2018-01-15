@@ -596,6 +596,7 @@
     <string-array name="date_formats">
         <item>MM/dd/yyyy</item>
         <item>dd/MM/yyyy</item>
+        <item>dd.MM.yyyy</item>
     </string-array>
 
     <string name="title_activity_help">Help Activity</string>
