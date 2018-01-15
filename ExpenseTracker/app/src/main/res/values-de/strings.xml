@@ -7,7 +7,7 @@
     <string name="add_new_expense">Neue Ausgabe hinzufügen</string>
     <string name="cancel">Abbrechen</string>
     <string name="categories">Kategorien</string>
-    <string name="categories_empty">Bisher existieren keine Kategorien. Fange an, Kategorien zu erstellen und nutze den Vorteil der Statistiken.</string>
+    <string name="categories_empty">Bisher existieren keine Kategorien. Beginne Kategorien zu erstellen, um den Vorteil der Statistiken zu nutzen.</string>
     <string name="categories_percentage">Kategorien (prozentual)</string>
     <string name="confirm">Bestätigen</string>
     <string name="confirm_delete">Bist du dir sicher, dass du etwas löschen möchtest?</string>
@@ -33,14 +33,14 @@
     <string name="expense_detail">Ausgaben (detailliert)</string>
     <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="expenses">Ausgaben</string>
-    <string name="expenses_mail_content">Ausgaben Bericht von Expense Tracker</string>
+    <string name="expenses_mail_content">Bericht über die Ausgaben von Expense Tracker</string>
     <string name="export">Exportieren</string>
-    <string name="help_text">Um Ausgaben, Kategorien und Erinnerungen zu löschen, halte den Eintrag und ein Menü erscheint, um einen oder mehr Einträge zu selektieren\n\nTippe das Datum im Neue Ausgabe Dialog an, um das Datum auszuwählen\n\nErstelle Erinnerungen, um eine Benachrichtigung für den gewählten Zeitpunkt zu erhalten.\n\nTippe eine Kategorie an, um ihren Namen zu ändern.\n\nBei Problemen oder Ideen melde dich gerne bei carrillochero6@gmail.com</string>
+    <string name="help_text">Um Ausgaben, Kategorien und Erinnerungen zu löschen halte den Eintrag und ein Menü erscheint, um einen oder mehr Einträge zu selektieren.\n\nTippe das Datum im Erstellen Dialog an, um das Datum auszuwählen.\n\nErstelle Erinnerungen, um eine Benachrichtigung für den gewählten Zeitpunkt zu erhalten.\n\nTippe eine Kategorie an, um ihren Namen zu ändern.\n\nBei Problemen oder Ideen melde dich gerne bei carrillochero6@gmail.com</string>
     <string name="hint_category">Bspw. Lebensmittel</string>
     <string name="history">Chronik</string>
     <string name="income">Einkommen</string>
     <string name="month">Monat</string>
-    <string name="no_categories_error">Bitte erstelle Kategorien um Ausgaben zu speichern</string>
+    <string name="no_categories_error">Bitte erstelle Kategorien, um Ausgaben zu speichern</string>
     <string name="no_chart_data">Keine Daten verfügbar</string>
     <string name="no_expenses_today">Keine Ausgaben heute</string>
     <string name="ok">Ok</string>
@@ -61,7 +61,7 @@
     <string name="start">Start</string>
     <string name="start_using_expense">Starte mit der Nutzung des Expense Tracker</string>
     <string name="statistics">Statistik</string>
-    <string name="third_page_desc">Erstelle Erinnerungen, um dich zu Benachrichtigen wenn ein Stichtag nahe kommt.</string>
+    <string name="third_page_desc">Erstelle Erinnerungen, um dich zu benachrichtigen wenn ein Stichtag nahe kommt.</string>
     <string name="this_week">Diese Woche</string>
     <string name="title_activity_help">Hilfe</string>
     <string name="title_activity_login">Login</string>
