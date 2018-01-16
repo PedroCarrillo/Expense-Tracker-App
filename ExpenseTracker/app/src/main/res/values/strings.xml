@@ -36,10 +36,10 @@
     <string name="total">Total</string>
     <string name="confirm_delete_items">Are you sure to delete this item(s)</string>
     <string name="confirm_delete_expense">Are you sure you want to delete this expense?</string>
-    <string name="expense_prefix">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
-    <string name="income_prefix">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
+    <string name="expense_prefix" translatable="false">- <xliff:g id="amount" example="100.00">%s</xliff:g></string>
+    <string name="income_prefix" translatable="false">+ <xliff:g id="amount" example="100.00">%s</xliff:g></string>
     <string name="country_currency">Country Currency</string>
-    <string name="pref_country_key">country_key</string>
+    <string name="pref_country_key" translatable="false">country_key</string>
     <string name="default_country">US</string>
     <string name="title_activity_expense_detail">ExpenseDetailActivity</string>
     <string name="tv_title_transition">tvTotalTransition</string>
@@ -602,7 +602,7 @@
     <string name="title_activity_help">Help Activity</string>
     <string name="help_text">You can delete Expenses, Categories and Reminders by holding an item and a menu will let you select one or more items to delete\n\nChoose the date you wish to create the expenses in the New Dialog Expense by tapping the date\n\nCreate reminders to set a notification for the specified date and hour.\n\nEdit Categories name by tapping the item once.\n\nAny doubts or ideas don\'t doubt to contact carrillochero6@gmail.com</string>
     <string name="default_date_format">MM/dd/yyyy</string>
-    <string name="date_format_key">date_format_key</string>
+    <string name="date_format_key" translatable="false">date_format_key</string>
     <string name="date_format">Date Format</string>
     <string name="export">Export</string>
     <string name="write_external_message">Expense Tracker would like to create Files in order to export your expenses data</string>
