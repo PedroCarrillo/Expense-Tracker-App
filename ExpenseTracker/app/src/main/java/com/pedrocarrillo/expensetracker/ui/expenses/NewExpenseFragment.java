@@ -10,14 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.pedrocarrillo.expensetracker.R;
-import com.pedrocarrillo.expensetracker.adapters.CategoriesSpinnerAdapter;
+import com.pedrocarrillo.expensetracker.adapters.CategoriesAutoCompleteAdapter;
 import com.pedrocarrillo.expensetracker.entities.Category;
 import com.pedrocarrillo.expensetracker.entities.Expense;
 import com.pedrocarrillo.expensetracker.interfaces.IExpensesType;
@@ -33,23 +33,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by pcarrillo on 21/09/2015.
- */
-public class NewExpenseFragment extends DialogFragment implements View.OnClickListener{
+public class NewExpenseFragment extends DialogFragment implements View.OnClickListener {
 
     private TextView tvTitle;
     private Button btnDate;
-    private Spinner spCategory;
+    private AutoCompleteTextView acCategory;
     private EditText etDescription;
     private EditText etTotal;
 
-    private CategoriesSpinnerAdapter mCategoriesSpinnerAdapter;
+    private CategoriesAutoCompleteAdapter mCategoriesAutoCompleteAdapter;
     private Date selectedDate;
     private Expense mExpense;
 
-    private @IUserActionsMode int mUserActionMode;
-    private @IExpensesType int mExpenseType;
+    private
+    @IUserActionsMode
+    int mUserActionMode;
+    private
+    @IExpensesType
+    int mExpenseType;
 
     static NewExpenseFragment newInstance(@IUserActionsMode int mode, String expenseId) {
         NewExpenseFragment newExpenseFragment = new NewExpenseFragment();
@@ -64,11 +65,11 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_dialog_new_expense, container, false);
-        tvTitle = (TextView)rootView.findViewById(R.id.tv_title);
-        btnDate = (Button)rootView.findViewById(R.id.btn_date);
-        spCategory = (Spinner)rootView.findViewById(R.id.sp_categories);
-        etDescription = (EditText)rootView.findViewById(R.id.et_description);
-        etTotal = (EditText)rootView.findViewById(R.id.et_total);
+        tvTitle = (TextView) rootView.findViewById(R.id.tv_title);
+        btnDate = (Button) rootView.findViewById(R.id.btn_date);
+        acCategory = (AutoCompleteTextView) rootView.findViewById(R.id.actv_categories);
+        etDescription = (EditText) rootView.findViewById(R.id.et_description);
+        etTotal = (EditText) rootView.findViewById(R.id.et_total);
         mExpenseType = IExpensesType.MODE_EXPENSES;
         return rootView;
     }
@@ -96,8 +97,8 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
         List<Category> categoriesList = Category.getCategoriesExpense();
         Category[] categoriesArray = new Category[categoriesList.size()];
         categoriesArray = categoriesList.toArray(categoriesArray);
-        mCategoriesSpinnerAdapter = new CategoriesSpinnerAdapter(getActivity(), categoriesArray);
-        spCategory.setAdapter(mCategoriesSpinnerAdapter);
+        mCategoriesAutoCompleteAdapter = new CategoriesAutoCompleteAdapter(getActivity());
+        acCategory.setAdapter(mCategoriesAutoCompleteAdapter);
         switch (mUserActionMode) {
             case IUserActionsMode.MODE_CREATE:
                 selectedDate = new Date();
@@ -111,13 +112,13 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
                     etDescription.setText(mExpense.getDescription());
                     etTotal.setText(String.valueOf(mExpense.getTotal()));
                     int categoryPosition = 0;
-                    for (int i=0; i<categoriesArray.length; i++) {
+                    for (int i = 0; i < categoriesArray.length; i++) {
                         if (categoriesArray[i].getId().equalsIgnoreCase(mExpense.getCategory().getId())) {
                             categoryPosition = i;
                             break;
                         }
                     }
-                    spCategory.setSelection(categoryPosition);
+                    acCategory.setSelection(categoryPosition);
                 }
                 break;
         }
@@ -135,7 +136,7 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.btn_date) {
+        if (view.getId() == R.id.btn_date) {
             showDateDialog();
         } else if (view.getId() == R.id.btn_cancel) {
             dismiss();
@@ -145,9 +146,9 @@ public class NewExpenseFragment extends DialogFragment implements View.OnClickLi
     }
 
     private void onSaveExpense() {
-        if (mCategoriesSpinnerAdapter.getCount() > 0 ) {
+        if (acCategory.getText().length() > 0) {
             if (!Util.isEmptyField(etTotal)) {
-                Category currentCategory = (Category) spCategory.getSelectedItem();
+                Category currentCategory = Category.getCategoryByName(acCategory.getText().toString());
                 String total = etTotal.getText().toString();
                 String description = etDescription.getText().toString();
                 if (mUserActionMode == IUserActionsMode.MODE_CREATE) {
